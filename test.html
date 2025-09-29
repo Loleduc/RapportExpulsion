@@ -615,12 +615,10 @@ async function convertirenPDF(customData) {
     // 🔹 3. Envoi de la requête
     const pdfUrl = "https://script.google.com/macros/s/AKfycbxpDzlvVRMJTDSF6AGndnMnAwWQK70kqA8fi4qzUgW0bkvSQe-2cX2IZrq0TGjbpstn/exec";
     
-     try {
+    try {
         const response = await fetch(pdfUrl, {
             method: "POST",
-            headers: {
-                'Content-Type': 'application/json',
-            },
+            headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({
                 htmlContent: htmlContent,
                 formDataJSON: customData
@@ -635,10 +633,12 @@ async function convertirenPDF(customData) {
         } else {
             alert("Erreur Apps Script: " + (data.error || "Raison inconnue."));
         }
+
     } catch (err) {
         alert("Erreur de soumission du rapport: " + err.message);
     }
 }
+
 	
 	
 	

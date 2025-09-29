@@ -1808,7 +1808,7 @@ async function envoyerRapportParEmail(data) {
             method: "POST",
             // 2. CORRECTION CLÉ : Ajout de l'en-tête Content-Type
             headers: {
-                'Content-Type': 'text/plain' 
+                'Content-Type': 'application/json' 
             },
             // 3. CORRECTION CLÉ : Envoi du corps de la requête en JSON stringifié
             body: JSON.stringify(payload) 

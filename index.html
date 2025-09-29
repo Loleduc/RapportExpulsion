@@ -345,7 +345,7 @@ button:hover { background:#0056b3; }
 </head>
 <body>
 
-<h1>RAPPORT D'EXPULSION 19:06</h1>
+<h1>RAPPORT D'EXPULSION 19:10</h1>
 
 <form id="rapportForm" novalidate>
 
@@ -1778,53 +1778,48 @@ function createCodeChips(expulsionIndex, codesData, panel) {
 }    
 			
 async function envoyerRapportParEmail(data) {
-    // 🛑 REMPLACEZ CECI PAR VOTRE URL APPS SCRIPT DÉPLOYÉE
-    const emailUrl = "https://script.google.com/macros/s/AKfycbzptS_pTHRw9HERRy6ZjLKfkY25GTgOkHbJMaSi7h9wd2tFyiF0zKWaw9T-HoArXrrw/exec";
     
-    // Assurez-vous que ces fonctions/variables sont définies dans votre environnement client
+    // 🛑 REMPLACEZ CECI PAR VOTRE URL APPS SCRIPT
+   // const emailUrl = "https://script.google.com/macros/s/AKfycbxKvafCxazQpekoIlAHZSj06TY7lz0u1xXvLt1-DurLEgLMbcQi8pPFb-GjOE37rsiO/exec";
+     const emailUrl = "https://script.google.com/macros/s/AKfycbzptS_pTHRw9HERRy6ZjLKfkY25GTgOkHbJMaSi7h9wd2tFyiF0zKWaw9T-HoArXrrw/exec"
     const rapportHTML = genererRapportExpulsion(data);
-    const adresseDeDestination = "ump_77@videotron.ca,ump_77@hotmail.com";
     
-    // 1. Préparation du payload pour le POST
+			
+			
+    // Assurez-vous que cette adresse est correcte
+    const adresseDeDestination = "ump_77@videotron.ca,ump_77@hotmail.com"; 
+    
+	document.getElementById("debugOutput").textContent = ` Html : ${rapportHTML} Destinataire : ${adresseDeDestination} Sujet : ${ObjetCourriel}  `;
+    
+			
+    // 1. Préparation du corps de la requête (Objet JavaScript)
     const payload = {
+        // Les clés DOIVENT correspondre aux noms attendus dans Apps Script (e.g., data.htmlContent)
         htmlContent: rapportHTML, 
         destinatairesContainer: adresseDeDestination, 
-        sujetCourriel : ObjetCourriel // Assurez-vous que ObjetCourriel est défini
+		sujetCourriel : ObjetCourriel
     };
-    
-    try {
-        // Étape 1 : Appel POST (Création du PDF et envoi de l'e-mail)
-        const response = await fetch(emailUrl, {
-            method: 'POST',
-            headers: {
-                // Utiliser text/plain pour éviter le pré-vol CORS
-                'Content-Type': 'text/plain' 
-            },
-            body: JSON.stringify(payload) // 🔑 IMPORTANT : Envoyer le 'payload'
+		
+	try {
+        fetch(emailUrl, {
+    method: 'POST',
+    headers: {
+        // ✅ Utiliser text/plain pour que le navigateur ne fasse PAS de pré-vol CORS
+        'Content-Type': 'text/plain' 
+    },
+         body: JSON.stringify(payload)
         });
 
         const result = await response.json();
 
         if (result.success) {
-            
-            // 2. Récupérer l'ID du fichier
-            const fileId = result.fileId; 
-            
-            // 3. Construire l'URL pour le GET (Distribution du fichier)
-            const downloadUrl = `${emailUrl}?fileId=${fileId}`; 
-            
-            alert(`✅ Opération réussie. L'e-mail est envoyé. Le rapport va s'ouvrir pour téléchargement.`);
-            
-            // 4. Lancer la requête GET dans une nouvelle fenêtre pour télécharger le fichier
-            window.open(downloadUrl, '_blank'); 
-            
+            alert(`✅ E-mail envoyé avec succès à : ${adresseDeDestination}`);
             document.getElementById('rapportForm').reset();
         } else {
-            alert(`❌ Échec de l'opération. Erreur: ${result.error} (Détails: ${result.debug || 'Aucun'})`);
-            console.error("Erreur serveur Apps Script:", result);
+            alert(`❌ Échec de l'envoi d'e-mail. Erreur: ${result.error} (Détails: ${result.details || 'Aucun'})`);
         }
     } catch (err) {
-        alert("❌ Erreur de communication avec le service d'e-mail/PDF. Vérifiez la console.");
+        alert("❌ Erreur de communication avec le service d'e-mail. Vérifiez la console.");
         console.error("Erreur Fetch:", err);
     }
 }

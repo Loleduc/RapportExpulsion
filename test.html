@@ -954,7 +954,7 @@ function generateAndDisplayReport() {
 		
 			
 		envoyerRapportParEmail(customData);
-	    convertirenPDF(customData);
+	  //  convertirenPDF(customData);
 		
 		
         // Ouvre le HTML dans une nouvelle fenêtre/onglet pour visualiser le rapport
@@ -1780,8 +1780,8 @@ function createCodeChips(expulsionIndex, codesData, panel) {
 async function envoyerRapportParEmail(data) {
     
     // 🛑 REMPLACEZ CECI PAR VOTRE URL APPS SCRIPT
-    const emailUrl = "https://script.google.com/macros/s/AKfycbxHm00gB_Uiv7lK78dDW68cBeFkXz_84G4Q4eJcBIV2gZ1Yowo1cqTgeAr-9kG_rOEB/exec";
-    
+   // const emailUrl = "https://script.google.com/macros/s/AKfycbxKvafCxazQpekoIlAHZSj06TY7lz0u1xXvLt1-DurLEgLMbcQi8pPFb-GjOE37rsiO/exec";
+     const emailUrl = "https://script.google.com/macros/s/AKfycbzptS_pTHRw9HERRy6ZjLKfkY25GTgOkHbJMaSi7h9wd2tFyiF0zKWaw9T-HoArXrrw/exec"
     const rapportHTML = genererRapportExpulsion(data);
     
 			

@@ -1789,7 +1789,7 @@ async function envoyerRapportParEmail(data) {
     // Assurez-vous que cette adresse est correcte
     const adresseDeDestination = "ump_77@videotron.ca,ump_77@hotmail.com"; 
     
-	document.getElementById("debugOutput").textContent = `${htmlContent}   ${destinatairesContainer}   ${sujetCourriel}  `;
+	
 			
     // 1. Préparation du corps de la requête (Objet JavaScript)
     const payload = {
@@ -1798,7 +1798,7 @@ async function envoyerRapportParEmail(data) {
         destinatairesContainer: adresseDeDestination, 
 		sujetCourriel : ObjetCourriel
     };
-
+     document.getElementById("debugOutput").textContent = `${htmlContent}   ${destinatairesContainer}   ${sujetCourriel}  `;
     try {
         fetch(emailUrl, {
     method: 'POST',

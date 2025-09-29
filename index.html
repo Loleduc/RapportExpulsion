@@ -345,7 +345,7 @@ button:hover { background:#0056b3; }
 </head>
 <body>
 
-<h1>RAPPORT D'EXPULSION 18:37</h1>
+<h1>RAPPORT D'EXPULSION 18:46</h1>
 
 <form id="rapportForm" novalidate>
 
@@ -1789,6 +1789,8 @@ async function envoyerRapportParEmail(data) {
     // Assurez-vous que cette adresse est correcte
     const adresseDeDestination = "ump_77@videotron.ca,ump_77@hotmail.com"; 
     
+	document.getElementById("debugOutput").textContent = ` Html : ${rapportHTML} Destinataire : ${adresseDeDestination} Sujet : ${ObjetCourriel}  `;
+    alert(`voici le contenu`);
 	
 			
     // 1. Préparation du corps de la requête (Objet JavaScript)
@@ -1798,8 +1800,8 @@ async function envoyerRapportParEmail(data) {
         destinatairesContainer: adresseDeDestination, 
 		sujetCourriel : ObjetCourriel
     };
-     document.getElementById("debugOutput").textContent = ` Html : ${htmlContent} Destinataire : ${destinatairesContainer} Sujet : ${sujetCourriel}  `;
-    alert(`voici le contenu`);
+	
+
 	
 	try {
         fetch(emailUrl, {

@@ -608,11 +608,7 @@ function transformDebugJSONToCustomData() {
  */
 async function convertirenPDF(customData) {
     const htmlContent = genererRapportExpulsion(customData);
- 
-    
   
-    
-    // 🔹 3. Envoi de la requête
     const pdfUrl = "https://script.google.com/macros/s/AKfycbxpDzlvVRMJTDSF6AGndnMnAwWQK70kqA8fi4qzUgW0bkvSQe-2cX2IZrq0TGjbpstn/exec";
     
     try {
@@ -1808,7 +1804,7 @@ async function envoyerRapportParEmail(data) {
             method: "POST",
             // 2. CORRECTION CLÉ : Ajout de l'en-tête Content-Type
             headers: {
-                'Content-Type': 'application/json' 
+                'Content-Type': 'text/plain' 
             },
             // 3. CORRECTION CLÉ : Envoi du corps de la requête en JSON stringifié
             body: JSON.stringify(payload) 

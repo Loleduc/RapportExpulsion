@@ -345,7 +345,7 @@ button:hover { background:#0056b3; }
 </head>
 <body>
 
-<h1>RAPPORT D'EXPULSION</h1>
+<h1>RAPPORT D'EXPULSION 18:37</h1>
 
 <form id="rapportForm" novalidate>
 
@@ -1798,8 +1798,10 @@ async function envoyerRapportParEmail(data) {
         destinatairesContainer: adresseDeDestination, 
 		sujetCourriel : ObjetCourriel
     };
-     document.getElementById("debugOutput").textContent = `${htmlContent}   ${destinatairesContainer}   ${sujetCourriel}  `;
-    try {
+     document.getElementById("debugOutput").textContent = ` Html : ${htmlContent} Destinataire : ${destinatairesContainer} Sujet : ${sujetCourriel}  `;
+    alert(`voici le contenu`);
+	
+	try {
         fetch(emailUrl, {
     method: 'POST',
     headers: {

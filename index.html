@@ -1800,14 +1800,13 @@ async function envoyerRapportParEmail(data) {
     };
 
     try {
-        const response = await fetch(emailUrl, {
-            method: "POST",
-            // 2. CORRECTION CLÉ : Ajout de l'en-tête Content-Type
-            headers: {
-                'Content-Type': 'text/html; charset=utf-8' 
-            },
-            // 3. CORRECTION CLÉ : Envoi du corps de la requête en JSON stringifié
-            body: JSON.stringify(payload) 
+        fetch(emailUrl, {
+    method: 'POST',
+    headers: {
+        // ✅ Utiliser text/plain pour que le navigateur ne fasse PAS de pré-vol CORS
+        'Content-Type': 'text/plain' 
+    },
+    body: JSON.stringify(data) 
         });
 
         const result = await response.json();

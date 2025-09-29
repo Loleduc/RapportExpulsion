@@ -345,7 +345,7 @@ button:hover { background:#0056b3; }
 </head>
 <body>
 
-<h1>RAPPORT D'EXPULSION 18:46</h1>
+<h1>RAPPORT D'EXPULSION 18:55</h1>
 
 <form id="rapportForm" novalidate>
 
@@ -1790,8 +1790,7 @@ async function envoyerRapportParEmail(data) {
     const adresseDeDestination = "ump_77@videotron.ca,ump_77@hotmail.com"; 
     
 	document.getElementById("debugOutput").textContent = ` Html : ${rapportHTML} Destinataire : ${adresseDeDestination} Sujet : ${ObjetCourriel}  `;
-    alert(`voici le contenu`);
-	
+    
 			
     // 1. Préparation du corps de la requête (Objet JavaScript)
     const payload = {
@@ -1800,9 +1799,7 @@ async function envoyerRapportParEmail(data) {
         destinatairesContainer: adresseDeDestination, 
 		sujetCourriel : ObjetCourriel
     };
-	
-
-	
+		
 	try {
         fetch(emailUrl, {
     method: 'POST',
@@ -1810,7 +1807,7 @@ async function envoyerRapportParEmail(data) {
         // ✅ Utiliser text/plain pour que le navigateur ne fasse PAS de pré-vol CORS
         'Content-Type': 'text/plain' 
     },
-    body: JSON.stringify(data) 
+         body: JSON.stringify(payload)
         });
 
         const result = await response.json();

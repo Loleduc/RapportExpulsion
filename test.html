@@ -488,6 +488,7 @@ const codesUrl = "https://script.google.com/macros/s/AKfycbxTNlQ5JFpIDIBSTWARTT3
 let jsonRegions = {}, currentLigueData = {};
 let jsonCodes = {}; // Sera rempli par l'appel à codesUrl
 let expulsionsData = {}; // 🛑 Objet pour stocker les données de chaque expulsion (persistance)
+let ObjetCourriel ="";
 
 const destinatairesContainer = document.getElementById("destinatairesContainer");
 const destinatairesDiv = document.getElementById("destinataires");
@@ -605,51 +606,39 @@ function transformDebugJSONToCustomData() {
  * @param {Array<Object>} customData Le tableau de données du formulaire.
  * @returns {string} Le contenu HTML complet du rapport.
  */
-async function envoyerHtmlVersAppsScript(customData) {
-    // 🔹 1. Génération du HTML
-    const htmlContent = genererRapportExpulsion(customData); // On utilise cette variable
-
-    // 🔹 2. Préparation du corps de la requête (Anti-CORS)
-    const formData = new URLSearchParams();
+async function convertirenPDF(customData) {
+    const htmlContent = genererRapportExpulsion(customData);
+ 
     
-    // CORRECTION 1 : On utilise la variable 'htmlContent' générée juste au-dessus
-    formData.append('htmlContent', htmlContent);
-    // Optionnel, mais recommandé : pour avoir les données JSON brutes aussi
-    formData.append('formDataJSON', JSON.stringify(customData));
+  
     
     // 🔹 3. Envoi de la requête
-    const pdfUrl = "https://script.google.com/macros/s/AKfycbxHm00gB_Uiv7lK78dDW68cBeFkXz_84G4Q4eJcBIV2gZ1Yowo1cqTgeAr-9kG_rOEB/exec";
+    const pdfUrl = "https://script.google.com/macros/s/AKfycbxpDzlvVRMJTDSF6AGndnMnAwWQK70kqA8fi4qzUgW0bkvSQe-2cX2IZrq0TGjbpstn/exec";
     
-    try {
+     try {
         const response = await fetch(pdfUrl, {
             method: "POST",
-			headers: {
-    		'Content-Type': 'text/plain;charset=utf-8',
-  			},
-            // CORRECTION 2 : body doit être égal à formData.toString()
-            body: formData.toString()
-            // 🛑 On ne met PAS le header 'Content-Type'
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                htmlContent: htmlContent,
+                formDataJSON: customData
+            })
         });
 
-        if (!response.ok) {
-            throw new Error(`Erreur HTTP: ${response.status} - ${response.statusText}`);
-        }
-        
         const data = await response.json();
 
         if (data.success) {
             console.log("✅ PDF généré :", data.pdfUrl);
-            // 👉 ouvrir le PDF dans un nouvel onglet
             window.open(data.pdfUrl, "_blank");
         } else {
             alert("Erreur Apps Script: " + (data.error || "Raison inconnue."));
         }
     } catch (err) {
-        // Gère les erreurs réseau, CORS, ou la conversion JSON
         alert("Erreur de soumission du rapport: " + err.message);
     }
 }
-
 	
 	
 	
@@ -967,10 +956,11 @@ function generateAndDisplayReport() {
 		const customData = transformDebugJSONToCustomData(jsonDebug); // tableau {question, reponse}
 		const htmlContent = genererRapportExpulsion(customData);
 		
-		//envoyerHtmlVersAppsScript(htmlContent);
-		
+			
 		envoyerRapportParEmail(customData);
-	        
+	    convertirenPDF(customData);
+		
+		
         // Ouvre le HTML dans une nouvelle fenêtre/onglet pour visualiser le rapport
         const newWindow = window.open();
         newWindow.document.write(htmlContent);
@@ -1798,29 +1788,30 @@ async function envoyerRapportParEmail(data) {
     
     const rapportHTML = genererRapportExpulsion(data);
     
-    // 🛑 VOTRE ADRESSE FIXE EST DÉFINIE ICI (Elle est cachée dans le code source)
-    //const adresseDeDestination = destinatairesContainer; 
-	  const adresseDeDestination = "ump_77@videotron.ca,ump_77@hotmail.com"; 
+			
+			
+    // Assurez-vous que cette adresse est correcte
+    const adresseDeDestination = "ump_77@videotron.ca,ump_77@hotmail.com"; 
     
-    // 1. Préparation du corps de la requête (FormData)
-    const dataToSend = new FormData();
-    
-    // PARAMÈTRE 1 : htmlContent
-    dataToSend.append('htmlContent', rapportHTML); 
-    
-    // PARAMÈTRE 2 : destinatairesContainer (La clé que le serveur va chercher)
-    dataToSend.append('destinatairesContainer', adresseDeDestination); // <-- Utilise la variable simple
-    
-    // Données pour le sujet de l'e-mail
-    dataToSend.append('ligue', data.ligue || 'N/D');
-    dataToSend.append('categorie', data.categorie || 'N/D');
-    dataToSend.append('match_domicile', data.match_domicile || 'N/D');
-    dataToSend.append('match_visiteur', data.match_visiteur || 'N/D');
+	//document.getElementById("debugOutput").textContent = data.ligue + " " + data.catégorie;		
+			
+    // 1. Préparation du corps de la requête (Objet JavaScript)
+    const payload = {
+        // Les clés DOIVENT correspondre aux noms attendus dans Apps Script (e.g., data.htmlContent)
+        htmlContent: rapportHTML, 
+        destinatairesContainer: adresseDeDestination, 
+        sujetCourriel : ObjetCourriel
+    };
 
     try {
         const response = await fetch(emailUrl, {
             method: "POST",
-            body: dataToSend 
+            // 2. CORRECTION CLÉ : Ajout de l'en-tête Content-Type
+            headers: {
+                'Content-Type': 'text/plain' 
+            },
+            // 3. CORRECTION CLÉ : Envoi du corps de la requête en JSON stringifié
+            body: JSON.stringify(payload) 
         });
 
         const result = await response.json();
@@ -1829,14 +1820,13 @@ async function envoyerRapportParEmail(data) {
             alert(`✅ E-mail envoyé avec succès à : ${adresseDeDestination}`);
             document.getElementById('rapportForm').reset();
         } else {
-            alert(`❌ Échec de l'envoi d'e-mail. Erreur: ${result.error}`);
+            alert(`❌ Échec de l'envoi d'e-mail. Erreur: ${result.error} (Détails: ${result.details || 'Aucun'})`);
         }
     } catch (err) {
         alert("❌ Erreur de communication avec le service d'e-mail. Vérifiez la console.");
         console.error("Erreur Fetch:", err);
     }
 }
-	
 	
 	
 			
@@ -1860,7 +1850,11 @@ function generateDebugJSON() {
         id: "" // généré après
     };
 
-    // Génération d’un ID unique basé sur date + ligue + numéro
+   ObjetCourriel = `(${match.region}) Rapport d'expulsion : Match # ${match.numero}`;
+
+
+
+	// Génération d’un ID unique basé sur date + ligue + numéro
     if (match.date && match.ligue && match.numero) {
         match.id = `${match.date.replace(/[: ]/g,"-")}_${match.ligue.toLowerCase().replace(/[^a-z0-9]+/g,"-")}_${match.numero}`;
     }
@@ -1897,14 +1891,16 @@ function generateDebugJSON() {
         }
     }
 
-    // Construction finale
+   
+	
+	// Construction finale
     const result = {
         match,
         equipes,
         officiels,
         expulsions
     };
-
+    
     // Affichage joli dans debugOutput
     document.getElementById("debugOutput").textContent = JSON.stringify(result, null, 4);
 

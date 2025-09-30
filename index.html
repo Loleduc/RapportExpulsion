@@ -345,7 +345,7 @@ button:hover { background:#0056b3; }
 </head>
 <body>
 
-<h1>RAPPORT D'EXPULSION 23:05</h1>
+<h1>RAPPORT D'EXPULSION 23:15</h1>
 
 <form id="rapportForm" novalidate>
 
@@ -523,25 +523,25 @@ function getLogoUrl() {
 
 async function chargerDonneesDepuisGitHub(url) {
     try {
-        const reponse = await fetch(url, {
-            // Pas besoin de headers ni de mode: 'no-cors'
-            method: 'GET'
-        });
+        const reponse = await fetch(url, { method: 'GET' });
+        if (!reponse.ok) throw new Error(`Erreur HTTP: ${reponse.status}`);
 
-        // 🔑 Le statut 200 doit être là
-        if (!reponse.ok) {
-            throw new Error(`Erreur HTTP: ${reponse.status}`);
+        const data = await reponse.json();
+
+        // 🔎 Adaptation selon la structure
+        if (data.Codes) {
+            return data.Codes;   // fichier Codes.json
+        } else if (data.Regions) {
+            return data.Regions; // fichier Regions.json
+        } else {
+            return data;         // fallback si structure différente
         }
 
-        // 🔑 Le navigateur peut lire le JSON directement et sans erreur
-        return await reponse.json(); 
-        
     } catch (erreur) {
         console.error("Erreur lors du chargement des données depuis GitHub:", erreur);
-        return null; 
+        return {}; 
     }
 }
-
 /**
  * Remplace l'ancienne fonction "convertirImageEnBase64" pour utiliser l'URL directe.
  */

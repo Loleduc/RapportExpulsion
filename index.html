@@ -345,7 +345,7 @@ button:hover { background:#0056b3; }
 </head>
 <body>
 
-<h1>RAPPORT D'EXPULSION 18:55</h1>
+<h1>RAPPORT D'EXPULSION 19:05</h1>
 
 <form id="rapportForm" novalidate>
 
@@ -683,25 +683,25 @@ async function convertirenPDF(customData) {
 	
 function genererRapportExpulsion(customData) {
     let message = "";
-    let courrierArbitre = "";
     
     
     // 🎨 Styles centralisés
-    // MODIFICATION 1: Augmentation de la marge basse à 30px pour plus d'espace entre les tableaux
+    // Marge basse de 30px pour plus d'espace entre les tableaux
     const styleTable = "width: 100%; max-width: 900px; border-collapse: collapse; font-family: Arial, sans-serif; font-size: 14px; margin: 0 auto 30px auto; border: 1px solid #ddd;";
     
-    // Header des sections (INFORMATIONS, ÉQUIPES, OFFICIELS, EXPULSION, etc.)
-    const styleSectionHeader = "padding: 10px; text-align: left; font-size: 16px; border-top: 1px solid #ddd; background-color: #f2f2f2; -webkit-print-color-adjust: exact;";
+    // MODIFICATION: Styles SectionHeader appliqués via <td> pour une meilleure compatibilité Outlook
+    const styleSectionHeaderTD = "padding: 10px; text-align: left; font-size: 16px; border-top: 1px solid #ddd; background-color: #f2f2f2; -webkit-print-color-adjust: exact;";
+    const styleSectionHeaderTH = "text-align: left; font-weight: bold; font-size: 16px; color: #333;"; // Style minimal pour le texte du TH
     
-    // MODIFICATION 2: Réduction du padding vertical de 8px à 5px pour réduire la hauteur des champs
-    const cellPadding = "5px 8px"; // Padding vertical 5px, horizontal 8px.
+    // Remplissage réduit pour les cellules de données
+    const cellPadding = "5px 8px"; 
     
-    // Styles pour les cellules de données
-    const styleCell = `padding: ${cellPadding}; border: 1px solid #ddd; width: auto; background-color: white;`; // Fond blanc explicite
-    const styleCell15 = `padding: ${cellPadding}; border: 1px solid #ddd; width: 15%; background-color: white;`;
-    const styleCell25 = `padding: ${cellPadding}; border: 1px solid #ddd; width: 25%; background-color: white;`;
-    const styleCell30 = `padding: ${cellPadding}; border: 1px solid #ddd; width: 30%; background-color: white;`;
-    const styleCell40 = `padding: ${cellPadding}; border: 1px solid #ddd; width: 40%; background-color: white;`;
+    // Styles pour les cellules de données (background: white obligatoire)
+    const styleCell = `padding: ${cellPadding}; border: 1px solid #ddd; width: auto; background-color: white; -webkit-print-color-adjust: exact;`; 
+    const styleCell15 = `padding: ${cellPadding}; border: 1px solid #ddd; width: 15%; background-color: white; -webkit-print-color-adjust: exact;`;
+    const styleCell25 = `padding: ${cellPadding}; border: 1px solid #ddd; width: 25%; background-color: white; -webkit-print-color-adjust: exact;`;
+    const styleCell30 = `padding: ${cellPadding}; border: 1px solid #ddd; width: 30%; background-color: white; -webkit-print-color-adjust: exact;`;
+    const styleCell40 = `padding: ${cellPadding}; border: 1px solid #ddd; width: 40%; background-color: white; -webkit-print-color-adjust: exact;`;
     
     // Style pour l'entête principale
     const styleMainHeaderBG = "background-color: #a3a3a3; -webkit-print-color-adjust: exact;";
@@ -711,11 +711,20 @@ function genererRapportExpulsion(customData) {
     const region = (customData[2] && customData[2].reponse) ? customData[2].reponse.toUpperCase() : "RÉGION INDÉTERMINÉE";
     const numeroMatch = (customData[0] && customData[0].reponse) ? customData[0].reponse : "N/A";
 
-    const image1 = "cid:logo-gauche"; // Simplification car la conversion n'est pas supportée dans cet environnement
-    const image2 = "cid:logo-droite"; // Simplification car la conversion n'est pas supportée dans cet environnement
+    const image1 = convertirImageEnBase64("logo-gauche"); 
+    const image2 = convertirImageEnBase64("logo-droite"); 
 
-    let journee = "30 septembre 2025 18:51"; // Utilisation d'une date simulée pour cet exemple
-    let delaisheure = null; // Simuler l'absence de délai
+    let journee = getCurrentDateTime();
+    let delaisheure = delaiEntreDates(customData[1].reponse, journee);
+
+    if (delaisheure) {
+        message += `
+            <div style="font-family: 'Segoe UI', sans-serif; font-size: 18px; color: red; font-weight: bold;">
+                ${delaisheure}
+            </div>
+            <br>
+        `;
+    }
 
     // Début du corps HTML
     message += `<div style="font-family: 'Segoe UI', sans-serif; font-size: 15px;">`;
@@ -748,7 +757,7 @@ function genererRapportExpulsion(customData) {
     message += `<table style="${styleTable}">`; 
     message += `
         <tr>
-        <th colspan="5" style="${styleSectionHeader}">INFORMATIONS SUR LE MATCH</th>
+        <td colspan="5" style="${styleSectionHeaderTD}"><h3 style="${styleSectionHeaderTH}; margin: 0; padding: 0;">INFORMATIONS SUR LE MATCH</h3></td>
         </tr>
         <tr>
         <td colspan="2" style="${styleCell30}"><b>Date et Heure du match :</b></td> 
@@ -770,7 +779,7 @@ function genererRapportExpulsion(customData) {
     message += `<table style="${styleTable}">`; 
     message += `
         <tr>
-        <th colspan="5" style="${styleSectionHeader}">ÉQUIPES ET TERRAIN</th>
+        <td colspan="5" style="${styleSectionHeaderTD}"><h3 style="${styleSectionHeaderTH}; margin: 0; padding: 0;">ÉQUIPES ET TERRAIN</h3></td>
         </tr>
         <tr>
         <td style="${styleCell15}"><b>Équipe locale :</b></td>
@@ -791,7 +800,7 @@ function genererRapportExpulsion(customData) {
     message += `<table style="${styleTable}">`; 
     message += `
         <tr>
-        <th colspan="5" style="${styleSectionHeader}">OFFICIELS</th>
+        <td colspan="5" style="${styleSectionHeaderTD}"><h3 style="${styleSectionHeaderTH}; margin: 0; padding: 0;">OFFICIELS</h3></td>
         </tr>
         <tr>
         <td style="${styleCell25}"><b>Arbitre au marbre :</b></td>
@@ -819,7 +828,7 @@ function genererRapportExpulsion(customData) {
     message += `<table style="${styleTable}">`; 
     message += `
         <tr>
-        <th colspan="5" style="${styleSectionHeader}">COORDONNÉES</th>
+        <td colspan="5" style="${styleSectionHeaderTD}"><h3 style="${styleSectionHeaderTH}; margin: 0; padding: 0;">COORDONNÉES</h3></td>
         </tr>
         <tr>
         <td style="${styleCell25}"><b>Adresse courriel :</b></td>
@@ -838,7 +847,7 @@ function genererRapportExpulsion(customData) {
     let expulsionTable = "";
     let detailsTable = "";
     
-    // Fonctions utilitaires (conservées pour la robustesse)
+    // Fonctions utilitaires (maintenues)
     const norm = s => s ? s.toLowerCase().normalize('NFD').replace(/\p{Diacritic}/gu, '').replace(/[’]/g, "'").replace(/\s+/g, ' ').trim() : '';
     const getAnswerToQuestion = (q, data) => {
         if (!Array.isArray(data)) return "N/A"; 
@@ -872,8 +881,10 @@ function genererRapportExpulsion(customData) {
             if (expulsionTable !== "") {
                 message += expulsionTable + "</table>";
             }
-            // Nouvelle table pour l'EXPULSION #N
-            expulsionTable = `<table style="${styleTable}; page-break-inside: avoid;"><tr><th colspan="2" style="${styleSectionHeader}">EXPULSION #${expulsionIndex}</th></tr><tr><td style="${styleCell40}"><b>${question}</b></td><td style="${styleCell}">${answer}</td></tr>`;
+            // Nouvelle table pour l'EXPULSION #N (Utilisation du TD pour la couleur de fond)
+            expulsionTable = `<table style="${styleTable}; page-break-inside: avoid;">
+                <tr><td colspan="2" style="${styleSectionHeaderTD}"><h3 style="${styleSectionHeaderTH}; margin: 0; padding: 0;">EXPULSION #${expulsionIndex}</h3></td></tr>
+                <tr><td style="${styleCell40}"><b>${question}</b></td><td style="${styleCell}">${answer}</td></tr>`;
             expulsionIndex++;
             continue;
         }
@@ -905,9 +916,7 @@ function genererRapportExpulsion(customData) {
     const detailsGlobal = getAnswerToQuestion("Détails concernant les expulsions", customData);
     if (detailsGlobal !== "N/A") {
         detailsTable += `<table style="${styleTable}; page-break-inside: avoid;">
-            <tr><th colspan="2" style="${styleSectionHeader}">
-                <b>Détails concernant les expulsions</b>
-            </th></tr>
+            <tr><td colspan="2" style="${styleSectionHeaderTD}"><h3 style="${styleSectionHeaderTH}; margin: 0; padding: 0;"><b>Détails concernant les expulsions</b></h3></td></tr>
             <tr><td colspan="2" style="${styleCell}">${detailsGlobal.replace(/\n/g, "<br>")}</td></tr>
         </table>`;
     }
@@ -928,9 +937,7 @@ function genererRapportExpulsion(customData) {
     
     if (infosComplementaires !== "N/A" || avertissement !== "N/A" || duree !== "N/A" || environs !== "N/A") {
         detailsTable += `<table style="${styleTable}; page-break-inside: avoid;">
-            <tr><th colspan="2" style="${styleSectionHeader}">
-                <b>Informations complémentaires</b>
-            </th></tr>
+            <tr><td colspan="2" style="${styleSectionHeaderTD}"><h3 style="${styleSectionHeaderTH}; margin: 0; padding: 0;"><b>Informations complémentaires</b></h3></td></tr>
             <tr><td colspan="2" style="${styleCell}">
                 ${desc}
                 <hr style="border: 0; border-top: 1px solid #ddd; margin: 10px 0;">
@@ -952,15 +959,15 @@ function genererRapportExpulsion(customData) {
         <style>
             body { font-family: Arial, sans-serif; margin: 0; padding: 0; background-color: #f4f4f4; }
             .content-wrapper { max-width: 900px; margin: 20px auto; padding: 15px; border: 1px solid #ccc; box-shadow: 0 0 10px rgba(0,0,0,0.1); background-color: white; }
-            /* Styles pour l'impression */
+            /* Styles pour l'impression (Mise à jour pour 30px) */
             @media print {
                 .content-wrapper { box-shadow: none; border: none; }
                 body { background-color: white; }
-                /* Assurer la coupure de page propre pour les tableaux */
                 table { page-break-inside: auto !important; margin-bottom: 30px !important; }
                 tr { page-break-inside: avoid !important; page-break-after: auto !important; }
-                thead { display: table-header-group !important; }
-                tfoot { display: table-footer-group !important; }
+                /* S'assurer que les en-têtes sont imprimés correctement */
+                td[style*="f2f2f2"] { background-color: #f2f2f2 !important; -webkit-print-color-adjust: exact; }
+                td[style*="a3a3a3"] { background-color: #a3a3a3 !important; -webkit-print-color-adjust: exact; }
             }
         </style>
         </head>
@@ -977,7 +984,6 @@ function genererRapportExpulsion(customData) {
     
     return finalHTML;
 }
-
 
 
 /**

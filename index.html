@@ -345,7 +345,7 @@ button:hover { background:#0056b3; }
 </head>
 <body>
 
-<h1>RAPPORT D'EXPULSION 23:25</h1>
+<h1>RAPPORT D'EXPULSION 23:40</h1>
 
 <form id="rapportForm" novalidate>
 
@@ -948,14 +948,14 @@ function genererRapportExpulsion(customData) {
             body { font-family: Arial, sans-serif; margin: 0; padding: 0; background-color: #f4f4f4; }
             .content-wrapper { max-width: 900px; margin: 20px auto; padding: 15px; border: 1px solid #ccc; box-shadow: 0 0 10px rgba(0,0,0,0.1); background-color: white; }
             /* Styles pour l'impression */
-            @media print {
-                .content-wrapper { box-shadow: none; border: none; }
-                body { background-color: white; }
-                /* Assurer la coupure de page propre pour les tableaux */
-                table { page-break-inside: auto !important; }
-                tr { page-break-inside: avoid !important; page-break-after: auto !important; }
-                thead { display: table-header-group !important; }
-                tfoot { display: table-footer-group !important; }
+              @media print {
+              .content-wrapper { box-shadow: none; border: none; }
+               body { background-color: white; }
+              /* On garde cette règle, car elle est utile pour les lignes courtes */
+              tr { page-break-inside: avoid !important; page-break-after: auto !important; } 
+        
+        thead { display: table-header-group !important; }
+        tfoot { display: table-footer-group !important; }
             }
         </style>
         </head>

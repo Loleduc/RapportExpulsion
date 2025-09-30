@@ -345,7 +345,7 @@ button:hover { background:#0056b3; }
 </head>
 <body>
 
-<h1>RAPPORT D'EXPULSION 22:47</h1>
+<h1>RAPPORT D'EXPULSION 22:57</h1>
 
 <form id="rapportForm" novalidate>
 
@@ -482,8 +482,12 @@ button:hover { background:#0056b3; }
 <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
 <script src="https://cdn.jsdelivr.net/npm/flatpickr/dist/l10n/fr.js"></script> 
 <script>
-const regionUrl = "https://script.google.com/macros/s/AKfycby5mjKpMvPhV4jQdNPuO7H8NIcaRh_P3SRoqQSJLu8IzrMn7s5ytmZxbYXody-nqVKS-A/exec";
+/*const regionUrl = "https://script.google.com/macros/s/AKfycby5mjKpMvPhV4jQdNPuO7H8NIcaRh_P3SRoqQSJLu8IzrMn7s5ytmZxbYXody-nqVKS-A/exec";
 const codesUrl = "https://script.google.com/macros/s/AKfycbxTNlQ5JFpIDIBSTWARTT3v1ztYXexP9zMuVwwAdWC43acGQGA1cPibQYqSyCabhzEd/exec"; 
+*/
+const regionUrl = https://raw.githubusercontent.com/Loleduc/RapportExpulsion/refs/heads/main/BETA%20adressesmultiples.json
+const codesUrl = https://raw.githubusercontent.com/Loleduc/RapportExpulsion/refs/heads/main/Codes.json
+
 
 let jsonRegions = {}, currentLigueData = {};
 let jsonCodes = {}; // Sera rempli par l'appel à codesUrl
@@ -515,6 +519,27 @@ const LOGO_DRIVE_ID = "1Kqf-zlSqbQO-gdp7vrqedi4lhZG-UwDC";
  */
 function getLogoUrl() {
     return `https://drive.google.com/uc?export=download&id=${LOGO_DRIVE_ID}`;
+}
+
+async function chargerDonneesDepuisGitHub(url) {
+    try {
+        const reponse = await fetch(url, {
+            // Pas besoin de headers ni de mode: 'no-cors'
+            method: 'GET'
+        });
+
+        // 🔑 Le statut 200 doit être là
+        if (!reponse.ok) {
+            throw new Error(`Erreur HTTP: ${reponse.status}`);
+        }
+
+        // 🔑 Le navigateur peut lire le JSON directement et sans erreur
+        return await reponse.json(); 
+        
+    } catch (erreur) {
+        console.error("Erreur lors du chargement des données depuis GitHub:", erreur);
+        return null; 
+    }
 }
 
 /**
@@ -1086,14 +1111,18 @@ async function init() {
     
     // 1. Démarrer les deux requêtes en parallèle SANS AWAIT
     // Chaque requête est enveloppée dans une promesse pour gérer son propre parsing JSON et ses erreurs.
-    const regionsPromise = fetch(regionUrl)
+  /*  const regionsPromise = fetch(regionUrl)
         .then(res => res.ok ? res.json() : Promise.reject(new Error(`HTTP Régions ${res.status}`)))
         .catch(err => {
             console.warn("Impossible de récupérer les régions:", err);
             return {}; // Retourne un objet vide pour ne pas bloquer Promise.all
         });
-
-    const codesPromise = fetch(codesUrl)
+	*/
+    const regionsPromise = await chargerDonneesDepuisGitHub(regionUrl);
+	
+	const codesPromise = await chargerDonneesDepuisGitHub(codesUrl);
+	
+   /* const codesPromise = fetch(codesUrl)
         .then(resCodes => resCodes.ok ? resCodes.json() : Promise.reject(new Error(`HTTP Codes ${resCodes.status}`)))
         // Extraction de la clé 'Codes' et gestion de l'échec de parsing/fetch
         .then(codeData => codeData.Codes || {})
@@ -1101,7 +1130,7 @@ async function init() {
             console.error("ÉCHEC TOTAL du fetch des codes:", err);
             return {}; // Retourne un objet vide pour ne pas bloquer Promise.all
         });
-
+*/
     // 2. Attendre que les deux promesses soient complétées (la durée sera celle du fetch le plus lent)
     const [regionsResult, codesResult] = await Promise.all([regionsPromise, codesPromise]);
 

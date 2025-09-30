@@ -345,7 +345,7 @@ button:hover { background:#0056b3; }
 </head>
 <body>
 
-<h1>RAPPORT D'EXPULSION 19:10</h1>
+<h1>RAPPORT D'EXPULSION 22:17</h1>
 
 <form id="rapportForm" novalidate>
 
@@ -1778,52 +1778,38 @@ function createCodeChips(expulsionIndex, codesData, panel) {
 }    
 			
 async function envoyerRapportParEmail(data) {
-    
-    // 🛑 REMPLACEZ CECI PAR VOTRE URL APPS SCRIPT
-   // const emailUrl = "https://script.google.com/macros/s/AKfycbxKvafCxazQpekoIlAHZSj06TY7lz0u1xXvLt1-DurLEgLMbcQi8pPFb-GjOE37rsiO/exec";
-     const emailUrl = "https://script.google.com/macros/s/AKfycbzptS_pTHRw9HERRy6ZjLKfkY25GTgOkHbJMaSi7h9wd2tFyiF0zKWaw9T-HoArXrrw/exec"
-    const rapportHTML = genererRapportExpulsion(data);
-    
-			
-			
-    // Assurez-vous que cette adresse est correcte
-    const adresseDeDestination = "ump_77@videotron.ca,ump_77@hotmail.com"; 
-    
-	document.getElementById("debugOutput").textContent = ` Html : ${rapportHTML} Destinataire : ${adresseDeDestination} Sujet : ${ObjetCourriel}  `;
-    
-			
-    // 1. Préparation du corps de la requête (Objet JavaScript)
-    const payload = {
-        // Les clés DOIVENT correspondre aux noms attendus dans Apps Script (e.g., data.htmlContent)
-        htmlContent: rapportHTML, 
-        destinatairesContainer: adresseDeDestination, 
-		sujetCourriel : ObjetCourriel
-    };
-		
-	try {
-        fetch(emailUrl, {
-    method: 'POST',
-    headers: {
-        // ✅ Utiliser text/plain pour que le navigateur ne fasse PAS de pré-vol CORS
-        'Content-Type': 'text/plain' 
-    },
-         body: JSON.stringify(payload)
-        });
+  const emailUrl = "https://script.google.com/macros/s/.../exec"; // ton URL
+  const rapportHTML = genererRapportExpulsion(data);
+  const adresseDeDestination = "ump_77@videotron.ca,ump_77@hotmail.com";
 
-        const result = await response.json();
+  const payload = {
+    htmlContent: rapportHTML,
+    destinatairesContainer: adresseDeDestination,
+    sujetCourriel: ObjetCourriel // variable que tu as déjà
+  };
 
-        if (result.success) {
-            alert(`✅ E-mail envoyé avec succès à : ${adresseDeDestination}`);
-            document.getElementById('rapportForm').reset();
-        } else {
-            alert(`❌ Échec de l'envoi d'e-mail. Erreur: ${result.error} (Détails: ${result.details || 'Aucun'})`);
-        }
-    } catch (err) {
-        alert("❌ Erreur de communication avec le service d'e-mail. Vérifiez la console.");
-        console.error("Erreur Fetch:", err);
+  try {
+    const response = await fetch(emailUrl, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(payload)
+    });
+
+    const result = await response.json();
+    console.log("Résultat serveur:", result);
+    if (result.success) {
+      alert(`✅ OK — ${result.fileName}`);
+      document.getElementById('rapportForm').reset();
+    } else {
+      alert(`❌ Erreur serveur: ${result.error}`);
     }
+  } catch (err) {
+    console.error("Erreur fetch:", err);
+    alert("❌ Erreur réseau ou CORS — voir console.");
+  }
 }
-	
+
+
 	
 			
 function generateDebugJSON() {

@@ -345,7 +345,7 @@ button:hover { background:#0056b3; }
 </head>
 <body>
 
-<h1>RAPPORT D'EXPULSION 23:15</h1>
+<h1>RAPPORT D'EXPULSION 23:25</h1>
 
 <form id="rapportForm" novalidate>
 
@@ -521,30 +521,31 @@ function getLogoUrl() {
     return `https://drive.google.com/uc?export=download&id=${LOGO_DRIVE_ID}`;
 }
 
-async function chargerDonneesDepuisGitHub(url) {
+async function chargerDonneesCodes(url) {
     try {
         const reponse = await fetch(url, { method: 'GET' });
         if (!reponse.ok) throw new Error(`Erreur HTTP: ${reponse.status}`);
 
         const data = await reponse.json();
-
-        if ("Codes" in data) {
-            console.log("📦 Codes.json détecté");
-            return data.Codes;  // retourne directement l’objet des codes
-        }
-        if ("Regions" in data) {
-            console.log("📦 Regions.json détecté");
-            return data.Regions; // retourne directement l’objet des régions
-        }
-
-        console.warn("⚠️ Structure inattendue:", data);
-        return data;  // fallback si autre format
-
+        return data.Codes || data;  // <-- comme ton ancien .then()
+        
     } catch (erreur) {
         console.error("Erreur lors du chargement des données depuis GitHub:", erreur);
         return {}; 
     }
 }
+
+    async function chargerDonneesRegions(url) {
+    try {
+        const reponse = await fetch(url, { method: 'GET' });
+        if (!reponse.ok) throw new Error(`Erreur HTTP: ${reponse.status}`);
+        return await reponse.json(); 
+    } catch (erreur) {
+        console.error("Erreur lors du chargement des données depuis GitHub:", erreur);
+        return null; 
+    }
+}
+
 
 /**
  * Remplace l'ancienne fonction "convertirImageEnBase64" pour utiliser l'URL directe.
@@ -1122,9 +1123,9 @@ async function init() {
             return {}; // Retourne un objet vide pour ne pas bloquer Promise.all
         });
 	*/
-    const regionsPromise = await chargerDonneesDepuisGitHub(regionUrl);
+    const regionsPromise = await chargerDonneesRegions(regionUrl);
 	
-	const codesPromise = await chargerDonneesDepuisGitHub(codesUrl);
+	const codesPromise = await chargerDonneesCodes(codesUrl);
 	
    /* const codesPromise = fetch(codesUrl)
         .then(resCodes => resCodes.ok ? resCodes.json() : Promise.reject(new Error(`HTTP Codes ${resCodes.status}`)))

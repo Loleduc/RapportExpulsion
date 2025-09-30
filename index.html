@@ -345,7 +345,7 @@ button:hover { background:#0056b3; }
 </head>
 <body>
 
-<h1>RAPPORT D'EXPULSION 18:35</h1>
+<h1>RAPPORT D'EXPULSION 18:50</h1>
 
 <form id="rapportForm" novalidate>
 
@@ -687,15 +687,22 @@ function genererRapportExpulsion(customData) {
     let courrierArbitre = "";
     
     
-    // 🎨 Styles centralisés (Modification: Ajout de 'margin-bottom: 20px' à styleTable)
+    // 🎨 Styles centralisés (Marge basse de 20px pour espacer les tableaux)
     const styleTable = "width: 100%; max-width: 900px; border-collapse: collapse; font-family: Arial, sans-serif; font-size: 14px; margin: 0 auto 20px auto; border: 1px solid #ddd;";
-    const styleHeaderCell = "padding: 10px; text-align: left; font-size: 16px; border-top: 1px solid #ddd;";
-    const styleCell = "padding: 8px; border: 1px solid #ddd; width: auto;";
-    const styleCell15 = "padding: 8px; border: 1px solid #ddd; width: 15%;";
-    const styleCell25 = "padding: 8px; border: 1px solid #ddd; width: 25%;";
-    const styleCell30 = "padding: 8px; border: 1px solid #ddd; width: 30%;";
-    const styleCell40 = "padding: 8px; border: 1px solid #ddd; width: 40%;";
-    const styleTitleRow = "background-color: #f2f2f2; -webkit-print-color-adjust: exact;";
+    
+    // NOUVEAU: Header des sections (INFORMATIONS, ÉQUIPES, OFFICIELS, EXPULSION, etc.)
+    const styleSectionHeader = "padding: 10px; text-align: left; font-size: 16px; border-top: 1px solid #ddd; background-color: #f2f2f2; -webkit-print-color-adjust: exact;";
+    
+    // Styles pour les cellules de données
+    const styleCell = "padding: 8px; border: 1px solid #ddd; width: auto; background-color: white;"; // Fond blanc explicite
+    const styleCell15 = "padding: 8px; border: 1px solid #ddd; width: 15%; background-color: white;";
+    const styleCell25 = "padding: 8px; border: 1px solid #ddd; width: 25%; background-color: white;";
+    const styleCell30 = "padding: 8px; border: 1px solid #ddd; width: 30%; background-color: white;";
+    const styleCell40 = "padding: 8px; border: 1px solid #ddd; width: 40%; background-color: white;";
+    
+    // Style pour l'entête principale
+    const styleMainHeaderBG = "background-color: #a3a3a3; -webkit-print-color-adjust: exact;";
+
 
     // Récupération des données clés (avec vérification d'existence)
     const region = (customData[2] && customData[2].reponse) ? customData[2].reponse.toUpperCase() : "RÉGION INDÉTERMINÉE";
@@ -718,141 +725,126 @@ function genererRapportExpulsion(customData) {
 
     // Début du corps HTML
     message += `<div style="font-family: 'Segoe UI', sans-serif; font-size: 15px;">`;
-    // Le premier tableau n'a pas besoin de margin-bottom, mais le styleTable en a une par défaut. 
-    // On retire la marge pour le premier tableau pour éviter un espace en haut, puis on la réapplique
-    message += `<table style="${styleTable.replace(' 20px auto', ' 0 auto')}">`; 
-    // ⬇️ Note: Pour la cohérence, j'utilise la version de styleTable sans margin-bottom pour le premier tableau.
     
-    // 🔹 Bandeau du titre
+    // ----------------------------------------------------
+    // 1. BANDEAU DE TITRE (Tableau 1)
+    // ----------------------------------------------------
+    message += `<table style="${styleTable}">`; 
+    
     message += `
         <tr>
             
-            <td style="width: 15%; text-align: center; padding: 10px; background-color:#a3a3a3; -webkit-print-color-adjust: exact;">
+            <td style="width: 15%; text-align: center; padding: 10px; ${styleMainHeaderBG}">
                 <img src="${image1}" alt=" " style="max-height: 60px;">
             </td>
-            <td colspan="3" style="padding: 10px; text-align: center; vertical-align: middle; color: white; background-color:#a3a3a3; -webkit-print-color-adjust: exact;">
+            <td colspan="3" style="padding: 10px; text-align: center; vertical-align: middle; color: white; ${styleMainHeaderBG}">
                 <div style="font-size: 26px; font-weight: bold;">(${region}) Rapport d'expulsion</div>
                 <div style="font-size: 26px; margin-top: 5px;">Match # ${numeroMatch}</div>
             </td>
-            <td style="width: 15%; text-align: center; padding: 10px; background-color:#a3a3a3; -webkit-print-color-adjust: exact;">
+            <td style="width: 15%; text-align: center; padding: 10px; ${styleMainHeaderBG}">
                 <img src="${image2}" alt=" " style="max-height: 60px;">
             </td>
           
         </tr>
-    `;
+    </table>`; // Fermeture du tableau de titre
+    
+    // ----------------------------------------------------
+    // 2. INFORMATIONS SUR LE MATCH (Tableau 2)
+    // ----------------------------------------------------
+    message += `<table style="${styleTable}">`; 
+    message += `
+        <tr>
+        <th colspan="5" style="${styleSectionHeader}">INFORMATIONS SUR LE MATCH</th>
+        </tr>
+        <tr>
+        <td colspan="2" style="${styleCell30}"><b>Date et Heure du match :</b></td> 
+        <td style="${styleCell}">${(customData[1].reponse || "N/A").replace('T', ' ')}</td> <td style="${styleCell}">
+        <b>Région du Match :</b></td>
+        <td style="${styleCell}">${customData[2].reponse || "N/A"}</td>
+        </tr>`;
+    message += `
+        <tr>
+        <td colspan="3" style="${styleCell}"><b>Ligue :</b> &nbsp;&nbsp;${customData[3].reponse || "N/A"}</td>
+        <td style="${styleCell25}"><b>Catégorie :</b> &nbsp;&nbsp;${customData[4].reponse || "N/A"}</td>
+        <td style="${styleCell25}"><b>Classe :</b> &nbsp;&nbsp;${customData[5].reponse || "N/A"}</td>
+        </tr>
+    </table>`; // Fermeture du tableau des informations sur le match
 
-    // 🧩 Sections fixes (Jusqu'à l'index 14)
-    for (let i = 0; i < 15; i++) {
-        if (!customData[i]) continue;
+    // ----------------------------------------------------
+    // 3. ÉQUIPES ET TERRAIN (Tableau 3)
+    // ----------------------------------------------------
+    message += `<table style="${styleTable}">`; 
+    message += `
+        <tr>
+        <th colspan="5" style="${styleSectionHeader}">ÉQUIPES ET TERRAIN</th>
+        </tr>
+        <tr>
+        <td style="${styleCell15}"><b>Équipe locale :</b></td>
+        <td colspan="2" style="${styleCell}">${customData[6].reponse || "N/A"}</td>
+        <td style="${styleCell15}"><b>Équipe visiteur :</b></td>
+        <td style="${styleCell}">${customData[7].reponse || "N/A"}</td>
+        </tr>`;
+    message += `
+        <tr>
+        <td style="${styleCell25}"><b>Terrain :</b></td>
+        <td colspan="4" style="${styleCell}">${customData[8].reponse || "N/A"}</td>
+        </tr>
+    </table>`; // Fermeture du tableau des équipes et terrain
 
-        let question = customData[i].question;
-        let answer = customData[i].reponse;
+    // ----------------------------------------------------
+    // 4. OFFICIELS (Tableau 4)
+    // ----------------------------------------------------
+    message += `<table style="${styleTable}">`; 
+    message += `
+        <tr>
+        <th colspan="5" style="${styleSectionHeader}">OFFICIELS</th>
+        </tr>
+        <tr>
+        <td style="${styleCell25}"><b>Arbitre au marbre :</b></td>
+        <td colspan="2" style="${styleCell}">${customData[9].reponse || "N/A"}</td>
+        <td style="${styleCell}"><b>Arbitre sur les buts :</b></td>
+        <td style="${styleCell}">${customData[10].reponse || "N/A"}</td>
+        </tr>`;
+    message += `
+        <tr>
+        <td style="${styleCell25}"><b>Marqueur :</b></td>
+        <td colspan="4" style="${styleCell}">${customData[11].reponse || "N/A"}</td>
+        </tr>`;
+    message += `
+        <tr>
+        <td style="${styleCell25}"><b>Rapport fait par :</b></td>
+        <td colspan="2" style="${styleCell}">${customData[12].reponse || "N/A"}</td>
+        <td style="${styleCell}"><b> Date et heure du rapport : </b></td>
+        <td style="${styleCell}">${journee}</td>
+        </tr>
+    </table>`; // Fermeture du tableau des officiels
 
-        switch (i) {
-            case 0: break;
-            case 1: 
-                        if (!customData[2]) break;
-                        const displayDate = (answer || "N/A").replace('T', ' ');
-                    message += `
-                        <tr>
-                        <th colspan="5" style="${styleHeaderCell}; ${styleTitleRow}">INFORMATIONS SUR LE MATCH</th>
-                        </tr>
-                        <tr>
-                        <td colspan="2" style="${styleCell30}"><b>${question}</b></td> 
-                        <td style="${styleCell}">${displayDate}</td> <td style="${styleCell}">
-                        <b>${customData[2].question}</b></td>
-                        <td style="${styleCell}">${customData[2].reponse}</td>
-                        </tr>`;
-                    break;
-            case 3:
-                if (!customData[4] || !customData[5]) break;
-                message += `
-                        <tr>
-                        <td colspan="3" style="${styleCell}"><b>${customData[3].question}</b> &nbsp;&nbsp;${customData[3].reponse}</td>
-                        <td style="${styleCell25}"><b>${customData[4].question}</b> &nbsp;&nbsp;${customData[4].reponse}</td>
-                        <td style="${styleCell25}"><b>${customData[5].question}</b> &nbsp;&nbsp;${customData[5].reponse}</td>
-                        </tr>`;
-                i += 2;
-                break;
-            case 6:
-                if (!customData[7]) break;
-                message += `
-                        <tr>
-                        <th colspan="5" style="${styleHeaderCell}; ${styleTitleRow}">ÉQUIPES ET TERRAIN</th>
-                        </tr>
-                        <tr>
-                        <td style="${styleCell15}"><b>${question}</b></td>
-                        <td colspan="2" style="${styleCell}">${answer}</td>
-                        <td style="${styleCell15}"><b>${customData[7].question}</b></td>
-                        <td style="${styleCell}">${customData[7].reponse}</td>
-                        </tr>`;
-                i++;
-                break;
-            case 8:
-                message += `
-                        <tr>
-                        <td style="${styleCell25}"><b>${question}</b></td>
-                        <td colspan="4" style="${styleCell}">${answer}</td>
-                        </tr>`;
-                break;
-            case 9:
-                if (!customData[10]) break;
-                message += `
-                        <tr>
-                        <th colspan="5" style="${styleHeaderCell}; ${styleTitleRow}">OFFICIELS</th>
-                        </tr>
-                        <tr>
-                        <td style="${styleCell25}"><b>${question}</b></td>
-                        <td colspan="2" style="${styleCell}">${answer}</td>
-                        <td style="${styleCell}"><b>${customData[10].question}</b></td>
-                        <td style="${styleCell}">${customData[10].reponse}</td>
-                        </tr>`;
-                i++;
-                break;
-            case 11:
-                message += `
-                        <tr>
-                        <td style="${styleCell25}"><b>${question}</b></td>
-                        <td colspan="4" style="${styleCell}">${answer}</td>
-                        </tr>`;
-                break;
-            case 12:
-                message += `
-                        <tr>
-                        <td style="${styleCell25}"><b>${question}</b></td>
-                        <td colspan="2" style="${styleCell}">${answer}</td>
-                        <td style="${styleCell}"><b> Date et heure du rapport : </b></td>
-                        <td style="${styleCell}">${journee}</td>
-                        </tr>`; 
-                break;
-            case 13:
-                message += `
-                        <tr>
-                        <th colspan="5" style="${styleHeaderCell}; ${styleTitleRow}">COORDONNÉES</th>
-                        </tr>
-                        <tr>
-                        <td style="${styleCell25}"><b>${question}</b></td>
-                        <td colspan="4" style="${styleCell}">${answer}</td>
-                        </tr>`;
-                courrierArbitre = answer;
-                break;
-            case 14:
-                message += `
-                        <tr>
-                        <td style="${styleCell25}"><b>${question}</b></td>
-                        <td colspan="4" style="${styleCell}">${answer}</td>
-                        </tr>`;
-                break;
-        }
-    }
+    // ----------------------------------------------------
+    // 5. COORDONNÉES (Tableau 5)
+    // ----------------------------------------------------
+    message += `<table style="${styleTable}">`; 
+    message += `
+        <tr>
+        <th colspan="5" style="${styleSectionHeader}">COORDONNÉES</th>
+        </tr>
+        <tr>
+        <td style="${styleCell25}"><b>Adresse courriel :</b></td>
+        <td colspan="4" style="${styleCell}">${customData[13].reponse || "N/A"}</td>
+        </tr>`;
+    message += `
+        <tr>
+        <td style="${styleCell25}"><b>Numéro de téléphone :</b></td>
+        <td colspan="4" style="${styleCell}">${customData[14].reponse || "N/A"}</td>
+        </tr>
+    </table>`; // Fermeture du tableau des coordonnées
 
-    // FIN du premier grand tableau d'informations
-    message += `</table>`; // Suppression de l'espace <br><br> ici
 
     // 🔁 Expulsions et détails
     let expulsionIndex = 1;
     let expulsionTable = "";
     let detailsTable = "";
+    
+    // Fonctions utilitaires (conservées pour la robustesse)
     const norm = s => s ? s.toLowerCase().normalize('NFD').replace(/\p{Diacritic}/gu, '').replace(/[’]/g, "'").replace(/\s+/g, ' ').trim() : '';
     const getAnswerToQuestion = (q, data) => {
         if (!Array.isArray(data)) return "N/A"; 
@@ -862,12 +854,11 @@ function genererRapportExpulsion(customData) {
     
     // Déterminer où commence la section des expulsions (après l'index 14)
     let startIndex = 15;
-    
-    // On avance dans le tableau pour trouver la première question d'expulsion
     while(startIndex < customData.length && !norm(customData[startIndex].question).startsWith("nom de l'equipe fautive")) {
         startIndex++;
     }
 
+    // Boucle pour les expulsions (chaque expulsion sera dans un tableau séparé)
     for (let i = startIndex; i < customData.length; i++) {
         let question = customData[i].question;
         let answer = customData[i].reponse;
@@ -880,12 +871,12 @@ function genererRapportExpulsion(customData) {
         answer = answer.toString().replace(/\n/g, "<br>"); // Remplace les retours à la ligne par <br>
 
         if (titreActuel.startsWith("nom de l'equipe fautive")) {
-            // Fermeture des tables précédentes
+            // Fermeture de la table d'expulsion précédente s'il y en a une
             if (expulsionTable !== "") {
-                message += expulsionTable + "</table>"; // Suppression de l'espace <br><br> ici
+                message += expulsionTable + "</table>";
             }
-            // Nouvelle table (avec le styleTable modifié)
-            expulsionTable = `<table style="${styleTable}; page-break-inside: avoid;"><tr><th colspan="2" style="${styleHeaderCell}; ${styleTitleRow}">EXPULSION #${expulsionIndex}</th></tr><tr><td style="${styleCell40}"><b>${question}</b></td><td style="${styleCell}">${answer}</td></tr>`;
+            // Nouvelle table pour l'EXPULSION #N
+            expulsionTable = `<table style="${styleTable}; page-break-inside: avoid;"><tr><th colspan="2" style="${styleSectionHeader}">EXPULSION #${expulsionIndex}</th></tr><tr><td style="${styleCell40}"><b>${question}</b></td><td style="${styleCell}">${answer}</td></tr>`;
             expulsionIndex++;
             continue;
         }
@@ -909,23 +900,22 @@ function genererRapportExpulsion(customData) {
     }
 
     // Fermeture de la dernière table d'expulsion
-    if (expulsionTable !== "") message += expulsionTable + "</table>"; // Suppression de l'espace <br><br> ici
+    if (expulsionTable !== "") message += expulsionTable + "</table>"; 
 
     // --- Ajout des détails et informations complémentaires (blocs globaux) ---
     
-    // 1. Détails concernant les expulsions (Global)
+    // 6. DÉTAILS CONCERNANT LES EXPULSIONS (Tableau séparé)
     const detailsGlobal = getAnswerToQuestion("Détails concernant les expulsions", customData);
     if (detailsGlobal !== "N/A") {
-        // Utilisation de styleTable
         detailsTable += `<table style="${styleTable}; page-break-inside: avoid;">
-            <tr><th colspan="2" style="${styleHeaderCell}; ${styleTitleRow}">
+            <tr><th colspan="2" style="${styleSectionHeader}">
                 <b>Détails concernant les expulsions</b>
             </th></tr>
             <tr><td colspan="2" style="${styleCell}">${detailsGlobal.replace(/\n/g, "<br>")}</td></tr>
-        </table>`; // Suppression de l'espace <br> ici
+        </table>`;
     }
     
-    // 2. Informations complémentaires (Global)
+    // 7. INFORMATIONS COMPLÉMENTAIRES (Tableau séparé)
     const infosComplementaires = getAnswerToQuestion("Informations complémentaires", customData);
     const avertissement = getAnswerToQuestion("avertissement avant d’être expulsé", customData);
     const duree = getAnswerToQuestion("longue durée", customData);
@@ -940,9 +930,8 @@ function genererRapportExpulsion(customData) {
     `;
     
     if (infosComplementaires !== "N/A" || avertissement !== "N/A" || duree !== "N/A" || environs !== "N/A") {
-        // Utilisation de styleTable
         detailsTable += `<table style="${styleTable}; page-break-inside: avoid;">
-            <tr><th colspan="2" style="${styleHeaderCell}; ${styleTitleRow}">
+            <tr><th colspan="2" style="${styleSectionHeader}">
                 <b>Informations complémentaires</b>
             </th></tr>
             <tr><td colspan="2" style="${styleCell}">
@@ -950,7 +939,7 @@ function genererRapportExpulsion(customData) {
                 <hr style="border: 0; border-top: 1px solid #ddd; margin: 10px 0;">
                 <p style="margin: 0;">${infosComplementaires.replace(/\n/g, "<br>")}</p>
             </td></tr>
-        </table>`; // Suppression de l'espace <br><br> ici
+        </table>`;
     }
 
     message += detailsTable;
@@ -991,7 +980,6 @@ function genererRapportExpulsion(customData) {
     
     return finalHTML;
 }
-
 
 
 

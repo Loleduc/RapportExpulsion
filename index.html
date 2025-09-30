@@ -528,20 +528,24 @@ async function chargerDonneesDepuisGitHub(url) {
 
         const data = await reponse.json();
 
-        // 🔎 Adaptation selon la structure
-        if (data.Codes) {
-            return data.Codes;   // fichier Codes.json
-        } else if (data.Regions) {
-            return data.Regions; // fichier Regions.json
-        } else {
-            return data;         // fallback si structure différente
+        if ("Codes" in data) {
+            console.log("📦 Codes.json détecté");
+            return data.Codes;  // retourne directement l’objet des codes
         }
+        if ("Regions" in data) {
+            console.log("📦 Regions.json détecté");
+            return data.Regions; // retourne directement l’objet des régions
+        }
+
+        console.warn("⚠️ Structure inattendue:", data);
+        return data;  // fallback si autre format
 
     } catch (erreur) {
         console.error("Erreur lors du chargement des données depuis GitHub:", erreur);
         return {}; 
     }
 }
+
 /**
  * Remplace l'ancienne fonction "convertirImageEnBase64" pour utiliser l'URL directe.
  */

@@ -1,0 +1,1009 @@
+const fileId = '1lD60DY_USlSMZfdB5i-u5YoIuEehciT9'; // ID du JSON dans Drive   ID du fichier Json en prod :1-Z3F2HcGzfTa9kOc7quZJEJ6x-Mgm-hN   Id fichier Json en Bêta : 1lD60DY_USlSMZfdB5i-u5YoIuEehciT9
+
+const BQId = '1fAAYZQ_-ZvrXyLY_Qa7JEC9MEiuJ_7Dx';     //avec nom : 1Kqf-zlSqbQO-gdp7vrqedi4lhZG-UwDC   sans nom : 1fAAYZQ_-ZvrXyLY_Qa7JEC9MEiuJ_7Dx
+const LBAVRId = '1GsT-o5dU1AoOh01t-WhcihVNuS0XGyu6';
+const LBFQId = '1_iE8iC9-etEviBlOCAZrsEkTe6gogPaF';       
+const LBJAAQId = '1Jg3oNiLRZ62ZAeVhNOpacdpy6l8vDCRs';
+const LBSVFId =  '11KGNhie-zlOLjrsWCTV9-C83Kbp34GHo';
+//const LBA30Id ="";
+const parentFolderName = "BETA Fichiers PDF"; // Nom du dossier parent   à changer pour Fichiers PDF en production
+const fichierreponse = "1c-0xYs6J1TucWgYd1gbhNPOJhGxbGxikOHrFFanqoHQ"; // id prod 1i10MaGpH4R-uFXgOVF1cig_Azq3q68ZyFaK6Bo0gzF4
+
+
+function validerTelephone(telephone) {
+    const regex = /^\d{3}-\d{3}-\d{4}$/;
+    return regex.test(telephone);
+}
+
+function envoicourriel(destinataire, expediteur, sujet, courriel, pdfFile) {
+  function envoyerEnSecurite(api, to, subject, body, attachment) {
+    try {
+      api.sendEmail(to, subject, "", { htmlBody: body, attachments: attachment ? [attachment] : [] });
+      Logger.log("Courriel envoyé à : " + to);
+    } catch (err) {
+      Logger.log("Erreur lors de l'envoi à " + to + " : " + err.message);
+    }
+  }
+
+  try {
+    GmailApp.sendEmail(destinataire, sujet, "", { htmlBody: courriel, attachments: pdfFile ? [pdfFile] : [] });
+    Logger.log("Courriel envoyé avec succès à : " + destinataire);
+    envoyerEnSecurite(GmailApp, expediteur, sujet, courriel, pdfFile);
+  } catch (err) {
+    Logger.log("Erreur vers destinataire principal (" + destinataire + ") : " + err.message);
+    envoyerEnSecurite(MailApp, "rapportdexpulsionrsry@gmail.com,ump_77@videotron.ca", 
+      "Catégorie et classe non trouvée ! dans le fichier Json", courriel, pdfFile);
+    envoyerEnSecurite(MailApp, expediteur, 
+      "Courriel de destination non trouvé ! Merci d'aviser votre représentant régional", courriel, pdfFile);
+  }
+}
+
+// fonction qui va chercher dans un fichier JSON les destinataires en fonction de la catégorie et la classe
+function getEmailsFromJson(region, ligue, optionChoisie) {
+ // const fileId = '1lD60DY_USlSMZfdB5i-u5YoIuEehciT9'; // ID du JSON dans Drive   ID du fichier Json en prod :1-Z3F2HcGzfTa9kOc7quZJEJ6x-Mgm-hN   Id fichier Json en Bêta : 1lD60DY_USlSMZfdB5i-u5YoIuEehciT9
+  
+  let contenu = DriveApp.getFileById(fileId).getBlob().getDataAsString();
+  
+  // Supprime le BOM s'il existe  fichier au début d'un document de type texte:   
+  contenu = contenu.replace(/^\uFEFF/, '');
+  
+  const data = JSON.parse(contenu);
+  
+  // Accès au 3 niveaux
+  const adresses = data[region]?.[ligue]?.[optionChoisie];
+  
+  return adresses || []; // Retourne un tableau vide si rien trouvé
+}
+
+function convertirImageEnBase64(ligueid) {
+  
+  let FileId; 
+  /*const BQId = '1fAAYZQ_-ZvrXyLY_Qa7JEC9MEiuJ_7Dx';     //avec nom : 1Kqf-zlSqbQO-gdp7vrqedi4lhZG-UwDC   sans nom : 1fAAYZQ_-ZvrXyLY_Qa7JEC9MEiuJ_7Dx
+  const LBAVRId = '1GsT-o5dU1AoOh01t-WhcihVNuS0XGyu6';
+  const LBFQId = '1_iE8iC9-etEviBlOCAZrsEkTe6gogPaF';       
+  const LBJAAQId = '1Jg3oNiLRZ62ZAeVhNOpacdpy6l8vDCRs';
+  const LBSVFId =  '11KGNhie-zlOLjrsWCTV9-C83Kbp34GHo';
+  */
+  // **const LBA30Id ="";
+
+  const ligueidString = String(ligueid);
+
+  if (ligueidString.startsWith("BQ")) {
+    FileId = BQId;
+  } else if (ligueidString.startsWith("LBAVR")) {
+    FileId = LBAVRId;
+  } else if (ligueidString.startsWith("LBFQ")) {
+    FileId = LBFQId;
+  } else if (ligueidString.startsWith("LBJAAQ")) {
+    FileId = LBJAAQId;
+  } else if (ligueidString.startsWith("LBSVF")) {
+    FileId = LBSVFId;
+  } //else if (ligueidString.startsWith("LBA30")) {
+  //   FileId = LBA30Id;
+  // }
+  else {
+    // Assign a default value
+    FileId = BQId; 
+  }
+
+  var file = DriveApp.getFileById(FileId);
+  var blob = file.getBlob();
+  var base64 = Utilities.base64Encode(blob.getBytes());
+  var mimeType = blob.getContentType();
+  var imageData = "data:" + mimeType + ";base64," + base64;
+  return imageData;
+}
+
+// function qui prend la catégorie et la classe ajoute un espace pour aller chercher la bonne option dans le fichier JSON
+// Exemple d'une entrée dans le fichier JSON   :   "Senior Majeur": ["adresse1@domaine.com","adresse2@domaine.com","adresse3@domaine.com"],
+function determinedestinataire(region, ligue, categorie, classe) {
+  const cleRecherche = categorie + " " + classe;
+  Logger.log("Recherche : Région=%s | Ligue=%s | Catégorie+Classe=%s", region, ligue, cleRecherche);
+  
+  let destinataires = getEmailsFromJson(region, ligue, cleRecherche);
+  
+  Logger.log("Destinataires trouvés : %s", JSON.stringify(destinataires));
+  
+  return destinataires;
+}
+
+function separerEnTableau(chaine) {
+  if (!chaine || typeof chaine !== 'string') return [];
+  return chaine
+    .split(",")           // coupe sur chaque virgule
+    .map(function(item) {
+      return item.trim();      // enlève les espaces inutiles
+    })
+    .filter(function(item) {
+      return item !== "";      // enlève les champs vides
+    });
+}
+
+/**
+ * Génère un PDF fidèle à partir de ton HTML en utilisant HtmlService
+ */
+function creerPdfDepuisHtml(titre, htmlContent) {
+  // Crée un output HTML temporaire
+  const htmlOutput = HtmlService.createHtmlOutput(htmlContent)
+                                .setWidth(900)
+                                .setHeight(1200);
+
+  // Convertit l'HTML en PDF
+  const pdfBlob = htmlOutput.getAs('application/pdf').setName(titre + '.pdf');
+
+  return pdfBlob;
+}
+
+function extraireAnnee(dateHeure) {
+  if (!dateHeure) return null;
+
+  // Si c'est déjà un objet Date
+  if (dateHeure instanceof Date) {
+    return dateHeure.getFullYear();
+  }
+
+  let annee = null;
+
+  // Essayer de parser avec Date (remplace espace par T pour ISO)
+  let dateObj = new Date(dateHeure.toString().replace(" ", "T"));
+  if (!isNaN(dateObj)) {
+    annee = dateObj.getFullYear();
+  } else {
+    // Si ça n'a pas marché, extraire les 4 premiers chiffres
+    let match = dateHeure.toString().match(/\d{4}/);
+    if (match) {
+      annee = parseInt(match[0], 10);
+    }
+  }
+
+  if (!annee) {
+    Logger.log("⚠ Impossible de déterminer l'année pour : " + dateHeure);
+  } else {
+    Logger.log("Année extraite : " + annee);
+  }
+
+  return annee;
+}
+
+function valideSousDossierDansParent(region, dossierdate) {
+  //const parentFolderName = "BETA Fichiers PDF"; // Nom du dossier parent   à changer pour Fichiers PDF en production
+  const parentIterator = DriveApp.getFoldersByName(parentFolderName);
+
+  if (!parentIterator.hasNext()) {
+    Logger.log("❌ Dossier parent introuvable !");
+    return;
+  }
+  const parent = parentIterator.next(); // Dossier parent
+
+  // 1️⃣ Vérifier/créer le sous-dossier Région
+  let regionFolder;
+  const regionFolders = parent.getFoldersByName(region);
+  if (regionFolders.hasNext()) {
+    regionFolder = regionFolders.next();
+    Logger.log("📂 Dossier Région déjà existant : " + regionFolder.getName());
+  } else {
+    regionFolder = parent.createFolder(region);
+    Logger.log("📂 Dossier Région créé : " + regionFolder.getName());
+  }
+
+  // 2️⃣ Vérifier/créer le sous-dossier Date
+  let dateFolder;
+  const dateFolders = regionFolder.getFoldersByName(dossierdate);
+  if (dateFolders.hasNext()) {
+    dateFolder = dateFolders.next();
+    Logger.log("📂 Sous-dossier Date déjà existant : " + dateFolder.getName());
+  } else {
+    dateFolder = regionFolder.createFolder(dossierdate);
+    Logger.log("📂 Sous-dossier Date créé : " + dateFolder.getName());
+  }
+
+  return dateFolder; // Retourne le dossier Date pour y créer le PDF
+}
+
+function sauvegardepdf(region,dossierdate, pdfFile) {
+  // Récupère ou crée le sous-dossier
+  const sousDossier = valideSousDossierDansParent(region,dossierdate);
+
+  if (sousDossier) { // si le dossier existe ou a été créé
+    const copiePdf = sousDossier.createFile(pdfFile); // crée le PDF dans ce dossier
+    Logger.log("PDF sauvegardé dans le dossier : " + copiePdf.getUrl());
+  } else {
+    Logger.log("❌ Impossible de sauvegarder le PDF : dossier introuvable ou non créé !");
+  }
+}
+
+function getCurrentDateTime() {
+  const now = new Date();
+
+  // Obtenir chaque composante
+  const year = now.getFullYear();
+  const month = String(now.getMonth() + 1).padStart(2, '0'); // Les mois commencent à 0
+  const day = String(now.getDate()).padStart(2, '0');
+  const hours = String(now.getHours()).padStart(2, '0');
+  const minutes = String(now.getMinutes()).padStart(2, '0');
+
+  // Construire la chaîne au format yyyy-mm-dd hh:mm
+  const formatted = `${year}-${month}-${day} ${hours}:${minutes}`;
+  return formatted;
+}
+
+function buildCustomData(responses) {
+  let data = [];
+
+  // 🔹 Copier toutes les réponses du formulaire dans un tableau personnalisé
+  // Chaque élément du tableau sera un objet { question: ..., reponse: ... }
+  responses.forEach((itemResponse) => {
+    data.push({
+      question: itemResponse.getItem().getTitle(),
+      reponse: itemResponse.getResponse()
+    });
+  });
+
+  // 🔹 Map des préfixes de code vers catégorie et classe correspondantes
+  // Cela permet de gérer facilement plusieurs codes et leurs valeurs associées
+  const codeMap = {
+    "LBSVF": { categorie: "Senior", classe: "BB" },
+    "LBJAAQ": { categorie: "Junior", classe: "AA" },
+    "LBA30": { categorie: "Senior", classe: "A" }
+  };
+
+  // 🔹 Chercher un préfixe correspondant dans le code de la 4e réponse (index 3)
+  // Utilisation de startsWith pour détecter le code même si la réponse contient plus de caractères
+  const code = Object.keys(codeMap).find(prefix => data[3].reponse.startsWith(prefix));
+
+  // 🔹 Si un préfixe est trouvé dans la map, insérer automatiquement Catégorie et Classe
+  if (code) {
+    const { categorie, classe } = codeMap[code];
+
+    // 🔹 Insérer "Catégorie" après la 4e question (index 3)
+    data.splice(4, 0, { question: "Catégorie : ", reponse: categorie });
+
+    // 🔹 Insérer "Classe" juste après la Catégorie (index 5)
+    data.splice(5, 0, { question: "Classe : ", reponse: classe });
+  }
+
+  // 🔹 Retourner le tableau complet, incluant les nouvelles entrées si applicable
+  return data;
+}
+
+
+/**
+ * Calcule le délai entre deux dates et retourne une string lisible
+ * @param {string} matchDateTime - Date et heure du match au format "yyyy-mm-dd hh:mm"
+ * @param {string} currentDateTime - Date et heure actuelle au format "yyyy-mm-dd hh:mm"
+ * @returns {string} Délai écoulé entre les deux dates
+ */
+function delaiEntreDates(matchDateTime, currentDateTime) {
+  // Convertir les chaînes en objets Date
+  const matchDate = new Date(matchDateTime.replace(" ", "T"));
+  const currentDate = new Date(currentDateTime.replace(" ", "T"));
+
+  // Calculer la différence en millisecondes
+  let diffMs = currentDate - matchDate;
+  if (diffMs < 0) diffMs = 0; // éviter les valeurs négatives
+
+  // Convertir en unités
+  const diffJours = Math.floor(diffMs / (1000 * 60 * 60 * 24));
+  diffMs -= diffJours * (1000 * 60 * 60 * 24);
+
+  const diffHeures = Math.floor(diffMs / (1000 * 60 * 60));
+  diffMs -= diffHeures * (1000 * 60 * 60);
+
+  const diffMinutes = Math.floor(diffMs / (1000 * 60));
+  
+  let difference = `( ${diffJours} jour(s) ${diffHeures} heure(s) ${diffMinutes} minute(s) )`;
+  let message = "";
+
+  // Ajouter un avertissement si plus de 24 heures
+  if ((diffJours * 24 + diffHeures) > 24) {
+    message += "ATTENTION : Plus de 24 heures se sont écoulées etre le match et la création du rapport d'expulsion ! " +"    " + difference;
+  }
+
+  return message;
+
+}
+
+
+
+/*
+function creerJsonDepuisFormulaire(responses) {
+  const customData = buildCustomData(responses);
+
+  let jsonObj = {
+    match: {},
+    equipes: {},
+    officiels: {},
+    arbitre: {},
+    expulsions: []
+  };
+
+  let expulsionCourante = null;
+  let expulsionIndex = 0;
+
+  const norm = s => s.toLowerCase()
+    .normalize('NFD')
+    .replace(/\p{Diacritic}/gu, '')
+    .replace(/[’]/g, "'")
+    .replace(/\s+/g, ' ')
+    .trim();
+
+  // Champs temporaires pour match
+  let matchFields = {
+    numero: "",
+    date: "",
+    region: "",
+    ligue: "",
+    categorie: "",
+    classe: "",
+    details_expulsions: [],
+    infos_complementaires: ""
+  };
+
+  customData.forEach(item => {
+    let q = norm(item.question);
+    let r = item.reponse;
+    if (!r) return;
+
+    // 🎯 MATCH
+    if (q.includes("match #")) matchFields.numero = r;
+    else if (q.includes("date et heure du match")) matchFields.date = r;
+    else if (q.includes("region du match")) matchFields.region = r;
+    else if (q.includes("ligue")) matchFields.ligue = r;
+    else if (q.includes("categorie")) matchFields.categorie = r;
+    else if (q.includes("classe")) matchFields.classe = r;
+
+    // 🎯 EQUIPES ET TERRAIN
+    else if (q.includes("equipe locale")) jsonObj.equipes.locale = r;
+    else if (q.includes("equipe visiteur")) jsonObj.equipes.visiteur = r;
+    else if (q.includes("terrain")) jsonObj.equipes.terrain = r;
+
+    // 🎯 OFFICIELS
+    else if (q.includes("arbitre au marbre")) jsonObj.officiels.marbre = r;
+    else if (q.includes("arbitre sur les buts")) jsonObj.officiels.buts = r;
+    else if (q.includes("marqueur")) jsonObj.officiels.marqueur = r;
+
+    // 🎯 ARBITRE RAPPORTEUR
+    else if (q.includes("rapport fait par")) jsonObj.arbitre.nom = r;
+    else if (q.includes("adresse courriel")) jsonObj.arbitre.courriel = r;
+    else if (q.includes("numero de telephone")) jsonObj.arbitre.telephone = r;
+
+    // 🎯 EXPULSIONS
+    else if (q.includes("nom de l'equipe fautive")) {
+      if (expulsionCourante) {
+        jsonObj.expulsions.push(expulsionCourante);
+      }
+      expulsionIndex++;
+      expulsionCourante = { numero: expulsionIndex, equipe: r, chandail: "", joueur: "", codes: [] };
+    }
+    else if (q.includes("numero de chandail")) {
+      if (expulsionCourante) expulsionCourante.chandail = r;
+    }
+    else if (q.includes("nom de la personne fautive")) {
+      if (expulsionCourante) expulsionCourante.joueur = r;
+    }
+    else if (q.includes("codes")) {
+      if (expulsionCourante) expulsionCourante.codes = separerEnTableau(r);
+    }
+
+    // 🎯 DETAILS EXPULSIONS
+    else if (q.includes("details concernant")) {
+      matchFields.details_expulsions.push(r);
+    }
+
+    // 🎯 INFORMATIONS COMPLEMENTAIRES
+    else if (q.includes("informations complementaires")) {
+      matchFields.infos_complementaires = r;
+    }
+  });
+
+  // Ajouter la dernière expulsion
+  if (expulsionCourante) {
+    jsonObj.expulsions.push(expulsionCourante);
+  }
+
+  // 🔹 Construire match avec l'ordre voulu
+  jsonObj.match = {
+    numero: matchFields.numero,
+    date: matchFields.date,
+    region: matchFields.region,
+    ligue: matchFields.ligue,
+    categorie: matchFields.categorie,
+    classe: matchFields.classe,
+    details_expulsions: matchFields.details_expulsions,
+    infos_complementaires: matchFields.infos_complementaires
+  };
+
+  // 🔹 Fonction pour générer un ID "propre" pour la base de données
+  function genererIdPropre(date, ligue, numero) {
+    const norm = s => s.toLowerCase()
+      .normalize('NFD')
+      .replace(/\p{Diacritic}/gu, '')   // enlever accents
+      .replace(/[^a-z0-9]+/g, '-')     // remplacer tout ce qui n'est pas lettre/chiffre par -
+      .replace(/^-+|-+$/g, '');        // enlever - au début et à la fin
+    return `${norm(date)}_${norm(ligue)}_${numero}`;
+  }
+
+  // 🔹 Ajouter la clé unique "propre"
+  jsonObj.match.id = genererIdPropre(
+    jsonObj.match.date,
+    jsonObj.match.ligue,
+    jsonObj.match.numero
+  );
+
+  // Sérialisation JSON
+  const contenuJson = JSON.stringify(jsonObj, null, 2);
+
+  const dossier = DriveApp.getFoldersByName("Rapports JSON").next();
+  const nomFichier = `rapport-expulsion-${jsonObj.match.numero || "inconnu"}.json`;
+  const fichier = dossier.createFile(nomFichier, contenuJson, MimeType.PLAIN_TEXT);
+
+  Logger.log("📄 Fichier JSON créé : " + fichier.getUrl());
+  return fichier;
+}
+*/
+
+function envoyerJSONVersSupabase(json) {
+  const SUPABASE_URL = "https://qqbbxirqzgxvbdakvatb.supabase.co";
+  const SUPABASE_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InFxYmJ4aXJxemd4dmJkYWt2YXRiIiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTc1NzU1OTcxMSwiZXhwIjoyMDczMTM1NzExfQ.MuzuDKY46up6ljHKkPJ_yoa0BwlTCjUJLeI_O_3mQg4";
+
+  // 🔹 Fonction utilitaire pour générer UUID pour les expulsions
+  function generateUUID() {
+    return Utilities.getUuid();
+  }
+
+  const match = json.match;
+  const equipes = json.equipes;
+  const officiels = json.officiels;
+  const expulsions = json.expulsions;
+
+  // 🔹 1️⃣ Insertion du match
+  const matchPayload = [{
+    id: match.id,
+    numero: match.numero,
+    date: match.date,
+    region: match.region,
+    ligue: match.ligue,
+    categorie: match.categorie,
+    classe: match.classe,
+    details_expulsions: match.details_expulsions || "",
+    infos_complementaires: match.infos_complementaires || ""
+  }];
+
+  UrlFetchApp.fetch(`${SUPABASE_URL}/rest/v1/matches`, {
+    method: "post",
+    contentType: "application/json",
+    headers: {
+      "apikey": SUPABASE_KEY,
+      "Authorization": `Bearer ${SUPABASE_KEY}`,
+      "Prefer": "return=minimal"
+    },
+    payload: JSON.stringify(matchPayload)
+  });
+
+  // 🔹 2️⃣ Insertion des équipes (une seule ligne par match)
+  const equipesPayload = [{
+    match_id: match.id,
+    locale: equipes.locale || "",
+    visiteur: equipes.visiteur || "",
+    terrain: equipes.terrain || ""
+  }];
+
+  UrlFetchApp.fetch(`${SUPABASE_URL}/rest/v1/equipes`, {
+    method: "post",
+    contentType: "application/json",
+    headers: {
+      "apikey": SUPABASE_KEY,
+      "Authorization": `Bearer ${SUPABASE_KEY}`,
+      "Prefer": "return=minimal"
+    },
+    payload: JSON.stringify(equipesPayload)
+  });
+
+  // 🔹 3️⃣ Insertion des officiels (une seule ligne par match)
+  const officielsPayload = [{
+    match_id: match.id,
+    marbre: officiels.marbre || "",
+    buts: officiels.buts || "",
+    marqueur: officiels.marqueur || "",
+    rapport: officiels.rapport || "",
+    courriel: officiels.courriel || "",
+    telephone: officiels.telephone || ""
+  }];
+
+  UrlFetchApp.fetch(`${SUPABASE_URL}/rest/v1/officiels`, {
+    method: "post",
+    contentType: "application/json",
+    headers: {
+      "apikey": SUPABASE_KEY,
+      "Authorization": `Bearer ${SUPABASE_KEY}`,
+      "Prefer": "return=minimal"
+    },
+    payload: JSON.stringify(officielsPayload)
+  });
+
+  // 🔹 4️⃣ Insertion des expulsions et de leurs codes
+  expulsions.forEach(exp => {
+    const expId = generateUUID();
+    const expPayload = [{
+      id: expId,
+      match_id: match.id,
+      numero: exp.numero,
+      equipe: exp.equipe,
+      chandail: exp.chandail,
+      joueur: exp.joueur
+    }];
+
+    UrlFetchApp.fetch(`${SUPABASE_URL}/rest/v1/expulsions`, {
+      method: "post",
+      contentType: "application/json",
+      headers: {
+        "apikey": SUPABASE_KEY,
+        "Authorization": `Bearer ${SUPABASE_KEY}`,
+        "Prefer": "return=minimal"
+      },
+      payload: JSON.stringify(expPayload)
+    });
+
+    // 🔹 Codes liés à l’expulsion
+    if (exp.codes && exp.codes.length > 0) {
+      const codesPayload = exp.codes.map(c => ({
+        expulsion_id: expId,
+        code: c
+      }));
+
+      UrlFetchApp.fetch(`${SUPABASE_URL}/rest/v1/expulsion_codes`, {
+        method: "post",
+        contentType: "application/json",
+        headers: {
+          "apikey": SUPABASE_KEY,
+          "Authorization": `Bearer ${SUPABASE_KEY}`,
+          "Prefer": "return=minimal"
+        },
+        payload: JSON.stringify(codesPayload)
+      });
+    }
+  });
+
+  Logger.log("JSON envoyé avec succès à Supabase !");
+}
+
+
+
+
+function creerJsonDepuisFormulaire(responses) {
+  // 🔹 Utilitaire pour normaliser les codes (string ou array → tableau)
+  function parseCodes(reponse) {
+    if (!reponse) return [];
+    if (Array.isArray(reponse)) {
+      return reponse.map(c => String(c).trim()).filter(c => c !== "");
+    }
+    if (typeof reponse === "string") {
+      return reponse
+        .split(",")
+        .map(c => c.trim())
+        .filter(c => c !== "");
+    }
+    return [];
+  }
+
+  // 🔹 Normaliser une question (minuscules + apostrophes + accents)
+  function normQuestion(q) {
+    if (!q) return "";
+    return q
+      .toLowerCase()
+      .replace(/[’']/g, "'") // apostrophes normales
+      .normalize("NFD").replace(/[\u0300-\u036f]/g, ""); // accents enlevés
+  }
+
+  const customData = buildCustomData(responses);
+
+  let match = {};
+  let equipes = {};
+  let officiels = {};
+  let expulsions = [];
+
+  let expulsionCourante = null;
+
+  customData.forEach(({ question: q, reponse: r }) => {
+    q = normQuestion(q);
+
+  if (q.includes("match #")) {
+      match.numero = r;
+     Logger.log(`${match.numero} VS ${r}`); 
+  }
+    else if (q.includes("date et heure")) match.date = r;
+    else if (q.includes("region")) match.region = r;
+    else if (q.includes("ligue")) match.ligue = r;
+    else if (q.includes("categorie")) match.categorie = r;
+    else if (q.includes("classe")) match.classe = r;
+
+   
+    else if (q.includes("equipe locale")) equipes.locale = r;
+    else if (q.includes("equipe visiteur")) equipes.visiteur = r;
+    else if (q.includes("terrain")) equipes.terrain = r;
+
+    else if (q.includes("arbitre au marbre")) officiels.marbre = r;
+    else if (q.includes("arbitre sur les buts")) officiels.buts = r;
+    else if (q.includes("marqueur")) officiels.marqueur = r;
+    else if (q.includes("rapport fait")) officiels.rapport = r;
+    else if (q.includes("courriel")) officiels.courriel = r;
+    else if (q.includes("telephone")) officiels.telephone = r;
+
+    else if (q.includes("details concernant")) {
+      match.details_expulsions = r; // un seul paragraphe
+    } 
+      else if (q.includes("informations complementaires")) {
+  match.infos_complementaires = r;
+  }
+
+    // 🔹 Expulsions
+    else if (q.includes("equipe fautive")) {
+      expulsionCourante = { numero: expulsions.length + 1, equipe: r };
+      expulsions.push(expulsionCourante);
+    } else if (q.includes("numero de chandail")) {
+      if (expulsionCourante) expulsionCourante.chandail = r;
+    } else if (q.includes("personne fautive")) {
+      if (expulsionCourante) expulsionCourante.joueur = r;
+    } else if (q.includes("codes")) {
+      if (expulsionCourante) expulsionCourante.codes = parseCodes(r);
+    }
+  });
+
+  // 🔹 Génération de l'ID unique
+  const norm = s => !s ? "" : s.normalize("NFD")
+    .replace(/[\u0300-\u036f]/g, "")
+    .replace(/[^a-zA-Z0-9]/g, "-")
+    .replace(/-+/g, "-")
+    .toLowerCase();
+
+  const dateId = match.date ? match.date.replace(/[: ]/g, "-") : "date-inconnue";
+  match.id = `${dateId}_${norm(match.ligue)}_${match.numero || "NA"}`;
+
+  const json = {
+    match,
+    equipes,
+    officiels,
+    expulsions
+  };
+
+  // 🔹 Sauvegarde sur Drive
+  const dossiers = DriveApp.getFoldersByName("Rapports JSON");
+  if (!dossiers.hasNext()) {
+    throw new Error("Le dossier 'Rapports JSON' est introuvable dans Google Drive.");
+  }
+  const dossier = dossiers.next();
+
+  const nomFichier = `rapport-expulsion-${match.numero || "inconnu"}.json`;
+  const contenuJson = JSON.stringify(json, null, 2);
+  dossier.createFile(nomFichier, contenuJson, MimeType.PLAIN_TEXT);
+   
+  envoyerJSONVersSupabase(json);
+  return json;
+}
+
+function insererDansFeuille(customData) {
+  const ss = SpreadsheetApp.openById(fichierreponse);
+  const sheet = ss.getSheetByName("Reponses");
+
+  // 🔹 On construit la ligne en filtrant "oui"/"non"
+  let ligne = customData
+    .map(item => {
+      let rep = item.reponse;
+
+      // si c’est un tableau, on le transforme en string
+      if (Array.isArray(rep)) {
+        rep = rep.join(", ");
+      }
+
+      // force en string
+      if (rep !== null && rep !== undefined) {
+        rep = rep.toString().trim();
+      } else {
+        rep = "";
+      }
+
+      return rep;
+    })
+    .filter(rep => rep.toLowerCase() !== "oui" && rep.toLowerCase() !== "non"); 
+    // 🔹 on retire complètement "oui"/"non"
+
+  Logger.log("Contenu de la ligne envoyée :");
+  ligne.forEach((val, i) => {
+    Logger.log("Colonne %s : %s", i + 1, val);
+  });
+
+  // 🔹 Insère la ligne
+  sheet.appendRow(ligne);
+}
+
+
+
+
+
+function onFormSubmit(e) {
+  const responses = e.response.getItemResponses();
+  const customData = buildCustomData(responses); // on récupère le nouveau tableau
+  let message = "";
+  let courrier = "";
+  let region = "";
+  
+  // Affichage pour vérification
+  customData.forEach((item, i) => {
+    Logger.log(item.question + " " + item.reponse);
+  });
+
+  insererDansFeuille(customData);
+  
+  // 🎨 Styles centralisés
+  const styleTable = "width: 100%; max-width: 900px; border-collapse: collapse; font-family: Arial, sans-serif; font-size: 14px; margin: 0 auto; border: 1px solid #ddd;";
+  const styleHeaderCell = "padding: 10px; text-align: left; font-size: 16px; border-top: 1px solid #ddd;";
+  const styleCell = "padding: 8px; border: 1px solid #ddd; width: auto;";
+  const styleCell10 = "padding: 8px; border: 1px solid #ddd; width: 10%;";
+  const styleCell15 = "padding: 8px; border: 1px solid #ddd; width: 15%;";
+  const styleCell25 = "padding: 8px; border: 1px solid #ddd; width: 25%;";
+  const styleCell30 = "padding: 8px; border: 1px solid #ddd; width: 30%;";
+  const styleCell40 = "padding: 8px; border: 1px solid #ddd; width: 40%;";
+  const styleTitleRow = "background-color: #f2f2f2; -webkit-print-color-adjust: exact;";
+
+  // 🖼 Logos
+  const image1 = convertirImageEnBase64("BQ");
+  //const image2 = convertirImageEnBase64(customData[3].Response); // Utilisé pour développement
+  const image2 = convertirImageEnBase64("BQ"); 
+
+  region = customData[2].reponse.toUpperCase();
+  const quoi = `(${region}) Rapport d'expulsion : Match # ${customData[0].reponse}`;
+
+  let journee = getCurrentDateTime(); // 📅 date + heure système formatée
+  const nomPDF = `${journee} - ${region} - Rapport d'expulsion : Match # ${customData[0].reponse}`;
+ 
+  let delaisheure = delaiEntreDates(customData[1].reponse, journee);
+  Logger.log("delaisheure = '" + delaisheure + "'");
+
+  if (delaisheure) {
+    message += `
+      <div style="font-family: 'Segoe UI', sans-serif; font-size: 18px; color: red; font-weight: bold;">
+        ${delaisheure}
+      </div>
+      <br>
+    `;
+  }
+
+
+
+  message += `<div style="font-family: 'Segoe UI', sans-serif; font-size: 15px;">`;
+  message += `<table style="${styleTable}">`;
+
+  // 🔹 Bandeau du titre
+  message += `
+    <tr>
+      <td style="width: 15%; text-align: center; padding: 10px; background-color:#a3a3a3; -webkit-print-color-adjust: exact;">
+        <img src="${image1}" alt="Logo" style="max-height: 60px;">
+      </td>
+      <td colspan="3" style="padding: 10px; text-align: center; vertical-align: middle; color: white; background-color:#a3a3a3; -webkit-print-color-adjust: exact;">
+        <div style="font-size: 26px; font-weight: bold;">(${region}) Rapport d'expulsion</div>
+        <div style="font-size: 26px; margin-top: 5px;">Match # ${customData[0].reponse}</div>
+      </td>
+      <td style="width: 15%; text-align: center; padding: 10px; background-color:#a3a3a3; -webkit-print-color-adjust: exact;">
+        <img src="${image2}" alt="Logo" style="max-height: 60px;">
+      </td>
+    </tr>
+  `;
+
+  // 🧩 Sections fixes
+  for (let i = 0; i <= 14; i++) {
+    let question = customData[i].question;
+    let answer = customData[i].reponse;
+
+    switch (i) {
+      case 0: break;
+      
+      // information sur le match :  Date / heure du match et Région du Match.
+      case 1:
+        message += `
+          <tr>
+            <th colspan="5" style="${styleHeaderCell}; ${styleTitleRow}">INFORMATIONS SUR LE MATCH</th>
+          </tr>
+          <tr>
+            <td colspan="2" style="${styleCell30}"><b>${question}</b></td> 
+            <td style="${styleCell}">${answer}</td>
+            <td style="${styleCell}"><b>${customData[2].question}</b></td> 
+            <td style="${styleCell}">${customData[2].reponse}</td>
+          </tr>`;
+        break;
+      
+      // Ligue, Catégorie et Classes.
+      case 3:
+        message += `
+          <tr>
+            <td colspan="3" style="${styleCell}"><b>${customData[3].question}</b> &nbsp;&nbsp;${customData[3].reponse}</td>
+            <td style="${styleCell25}"><b>${customData[4].question}</b> &nbsp;&nbsp;${customData[4].reponse}</td>
+            <td style="${styleCell25}"><b>${customData[5].question}</b> &nbsp;&nbsp;${customData[5].reponse}</td>
+          </tr>`;
+        i += 2;
+        break;
+
+      // informations sur l'équipe Locale et Visiteu. 
+      case 6:
+        message += `
+          <tr>
+            <th colspan="5" style="${styleHeaderCell}; ${styleTitleRow}">ÉQUIPES ET TERRAIN</th>
+          </tr>
+          <tr>
+            <td style="${styleCell15}"><b>${question}</b></td>
+            <td colspan="2" style="${styleCell}">${answer}</td>
+            <td style="${styleCell15}"><b>${customData[7].question}</b></td>
+            <td style="${styleCell}">${customData[7].reponse}</td>
+          </tr>`;
+        i++;
+        break;
+      
+      // indique le terrain où a été joué le match 
+      case 8:
+        message += `
+          <tr>
+            <td style="${styleCell25}"><b>${question}</b></td>
+            <td colspan="4" style="${styleCell}">${answer}</td>
+          </tr>`;
+        break;
+      
+      // Informations sur les officiels.  Arbitre au marbre et arbitre sur les buts.
+      case 9:
+        message += `
+          <tr>
+            <th colspan="5" style="${styleHeaderCell}; ${styleTitleRow}">OFFICIELS</th>
+          </tr>
+          <tr>
+            <td style="${styleCell25}"><b>${question}</b></td>
+            <td colspan="2" style="${styleCell}">${answer}</td>
+            <td style="${styleCell}"><b>${customData[10].question}</b></td>
+            <td style="${styleCell}">${customData[10].reponse}</td>
+          </tr>`;
+        i++;
+        break;
+
+      // Marqueur 
+      case 11:
+        message += `
+          <tr>
+            <td style="${styleCell25}"><b>${question}</b></td>
+            <td colspan="4" style="${styleCell}">${answer}</td>
+          </tr>`;
+        break;
+      
+      // Nom de l'arbitre qui a fait le rapport.  On ajoute également la date / heure du système lorsqu'il enregistre son formulaire.
+      case 12:
+        message += `
+          <tr>
+            <td style="${styleCell25}"><b>${question}</b></td>
+            <td colspan="2" style="${styleCell}">${answer}</td>
+            <td style="${styleCell}"><b> Date et heure du rapport : </b></td>
+            <td style="${styleCell}">${journee}</td>
+          </tr>`; 
+        break;
+
+      // Coordonnées de l'arbitre faisant le rapport.  
+      case 13:
+        message += `
+          <tr>
+            <th colspan="5" style="${styleHeaderCell}; ${styleTitleRow}">COORDONNÉES</th>
+          </tr>
+          <tr>
+            <td style="${styleCell25}"><b>${question}</b></td>
+            <td colspan="4" style="${styleCell}">${answer}</td>
+          </tr>`;
+        courrier += answer;
+        break;
+
+      // Son numéro de téléphone
+      case 14:
+        message += `
+          <tr>
+            <td style="${styleCell25}"><b>${question}</b></td>
+            <td colspan="4" style="${styleCell}">${answer}</td>
+          </tr>`;
+        break;
+    }
+  }
+
+  message += `</table><br><br>`;
+
+  // 🔁 Expulsions et détails
+  let expulsionIndex = 1;
+  let expulsionTable = "";
+  let detailsTable = "";
+  const norm = s => s.toLowerCase().normalize('NFD').replace(/\p{Diacritic}/gu, '').replace(/[’]/g, "'").replace(/\s+/g, ' ').trim();
+
+  for (let i = 15; i < customData.length; i++) {
+    let question = customData[i].question;
+    let answer = customData[i].reponse;
+    let titreActuel = norm(question);
+
+    if (answer === "Oui" || answer === "Non") continue;   
+    if (!answer) continue; 
+    answer = answer.toString().replace(/\n/g, "<br>");
+
+    if (titreActuel.startsWith("nom de l'equipe fautive")) {
+      if (expulsionTable !== "") {
+        message += expulsionTable + "</table><br><br>";
+        if (detailsTable !== "") {
+          message += detailsTable + "</table><br><br>";
+          detailsTable = "";
+        }
+      }
+      expulsionTable = `<table style="${styleTable}; page-break-inside: avoid;"><tr><th colspan="2" style="${styleHeaderCell}; ${styleTitleRow}">EXPULSION #${expulsionIndex}</th></tr><tr><td style="${styleCell40}"><b>${question}</b></td><td style="${styleCell}">${answer}</td></tr>`;
+      expulsionIndex++;
+      continue;
+    }
+    
+    if (titreActuel.startsWith("codes")) {
+      let tableau = separerEnTableau(answer);
+      let htmlCodes = "<ul style='margin:0; padding-left:20px;'>";
+      tableau.forEach(code => { htmlCodes += `<li>${code}</li>`; });
+      htmlCodes += "</ul>";
+      expulsionTable += `<tr><td style="${styleCell25}"><b>${question}</b></td><td style="${styleCell}">${htmlCodes}</td></tr>`;
+      continue;
+    }
+
+    if (titreActuel.startsWith("details concernant")) {
+      detailsTable += `<table style="${styleTable}; page-break-inside: avoid;">
+        <tr><th colspan="2" style="${styleHeaderCell}; ${styleTitleRow}">
+          <b>${question}</b>
+        </th></tr>
+        <tr><td colspan="2" style="${styleCell}">${answer}</td></tr>
+      </table><br>`;
+      continue;
+    }
+   
+if (titreActuel.startsWith("informations complementaires") && (answer)) {
+  // On écrit directement la description ici
+  let desc = `
+    <ul>
+      <li>Le participant a-t-il reçu un avertissement avant d’être expulsé ? Oui/Non</li>
+      <li>La situation était-elle d’une longue durée ? Oui/Non</li>
+      <li>Une fois le terrain quitté par le participant, a-t-il quitté les environs du terrain et est-il resté invisible ? Oui/Non</li>
+    </ul>
+  `;
+
+  detailsTable += `<br><br><table style="${styleTable}; page-break-inside: avoid;">
+    <tr><th colspan="2" style="${styleHeaderCell}; ${styleTitleRow}">
+      <b>${question}</b>
+    </th></tr>
+    <tr><td colspan="2" style="${styleCell}">${desc}</td></tr>
+    <tr><td colspan="2" style="${styleCell}">${answer}</td></tr>
+  </table><br><br>`;
+  continue;
+}
+
+    expulsionTable += `<tr><td style="${styleCell25}"><b>${question}</b></td><td style="${styleCell}">${answer}</td></tr>`;
+  }
+
+  if (expulsionTable !== "") message += expulsionTable + "</table><br><br>";
+  if (detailsTable !== "") message += detailsTable + "</table><br><br>";
+
+  message += `</div>`;
+
+  // 📬 Déterminer le destinataire
+  let qui = determinedestinataire(customData[2].reponse.toUpperCase(), customData[3].reponse, customData[4].reponse, customData[5].reponse);
+
+  // 📄 Générer PDF fidèle
+  let pdfFile = creerPdfDepuisHtml(nomPDF, message);
+  let dateheure = String(extraireAnnee(customData[1].reponse));
+
+  sauvegardepdf(region,dateheure,pdfFile);
+   creerJsonDepuisFormulaire(responses);
+/*
+try {
+  const quotaRestant = MailApp.getRemainingDailyQuota();
+  Logger.log("📩 Quota restant avant envoi (sécurisé) : " + quotaRestant);
+
+  if (quotaRestant > 0) {
+    envoicourriel(qui, courrier, quoi, message, pdfFile);
+  } else {
+    Logger.log("⚠️ Quota atteint. Impossible d’envoyer à : " + qui); 
+  }
+} catch (err) {
+  Logger.log("❌ Erreur lors de l'envoi à " + qui + " : " + err.message);
+}
+*/
+}
+

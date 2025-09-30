@@ -345,7 +345,7 @@ button:hover { background:#0056b3; }
 </head>
 <body>
 
-<h1>RAPPORT D'EXPULSION 18:00</h1>
+<h1>RAPPORT D'EXPULSION 18:05</h1>
 
 <form id="rapportForm" novalidate>
 
@@ -696,10 +696,10 @@ function genererRapportExpulsion(customData) {
     
     // MODIFIÉ : Fond BLANC + Couleur du texte GRIS FONCÉ (#333333) pour la lisibilité sur fond blanc.
     const styleCell = "padding: 8px; border: 1px solid #ddd; width: auto;  color: #333333;"; // 👈 MODIFIÉ
-    const styleCell15 = "padding: 8px; border: 1px solid #ddd; width: 15%; background-color: #FFFFFF; color: #333333;"; // 👈 MODIFIÉ
-    const styleCell25 = "padding: 8px; border: 1px solid #ddd; width: 25%; background-color: #FFFFFF; color: #333333;"; // 👈 MODIFIÉ
-    const styleCell30 = "padding: 8px; border: 1px solid #ddd; width: 30%; background-color: #FFFFFF; color: #333333;"; // 👈 MODIFIÉ
-    const styleCell40 = "padding: 8px; border: 1px solid #ddd; width: 40%; background-color: #FFFFFF; color: #333333;"; // 👈 MODIFIÉ
+    const styleCell15 = "padding: 8px; border: 1px solid #ddd; width: 15%; color: #333333;"; // 👈 MODIFIÉ
+    const styleCell25 = "padding: 8px; border: 1px solid #ddd; width: 25%; color: #333333;"; // 👈 MODIFIÉ
+    const styleCell30 = "padding: 8px; border: 1px solid #ddd; width: 30%; color: #333333;"; // 👈 MODIFIÉ
+    const styleCell40 = "padding: 8px; border: 1px solid #ddd; width: 40%; color: #333333;"; // 👈 MODIFIÉ
 
     const styleTitleRow = "background-color: #f2f2f2; -webkit-print-color-adjust: exact;";
 
@@ -934,7 +934,7 @@ function genererRapportExpulsion(customData) {
     const environs = getAnswerToQuestion("quitté les environs", customData);
     
     const desc = `
-        <ul style='list-style-type: none; margin: 0; padding: 0; color: #333333;'> // 👈 MODIFIÉ : Ajout de la couleur du texte aux <ul> et <li> suivants
+        <ul style='list-style-type: none; margin: 0; padding: 0; color: #333333;'> 
             <li style="color: #333333;">Le participant a-t-il reçu un avertissement avant d’être expulsé ? <b>${avertissement}</b></li>
             <li style="color: #333333;">La situation était-elle d’une longue durée ? <b>${duree}</b></li>
             <li style="color: #333333;">Une fois le terrain quitté par le participant, a-t-il quitté les environs du terrain et est-il resté invisible ? <b>${environs}</b></li>

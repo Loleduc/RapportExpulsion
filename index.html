@@ -345,7 +345,7 @@ button:hover { background:#0056b3; }
 </head>
 <body>
 
-<h1>RAPPORT D'EXPULSION 08:20</h1>
+<h1>RAPPORT D'EXPULSION 08:30</h1>
 
 <form id="rapportForm" novalidate>
 
@@ -685,16 +685,22 @@ async function convertirenPDF(customData) {
 function genererRapportExpulsion(customData) {
     let message = "";
     let courrierArbitre = "";
-	
+    
     
     // 🎨 Styles centralisés (Variables réintégrées en chaînes CSS)
-    const styleTable = "width: 100%; max-width: 900px; border-collapse: collapse; font-family: Arial, sans-serif; font-size: 14px; margin: 0 auto; border: 1px solid #ddd; background-color: #FFFFFF;";
-    const styleHeaderCell = "padding: 10px; text-align: left; font-size: 16px; border-top: 1px solid #ddd;";
-    const styleCell = "padding: 8px; border: 1px solid #ddd; width: auto; background-color: #FFFFFF";
-    const styleCell15 = "padding: 8px; border: 1px solid #ddd; width: 15%; background-color: #FFFFFF";
-    const styleCell25 = "padding: 8px; border: 1px solid #ddd; width: 25%; background-color: #FFFFFF";
-    const styleCell30 = "padding: 8px; border: 1px solid #ddd; width: 30%; background-color: #FFFFFF";
-    const styleCell40 = "padding: 8px; border: 1px solid #ddd; width: 40%; background-color: #FFFFFF";
+    // MODIFIÉ : Ajout du fond BLANC (#FFFFFF) au style de la table pour boucher les espaces.
+    const styleTable = "width: 100%; max-width: 900px; border-collapse: collapse; font-family: Arial, sans-serif; font-size: 14px; margin: 0 auto; border: 1px solid #ddd; background-color: #FFFFFF;"; // 👈 MODIFIÉ
+    
+    // MODIFIÉ : Ajout de la couleur GRIS (#555555) pour le texte des en-têtes.
+    const styleHeaderCell = "padding: 10px; text-align: left; font-size: 16px; border-top: 1px solid #ddd; color: #555555;"; // 👈 MODIFIÉ
+    
+    // MODIFIÉ : Fond BLANC + Couleur du texte GRIS FONCÉ (#333333) pour la lisibilité sur fond blanc.
+    const styleCell = "padding: 8px; border: 1px solid #ddd; width: auto; background-color: #FFFFFF; color: #333333;"; // 👈 MODIFIÉ
+    const styleCell15 = "padding: 8px; border: 1px solid #ddd; width: 15%; background-color: #FFFFFF; color: #333333;"; // 👈 MODIFIÉ
+    const styleCell25 = "padding: 8px; border: 1px solid #ddd; width: 25%; background-color: #FFFFFF; color: #333333;"; // 👈 MODIFIÉ
+    const styleCell30 = "padding: 8px; border: 1px solid #ddd; width: 30%; background-color: #FFFFFF; color: #333333;"; // 👈 MODIFIÉ
+    const styleCell40 = "padding: 8px; border: 1px solid #ddd; width: 40%; background-color: #FFFFFF; color: #333333;"; // 👈 MODIFIÉ
+
     const styleTitleRow = "background-color: #f2f2f2; -webkit-print-color-adjust: exact;";
 
     // Récupération des données clés (avec vérification d'existence)
@@ -716,8 +722,8 @@ function genererRapportExpulsion(customData) {
         `;
     }
 
-    // Début du corps HTML
-    message += `<div style="font-family: 'Segoe UI', sans-serif; font-size: 15px;">`;
+    // MODIFIÉ : Ajout de width: 100% et background-color: #FFFFFF au DIV englobant.
+    message += `<div style="font-family: 'Segoe UI', sans-serif; font-size: 15px; width: 100%; background-color: #FFFFFF;">`; // 👈 MODIFIÉ
     message += `<table style="${styleTable}">`;
 
     // 🔹 Bandeau du titre
@@ -734,7 +740,7 @@ function genererRapportExpulsion(customData) {
             <td style="width: 15%; text-align: center; padding: 10px; background-color:#a3a3a3; -webkit-print-color-adjust: exact;">
                 <img src="${image2}" alt=" " style="max-height: 60px;">
             </td>
-         
+          
         </tr>
     `;
 
@@ -748,19 +754,19 @@ function genererRapportExpulsion(customData) {
         switch (i) {
             case 0: break;
             case 1: 
-					if (!customData[2]) break;
-    				const displayDate = (answer || "N/A").replace('T', ' ');
-                message += `
-                    <tr>
-                    <th colspan="5" style="${styleHeaderCell}; ${styleTitleRow}">INFORMATIONS SUR LE MATCH</th>
-                    </tr>
-                    <tr>
-                    <td colspan="2" style="${styleCell30}"><b>${question}</b></td> 
-                    <td style="${styleCell}">${displayDate}</td> <td style="${styleCell}">
-					<b>${customData[2].question}</b></td>
-                    <td style="${styleCell}">${customData[2].reponse}</td>
-                    </tr>`;
-                break;
+                        if (!customData[2]) break;
+                        const displayDate = (answer || "N/A").replace('T', ' ');
+                    message += `
+                        <tr>
+                        <th colspan="5" style="${styleHeaderCell}; ${styleTitleRow}">INFORMATIONS SUR LE MATCH</th>
+                        </tr>
+                        <tr>
+                        <td colspan="2" style="${styleCell30}"><b>${question}</b></td> 
+                        <td style="${styleCell}">${displayDate}</td> <td style="${styleCell}">
+                        <b>${customData[2].question}</b></td>
+                        <td style="${styleCell}">${customData[2].reponse}</td>
+                        </tr>`;
+                    break;
             case 3:
                 if (!customData[4] || !customData[5]) break;
                 message += `
@@ -851,9 +857,9 @@ function genererRapportExpulsion(customData) {
     let detailsTable = "";
     const norm = s => s ? s.toLowerCase().normalize('NFD').replace(/\p{Diacritic}/gu, '').replace(/[’]/g, "'").replace(/\s+/g, ' ').trim() : '';
     const getAnswerToQuestion = (q, data) => {
-  if (!Array.isArray(data)) return "N/A";  // sécurité
-  const item = data.find(d => norm(d.question).includes(norm(q)));
-  return item ? (item.reponse?.length > 0 ? item.reponse : "N/A") : "N/A";
+    if (!Array.isArray(data)) return "N/A"; 
+    const item = data.find(d => norm(d.question).includes(norm(q)));
+    return item ? (item.reponse?.length > 0 ? item.reponse : "N/A") : "N/A";
 };
     
     // Déterminer où commence la section des expulsions (après l'index 14)
@@ -890,7 +896,7 @@ function genererRapportExpulsion(customData) {
         if (titreActuel.startsWith("codes")) {
             let tableau = separerEnTableau(answer);
             let htmlCodes = "<ul style='margin:0; padding-left:20px;'>";
-            tableau.forEach(code => { htmlCodes += `<li>${code}</li>`; });
+            tableau.forEach(code => { htmlCodes += `<li style="color: #333333;">${code}</li>`; }); // 👈 MODIFIÉ : Ajout de la couleur du texte blanc dans les <li> pour éviter l'héritage
             htmlCodes += "</ul>";
             expulsionTable += `<tr><td style="${styleCell25}"><b>${question}</b></td><td style="${styleCell}">${htmlCodes}</td></tr>`;
             continue;
@@ -928,10 +934,10 @@ function genererRapportExpulsion(customData) {
     const environs = getAnswerToQuestion("quitté les environs", customData);
     
     const desc = `
-        <ul style='list-style-type: none; margin: 0; padding: 0;'>
-            <li>Le participant a-t-il reçu un avertissement avant d’être expulsé ? <b>${avertissement}</b></li>
-            <li>La situation était-elle d’une longue durée ? <b>${duree}</b></li>
-            <li>Une fois le terrain quitté par le participant, a-t-il quitté les environs du terrain et est-il resté invisible ? <b>${environs}</b></li>
+        <ul style='list-style-type: none; margin: 0; padding: 0; color: #333333;'> // 👈 MODIFIÉ : Ajout de la couleur du texte aux <ul> et <li> suivants
+            <li style="color: #333333;">Le participant a-t-il reçu un avertissement avant d’être expulsé ? <b>${avertissement}</b></li>
+            <li style="color: #333333;">La situation était-elle d’une longue durée ? <b>${duree}</b></li>
+            <li style="color: #333333;">Une fois le terrain quitté par le participant, a-t-il quitté les environs du terrain et est-il resté invisible ? <b>${environs}</b></li>
         </ul>
     `;
     
@@ -943,13 +949,13 @@ function genererRapportExpulsion(customData) {
             <tr><td colspan="2" style="${styleCell}">
                 ${desc}
                 <hr style="border: 0; border-top: 1px solid #ddd; margin: 10px 0;">
-                <p style="margin: 0;">${infosComplementaires.replace(/\n/g, "<br>")}</p>
+                <p style="margin: 0; color: #333333;">${infosComplementaires.replace(/\n/g, "<br>")}</p>
             </td></tr>
         </table><br><br>`;
     }
 
     message += detailsTable;
-    message += `</div>`;
+    message += `</div>`; // Fermeture du DIV de message
 
     // Le HTML final est enveloppé dans une structure de document complète pour être utilisable
     const finalHTML = `
@@ -962,11 +968,11 @@ function genererRapportExpulsion(customData) {
             body { font-family: Arial, sans-serif; margin: 0; padding: 0; background-color: #f4f4f4; }
             .content-wrapper { max-width: 900px; margin: 20px auto; padding: 15px; border: 1px solid #ccc; box-shadow: 0 0 10px rgba(0,0,0,0.1); background-color: white; }
             /* Styles pour l'impression */
-              @media print {
-              .content-wrapper { box-shadow: none; border: none; }
-               body { background-color: white; }
-              /* On garde cette règle, car elle est utile pour les lignes courtes */
-              tr { page-break-inside: avoid !important; page-break-after: auto !important; } 
+             @media print {
+             .content-wrapper { box-shadow: none; border: none; }
+              body { background-color: white; }
+             /* On garde cette règle, car elle est utile pour les lignes courtes */
+             tr { page-break-inside: avoid !important; page-break-after: auto !important; } 
         
         thead { display: table-header-group !important; }
         tfoot { display: table-footer-group !important; }
@@ -986,7 +992,6 @@ function genererRapportExpulsion(customData) {
     
     return finalHTML;
 }
-
 /**
  * Fonction principale appelée après validation pour générer et afficher le rapport.
  */

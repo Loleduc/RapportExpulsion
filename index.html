@@ -152,48 +152,46 @@ button:hover { background:#0056b3; }
 }
 
 /* -----------------------------------------------------------------------------------
- * STRUCTURES COMPLEXES (Arbitres, Expulsions)
+ * NOUVELLE STRUCTURE ARBITRES ET COORDONNÉES (2 Rangées x 3 Colonnes)
  * ----------------------------------------------------------------------------------- */
+
+/* 1. Le conteneur principal empile les deux rangées verticalement */
 .arbitres-coordonnees-container { 
     display: flex; 
-    gap: 15px; 
-    justify-content: center; 
-    align-items: flex-start; 
-    flex-wrap: wrap; 
+    flex-direction: column; /* Empile les deux rangées (les .arbitres-row) l'une sur l'autre */
+    gap: 15px; /* Espacement vertical entre la Rangée 1 et la Rangée 2 */
     width: 100%; 
+    align-items: center; 
 }
 
-.arbitres-coordonnees-container { 
-    /* Le conteneur principal empile les deux rangées (TOP et BOTTOM) verticalement */
-    display: flex; 
-    flex-direction: column; /* Pour empiler TOP row sur BOTTOM row */
-    gap: 15px; /* Espacement entre la rangée du haut et celle du bas */
-    width: 100%; 
-    align-items: center; /* Centrage général */
-}
-
-/* Ces classes gèrent les 3 colonnes de la rangée */
-.arbitres-row-top,
-.arbitres-row-bottom {
+/* 2. Chaque rangée (le nouveau .arbitres-row) gère l'alignement des 3 champs */
+.arbitres-row {
     display: flex;
-    gap: 5px; /* Espacement entre les colonnes */
+    gap: 15px; /* Espacement horizontal entre les champs (comme .match-equipes-row) */
     justify-content: center;
     width: 100%;
-    flex-wrap: wrap; /* Assure que les colonnes passent à la ligne sur mobile */
+    flex-wrap: wrap; 
 }
 
-/* Ces règles remplacent l'ancienne logique .arbitres-col */
-.arbitres-row-top .champ,
-.arbitres-row-bottom .champ { 
-    /* Permet à la colonne de se rétrécir un peu sur mobile si nécessaire */
-    flex-grow: 1; 
-    flex-basis: 350px; /* Taille de base légèrement réduite pour la fluidité */
-    min-width: 250px; 
-    
-    /* Assure que l'input et le label s'empilent à l'intérieur du champ */
+/* 3. Définition du CHAMP (Label au-dessus de l'Input) */
+.arbitres-row .champ {
+    /* Assure que l'input et le label s'empilent au centre */
     display: flex; 
-    flex-direction: column;
+    flex-direction: column; 
     align-items: center; 
+    
+    /* Gère la largeur de la colonne */
+    flex-grow: 1; 
+    flex-basis: 250px; /* Taille de base (comme les inputs Équipe/Terrain) */
+    min-width: 250px; 
+}
+
+/* 4. Largeur des INPUTS/SELECTS eux-mêmes */
+.arbitres-row input,
+.arbitres-row select { 
+    width: 100%; 
+    max-width: 250px; /* Limite la largeur des champs à 250px comme Équipe/Terrain */
+    box-sizing: border-box; 
 }
 	
 .exp-row input,
@@ -377,7 +375,7 @@ button:hover { background:#0056b3; }
     <p><strong>Avis :</strong> Ce formulaire est optimisé pour les navigateurs **Chrome** ou **Edge**. Des problèmes d'affichage peuvent survenir avec **Firefox**. L'utilisation d'un navigateur recommandé est fortement suggérée. </p>
 </div>
 
-<h1>RAPPORT D'EXPULSION 00:10 </h1>
+<h1>RAPPORT D'EXPULSION 00:15 </h1>
 
 <form id="rapportForm" novalidate>
 
@@ -418,38 +416,38 @@ button:hover { background:#0056b3; }
 <div class="panel-3d arbitres-panel panel-step">
   <h2>Arbitres et Coordonnées</h2>
 <div class="arbitres-coordonnees-container">
-    <div class="arbitres-row-top">
-      <div class="champ" style="min-width: 300px;">
+    <div class="arbitres-row">
+      <div class="champ">
         <label for="arbitreMarbre">Arbitre au marbre</label>
         <input type="text" id="arbitreMarbre" tabindex="10" required>
         <div class="error"></div>
       </div>
-      <div class="champ" style="min-width: 300px;">
+      <div class="champ">
         <label for="arbitreButs">Arbitre sur les buts</label>
         <input type="text" id="arbitreButs" tabindex="11" required>
         <div class="error"></div>
       </div>
-      <div class="champ" style="min-width: 300px;">
+      <div class="champ">
         <label for="marqueur">Marqueur</label>
         <input type="text" id="marqueur" tabindex="12" required>
         <div class="error"></div>
       </div>
     </div>
 
-    <div class="arbitres-row-bottom">
-      <div class="champ" style="min-width: 300px;">
+    <div class="arbitres-row">
+      <div class="champ">
         <label for="arbitreRapport">Arbitre faisant le rapport</label>
         <select id="arbitreRapport" disabled tabindex="13" required>
           <option value="">-- Sélectionner un arbitre --</option>
         </select>
         <div class="error"></div>
       </div>
-      <div class="champ" style="min-width: 300px;">
+      <div class="champ">
         <label for="courriel">Adresse courriel</label>
         <input type="email" id="courriel" tabindex="14" required>
         <div class="error"></div>
       </div>
-      <div class="champ" style="min-width: 300px;">
+      <div class="champ">
         <label for="telephone">Téléphone</label>
         <input type="tel" id="telephone" required tabindex="15" placeholder="(000) 000-0000"> 
         <div class="error"></div>

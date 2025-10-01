@@ -62,15 +62,14 @@
 /* ===================================================================================
  * 2. CSS GÉNÉRAL (Utilisation des variables)
  * =================================================================================== */
-body { 
+ body { 
     font-family: Arial, sans-serif; 
     padding: 20px; 
     
-    /* NE LAISSER QUE LA RÈGLE UTILISANT LA VARIABLE */
+    /* 🔑 Règle unique utilisant la variable de thème pour le fond */
     background: var(--couleur-page-background);
     min-height: 100vh;
 }
-
 h1 { 
 	font-size: 72px;
     text-align: center; 
@@ -140,7 +139,7 @@ input, select, textarea {
     cursor: pointer; 
     font-size: 14px; 
     color: var(--couleur-accent); 
-    background: #fff; 
+    background: #fff; /* FOND BLANC POUR L'ÉTAT NORMAL */
     text-align: center; 
 }
 .chip.selected { 
@@ -281,8 +280,6 @@ button:hover { background:#0056b3; }
     top: 0 !important;
 }
 </style>
-
-</style>
 </head>
 
 /*<body class="theme-fonce">*/
@@ -292,7 +289,7 @@ button:hover { background:#0056b3; }
     <p><strong>Avis :</strong> Ce formulaire est optimisé pour les navigateurs **Chrome** ou **Edge**. Des problèmes d'affichage peuvent survenir avec **Firefox**. L'utilisation d'un navigateur recommandé est fortement suggérée. </p>
 </div>
 
-<h1>RAPPORT D'EXPULSION 9:35 </h1>
+<h1>RAPPORT D'EXPULSION 9:40 </h1>
 
 <form id="rapportForm" novalidate>
 

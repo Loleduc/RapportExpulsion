@@ -345,7 +345,7 @@ button:hover { background:#0056b3; }
 </head>
 <body>
 
-<h1>RAPPORT D'EXPULSION   23:15</h1>
+<h1>RAPPORT D'EXPULSION   23:25</h1>
 
 <form id="rapportForm" novalidate>
 
@@ -608,13 +608,7 @@ function transformDebugJSONToCustomData() {
         // Le champ "Détails concernant les expulsions" est global dans le HTML, nous l'ajoutons à la fin.
     });
 
-    // --- PARTIE FINALE (Infos Complémentaires) ---
-    // Les champs Oui/Non n'existent pas dans le HTML fourni, nous utilisons 'Non renseigné' par défaut.
-   // const getYesNoAnswer = (id) => document.getElementById(id)?.value === 'Oui' ? 'Oui' : 'Non renseigné';
-    
-   // data.push({ question: "Le participant a-t-il reçu un avertissement avant d’être expulsé ?", reponse: getYesNoAnswer('avertissement') });
-   // data.push({ question: "La situation était-elle d’une longue durée ?", reponse: getYesNoAnswer('duree') });
-   // data.push({ question: "Une fois le terrain quitté par le participant, a-t-il quitté les environs du terrain et est-il resté invisible ?", reponse: getYesNoAnswer('environs') });
+   
 
     // Les deux textareas globaux (seront trouvés par leur titre dans la logique HTML)
     data.push({ question: "Détails concernant les expulsions durant le match :", reponse: debugData.match.details_expulsions });
@@ -804,7 +798,7 @@ function genererRapportExpulsion(customData) {
         let titreActuel = norm(question);
 
         // Les réponses "Oui/Non" des questions complémentaires sont gérées plus tard, on les ignore ici.
-        if (titreActuel.includes("avertissement") || titreActuel.includes("longue duree") || titreActuel.includes("environs")) continue; 
+      //  if (titreActuel.includes("avertissement") || titreActuel.includes("longue duree") || titreActuel.includes("environs")) continue; 
         
         if (!answer) continue; 
         answer = answer.toString().replace(/\n/g, "<br>"); // Remplace les retours à la ligne par <br>
@@ -856,19 +850,16 @@ function genererRapportExpulsion(customData) {
     
     // 7. INFORMATIONS COMPLÉMENTAIRES (Tableau séparé)
     const infosComplementaires = getAnswerToQuestion("Informations complémentaires", customData);
-    const avertissement = getAnswerToQuestion("avertissement avant d’être expulsé", customData);
-    const duree = getAnswerToQuestion("longue durée", customData);
-    const environs = getAnswerToQuestion("quitté les environs", customData);
     
     const desc = `
         <ul style='list-style-type: none; margin: 0; padding: 0;'>
-            <li>Le participant a-t-il reçu un avertissement avant d’être expulsé ? <b>${avertissement}</b></li>
-            <li>La situation était-elle d’une longue durée ? <b>${duree}</b></li>
-            <li>Une fois le terrain quitté par le participant, a-t-il quitté les environs du terrain et est-il resté invisible ? <b>${environs}</b></li>
+            <li>Le participant a-t-il reçu un avertissement avant d’être expulsé ?</li>
+            <li>La situation était-elle d’une longue durée ?</li>
+            <li>Une fois le terrain quitté par le participant, a-t-il quitté les environs du terrain et est-il resté invisible ?</li>
         </ul>
     `;
     
-    if (infosComplementaires !== "N/A" || avertissement !== "N/A" || duree !== "N/A" || environs !== "N/A") {
+    if (infosComplementaires !== "N/A") {
         detailsTable += `<table style="${styleTable}; page-break-inside: avoid;">
             <tr><td colspan="2" style="${styleSectionHeaderTD}"><h3 style="${styleSectionHeaderTH}; margin: 0; padding: 0;"><b>Informations complémentaires</b></h3></td></tr>
             <tr><td colspan="2" style="${styleCell}">

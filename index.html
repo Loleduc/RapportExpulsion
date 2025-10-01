@@ -344,7 +344,7 @@ button:hover { background:#0056b3; }
 </style>
 </head>
 <body>
-<h1>RAPPORT D'EXPULSION 22:40</h1>
+<h1>RAPPORT D'EXPULSION 22:45</h1>
 
 <form id="rapportForm" novalidate>
 
@@ -1778,7 +1778,7 @@ function createCodeChips(expulsionIndex, codesData, panel) {
 async function envoyerRapportParEmail(data) {
   const emailUrl = "https://script.google.com/macros/s/AKfycbzptS_pTHRw9HERRy6ZjLKfkY25GTgOkHbJMaSi7h9wd2tFyiF0zKWaw9T-HoArXrrw/exec"; // ton URL
   const rapportHTML = genererRapportExpulsion(data);
-  const adresseDeDestination = "ump_77@videotron.ca,ump_77@hotmail.com";
+  const adresseDeDestination = "ump_77@videotron.ca,loleduc@videotron.ca";
 
   const payload = {
     htmlContent: rapportHTML,

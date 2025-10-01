@@ -1,4 +1,4 @@
-<!doctype html><!doctype html>
+<!doctype html>
 <html lang="fr">
 <head>
 <meta charset="UTF-8">
@@ -14,36 +14,13 @@
     font-family: Arial, sans-serif; 
     padding: 20px; 
     /* 🛑 CORRECTION CLÉ : Dégradé de Pantone 282 C (#00255c) à 285 C (#0073e6) */
-  
+  /*  background: linear-gradient(to bottom, #00255c 0%, #0073e6 100%); */
 	background: linear-gradient(to bottom, #0073e6 00%,  #00255c 100%);
     /* Le dégradé se fait sur toute la page, mais vous pouvez aussi le forcer sur 100vh */
     min-height: 100vh;
-    }
-#browser-warning-banner {
-    position: fixed;
-    top: -100px; /* Cache la bannière au-dessus de l'écran */
-    left: 0;
-    width: 100%;
-    background-color: #ffc107; /* Couleur d'avertissement (Jaune/Orange) */
-    color: #333;
-    text-align: center;
-    padding: 10px 20px;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
-    z-index: 9999; /* S'assure qu'elle est au-dessus de tout */
-    transition: top 0.5s ease-in-out; /* Animation de glissement */
+    
+    /* 🛑 Ancien background-color: #f4f4f4; est remplacé par le dégradé ci-dessus. */
 }
-
-#browser-warning-banner p {
-    margin: 0;
-    font-size: 1.1em;
-}
-
-/* Classe ajoutée par JavaScript pour afficher la bannière */
-.show-banner {
-    top: 0 !important;
-}	
-	
-	
 h1 { 
 	font-size: 72px;
     text-align: center; 
@@ -60,7 +37,6 @@ h1 {
         /* Ombre la plus éloignée pour l'effet de projection */
         6px 6px 5px rgba(0, 0, 0, 0.5); 
 }
-
 h2 { font-size: 30px;  margin-top: 10px; margin-bottom: 25px; color : dimgrey; 
 	text-shadow: 
         /* Ombre légère pour la profondeur (plus proche) */
@@ -187,7 +163,7 @@ button:hover { background:#0056b3; }
     width: 100%; 
 }
 
-/*.arbitres-col { 
+.arbitres-col { 
     display: flex; 
     flex-direction: column; 
     /* Rapprochement vertical : 5px de gap (réduit de 10px) */
@@ -196,23 +172,8 @@ button:hover { background:#0056b3; }
     flex-grow: 0; 
     /* Laisser le min-width par défaut pour la flexibilité si besoin, ou le fixer à 300px */
     min-width: 300px; 
-} */
-
-.arbitres-col { 
-    display: flex; 
-    flex-direction: column; 
-    /* Rapprochement vertical : 5px de gap (réduit de 10px) */
-    gap: 5px; 
-    /* Permet à la colonne de grandir, mais fixe sa taille de base */
-    flex-grow: 1; 
-    /* Largeur de base. L'ancienne min-width était trop rigide. */
-    flex-basis: 300px; 
-    
-    /* 🛑 NOUVEAU: S'assurer qu'elle peut se rétrécir jusqu'à 250px */
-    min-width: 250px; 
 }
 
-/* ... (Le reste de votre CSS reste le même) ... */
 .arbitres-col .champ { 
     display: flex; 
     flex-direction: column; 
@@ -379,6 +340,35 @@ button:hover { background:#0056b3; }
 #debugOutput {
     color: white !important; /* Force la couleur pour le texte du debug et des destinataires */
 }
+
+/* -----------------------------------------------------------------------------------
+ * NOUVEAU : BANDEAU D'AVERTISSEMENT FIREFOX
+ * ----------------------------------------------------------------------------------- */
+#browser-warning-banner {
+    position: fixed;
+    top: -100px; /* Cache la bannière au-dessus de l'écran */
+    left: 0;
+    width: 100%;
+    background-color: #ffc107; /* Couleur d'avertissement (Jaune/Orange) */
+    color: #333;
+    text-align: center;
+    padding: 10px 20px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+    z-index: 9999; /* S'assure qu'elle est au-dessus de tout */
+    transition: top 0.5s ease-in-out; /* Animation de glissement */
+}
+
+#browser-warning-banner p {
+    margin: 0;
+    font-size: 1.1em;
+}
+
+/* Classe ajoutée par JavaScript pour afficher la bannière */
+.show-banner {
+    top: 0 !important;
+}
+
+
 </style>
 </head>
 <body>
@@ -387,7 +377,7 @@ button:hover { background:#0056b3; }
     <p><strong>Avis :</strong> Ce formulaire est optimisé pour les navigateurs **Chrome** ou **Edge**. Des problèmes d'affichage peuvent survenir avec **Firefox**. L'utilisation d'un navigateur recommandé est fortement suggérée. </p>
 </div>
 
-<h1>RAPPORT D'EXPULSION 23:55 </h1>
+<h1>RAPPORT D'EXPULSION 00:00 </h1>
 
 <form id="rapportForm" novalidate>
 

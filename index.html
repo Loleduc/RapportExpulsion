@@ -345,7 +345,7 @@ button:hover { background:#0056b3; }
 </head>
 <body>
 
-<h1>RAPPORT D'EXPULSION 19:05</h1>
+<h1>RAPPORT D'EXPULSION 21:55</h1>
 
 <form id="rapportForm" novalidate>
 
@@ -711,8 +711,8 @@ function genererRapportExpulsion(customData) {
     const region = (customData[2] && customData[2].reponse) ? customData[2].reponse.toUpperCase() : "RÉGION INDÉTERMINÉE";
     const numeroMatch = (customData[0] && customData[0].reponse) ? customData[0].reponse : "N/A";
 
-    const image1 = convertirImageEnBase64("logo-gauche"); 
-    const image2 = convertirImageEnBase64("logo-droite"); 
+    const image1 = convertirImageEnBase64("BASE64_LOGO_GAUCHE"); 
+    const image2 = convertirImageEnBase64("BASE64_LOGO_DROITE"); 
 
     let journee = getCurrentDateTime();
     let delaisheure = delaiEntreDates(customData[1].reponse, journee);
@@ -749,12 +749,12 @@ function genererRapportExpulsion(customData) {
             </td>
           
         </tr>
-    </table>`; // Fermeture du tableau de titre
+ //   </table>`; // Fermeture du tableau de titre
     
     // ----------------------------------------------------
     // 2. INFORMATIONS SUR LE MATCH (Tableau 2)
     // ----------------------------------------------------
-    message += `<table style="${styleTable}">`; 
+  //  message += `<table style="${styleTable}">`; 
     message += `
         <tr>
         <td colspan="5" style="${styleSectionHeaderTD}"><h3 style="${styleSectionHeaderTH}; margin: 0; padding: 0;">INFORMATIONS SUR LE MATCH</h3></td>
@@ -771,12 +771,12 @@ function genererRapportExpulsion(customData) {
         <td style="${styleCell25}"><b>Catégorie :</b> &nbsp;&nbsp;${customData[4]?.reponse || "N/A"}</td>
         <td style="${styleCell25}"><b>Classe :</b> &nbsp;&nbsp;${customData[5]?.reponse || "N/A"}</td>
         </tr>
-    </table>`; // Fermeture du tableau des informations sur le match
+  //  </table>`; // Fermeture du tableau des informations sur le match
 
     // ----------------------------------------------------
     // 3. ÉQUIPES ET TERRAIN (Tableau 3)
     // ----------------------------------------------------
-    message += `<table style="${styleTable}">`; 
+  //  message += `<table style="${styleTable}">`; 
     message += `
         <tr>
         <td colspan="5" style="${styleSectionHeaderTD}"><h3 style="${styleSectionHeaderTH}; margin: 0; padding: 0;">ÉQUIPES ET TERRAIN</h3></td>

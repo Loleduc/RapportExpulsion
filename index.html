@@ -639,45 +639,7 @@ function transformDebugJSONToCustomData() {
     return data;
 }
 
-// ====================================================================
-// C. GÉNÉRATION DU RAPPORT HTML (Votre code App Script adapté)
-// ====================================================================
 
-/**
- * Génère le contenu HTML du rapport en utilisant la structure et le style App Script.
- * @param {Array<Object>} customData Le tableau de données du formulaire.
- * @returns {string} Le contenu HTML complet du rapport.
- */
-async function convertirenPDF(customData) {
-    const htmlContent = genererRapportExpulsion(customData);
-  
-    const pdfUrl = "https://script.google.com/macros/s/AKfycbxpDzlvVRMJTDSF6AGndnMnAwWQK70kqA8fi4qzUgW0bkvSQe-2cX2IZrq0TGjbpstn/exec";
-    
-    try {
-        const response = await fetch(pdfUrl, {
-            method: "POST",
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({
-                htmlContent: htmlContent,
-                formDataJSON: customData
-            })
-        });
-
-        const data = await response.json();
-
-        if (data.success) {
-            console.log("✅ PDF généré :", data.pdfUrl);
-            window.open(data.pdfUrl, "_blank");
-        } else {
-            alert("Erreur Apps Script: " + (data.error || "Raison inconnue."));
-        }
-
-    } catch (err) {
-        alert("Erreur de soumission du rapport: " + err.message);
-    }
-}
-
-	
 	
 function genererRapportExpulsion(customData) {
     let message = "";
@@ -984,7 +946,7 @@ function generateAndDisplayReport() {
 		
 			
 		envoyerRapportParEmail(customData);
-	  //  convertirenPDF(customData);
+	 
 		
 		
         // Ouvre le HTML dans une nouvelle fenêtre/onglet pour visualiser le rapport
@@ -999,32 +961,7 @@ function generateAndDisplayReport() {
         alert("Erreur lors de la génération du rapport HTML. Détails dans la console.");
     }
 }
-/**
- * Fonction principale appelée après validation pour générer et afficher le rapport.
- */
-function generateAndDisplayReport() {
-    try {
-        const jsonDebug = generateDebugJSON();               // ton objet
-		const customData = transformDebugJSONToCustomData(jsonDebug); // tableau {question, reponse}
-		const htmlContent = genererRapportExpulsion(customData);
-		
-			
-		envoyerRapportParEmail(customData);
-	  //  convertirenPDF(customData);
-		
-		
-        // Ouvre le HTML dans une nouvelle fenêtre/onglet pour visualiser le rapport
-        const newWindow = window.open();
-        newWindow.document.write(htmlContent);
-        newWindow.document.close();
-        
-        alert('Rapport HTML généré avec succès dans une nouvelle fenêtre.');
 
-    } catch (e) {
-        console.error("Erreur lors de la génération du rapport HTML:", e);
-        alert("Erreur lors de la génération du rapport HTML. Détails dans la console.");
-    }
-}
 
 	
 	/**

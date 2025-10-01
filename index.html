@@ -7,271 +7,365 @@
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/themes/material_blue.css"> 	
 
 <style>
-/* ===================================================================================
- * 1. DÉFINITION DES THÈMES (Variables CSS)
- * -----------------------------------------------------------------------------------
- * Thème CLAIR (Fond Blanc) est le thème par défaut (:root)
- * =================================================================================== */
-
-/* Thème par DÉFAUT (Clair : Fond Blanc) */
-:root, .theme-clair {
-    /* Couleurs de fond de page (pour le BODY) */
-    --couleur-page-fond-haut: white;
-    --couleur-page-fond-bas: white;
-    --couleur-page-background: white; /* Fond blanc uni */
-    
-    /* Couleurs des PANELS (les blocs d'informations) */
-    --couleur-panel-fond: #EAEAEA;      /* Gris très clair pour les panels */
-    
-    /* Couleurs des textes */
-    --couleur-texte-principal: #000;    /* Texte sombre des labels, etc. */
-    --couleur-texte-h1: var(--couleur-accent); /* Le H1 prend la couleur accent (Bleu) */
-    --couleur-texte-h2: var(--couleur-accent); /* Le H2 prend la couleur accent (Bleu) */
-    --couleur-texte-clair: #FFF;          /* Texte pour les zones foncées (Debug/Destinataires) */
-    --couleur-texte-h2-shadow: #EAEAEA; /* Ombre claire pour H2 */
-    
-    /* Couleurs d'accentuation (chips, boutons, ombres 3D) */
-    --couleur-accent: #0072ce; /* Bleu principal */
-    --couleur-bouton-principal: #007BFF;
-    --couleur-ombre-h1: #0056b3; /* Bleu pour les ombres du H1 */
-}
-
-/* Thème 2 : Thème Foncé (Dégradé Bleu) - Pour <body class="theme-fonce"> */
-.theme-fonce {
-    /* Couleurs de fond de page (pour le BODY) */
-    --couleur-page-fond-haut: #0073e6;    /* Bleu Vif */
-    --couleur-page-fond-bas: #00255c;   /* Bleu Foncé */
-    --couleur-page-background: linear-gradient(to bottom, var(--couleur-page-fond-haut) 00%, var(--couleur-page-fond-bas) 100%);
-
-    /* Couleurs des PANELS (les blocs d'informations) */
-    --couleur-panel-fond: #d0d3d4;      /* Gris clair des panels */
-    
-    /* Couleurs des textes */
-    --couleur-texte-principal: #333;    
-    --couleur-texte-h1: white;          /* Le H1 redevient Blanc */
-    --couleur-texte-h2: dimgrey;        /* Le H2 redevient gris */
-    --couleur-texte-clair: white;       
-    --couleur-texte-h2-shadow: #d0d3d4; /* Ombre des panels */
-
-    /* Couleurs d'accentuation */
-    --couleur-accent: #0072ce;
-    --couleur-bouton-principal: #007BFF;
-    --couleur-ombre-h1: #00255c;
-}
-
-/* ===================================================================================
- * 2. CSS GÉNÉRAL (Utilisation des variables)
- * -----------------------------------------------------------------------------------
- * Règle du BODY : UNE SEULE FOIS, AVEC LA VARIABLE.
- * =================================================================================== */
+/* -----------------------------------------------------------------------------------
+ * CSS GÉNÉRAL (AJUSTÉ: INPUT PADDING À 8PX POUR UNE MEILLEURE HAUTEUR)
+ * ----------------------------------------------------------------------------------- */
  body { 
     font-family: Arial, sans-serif; 
     padding: 20px; 
-    
-    /* 🔑 Règle unique utilisant la variable de thème pour le fond */
-    background: var(--couleur-page-background);
+    /* 🛑 CORRECTION CLÉ : Dégradé de Pantone 282 C (#00255c) à 285 C (#0073e6) */
+  /*  background: linear-gradient(to bottom, #00255c 0%, #0073e6 100%); */
+	background: linear-gradient(to bottom, #0073e6 00%,  #00255c 100%);
+    /* Le dégradé se fait sur toute la page, mais vous pouvez aussi le forcer sur 100vh */
     min-height: 100vh;
+    
+    /* 🛑 Ancien background-color: #f4f4f4; est remplacé par le dégradé ci-dessus. */
 }
 h1 { 
 	font-size: 72px;
     text-align: center; 
-    /* Utilisation de la variable de couleur du H1 */
-    color: var(--couleur-texte-h1); 
+    /* 🛑 CORRECTION CLÉ : Couleur du texte changée à blanc */
+    color: white; 
+    /* color: #ffffff; fonctionnerait aussi */
+    /* Vous pouvez aussi ajouter un peu de marge si vous trouvez que le titre est trop près du bord */
     margin-bottom: 25px; 
 	text-shadow: 
-        2px 2px 0px var(--couleur-ombre-h1), 
-        4px 4px 0px var(--couleur-page-fond-bas), 
+        /* Ombre légère pour la profondeur (plus proche) */
+        2px 2px 0px #0056b3, 
+        /* Ombre plus foncée pour la distance (plus loin) */
+        4px 4px 0px #00255c, 
+        /* Ombre la plus éloignée pour l'effet de projection */
         6px 6px 5px rgba(0, 0, 0, 0.5); 
 }
-h2 { 
-    font-size: 30px;  
-    margin-top: 10px; 
-    margin-bottom: 25px; 
-    /* Utilisation de la variable de couleur du H2 */
-    color : var(--couleur-texte-h2); 
+h2 { font-size: 30px;  margin-top: 10px; margin-bottom: 25px; color : dimgrey; 
 	text-shadow: 
-        2px 2px 0px rgba(0, 0, 0, 0.2), 
-        4px 4px 0px var(--couleur-texte-h2-shadow), 
-        6px 6px 5px rgba(0, 0, 0, 0.1); 
-}
+        /* Ombre légère pour la profondeur (plus proche) */
+        2px 2px 0px #000, 
+        /* Ombre plus foncée pour la distance (plus loin) */
+        4px 4px 0px #d0d3d4, 
+        /* Ombre la plus éloignée pour l'effet de projection */
+        6px 6px 5px rgba(0, 0, 0, 0.1); }
 
-/* Couleur de tous les labels est mise à jour */
-label { 
-    display: block; 
-    margin: 8px 0 4px; 
-    font-weight: bold; 
-    color: var(--couleur-texte-principal); 
-}
+label { display: block; margin: 8px 0 4px; font-weight: bold; }
+/* Augmentation du padding des inputs à 8px pour une meilleure visibilité et hauteur */
+input, select, textarea { padding: 8px; margin-bottom: 6px; border-radius: 6px; border: 1px solid #ccc; font-size: 14px; box-sizing: border-box; }
 
-/* Reste du CSS général (inputs, selects, etc.) */
-input, select, textarea { 
-    padding: 8px; 
-    margin-bottom: 6px; 
-    border-radius: 6px; 
-    border: 1px solid #ccc; 
-    font-size: 14px; 
-    box-sizing: border-box; 
-    color: var(--couleur-texte-principal); 
-}
 #matchNumero { width: 140px; }
 #matchDate { width: 220px; }
-.match-row { display: flex; gap: 15px; align-items: flex-start; justify-content: center; } 
+
+.match-row { display: flex; gap: 15px; align-items: flex-start; justify-content: center; } /* Centrage */
 .match-row > div { display: flex; flex-direction: column; }
-.select-row { display: flex; gap: 10px; flex-wrap: wrap; justify-content: center; } 
+
+.select-row { display: flex; gap: 10px; flex-wrap: wrap; justify-content: center; } /* Centrage */
 .select-row select { width: max-content; min-width: 150px; max-width: 300px; }
+
 .match-row label, 
-.select-row label,
-.match-equipes-row label {
-    text-align: center; 
+.select-row label {
+    /* 🛑 CHANGEMENT CLÉ 1: S'assurer que le label prend toute la place disponible pour le texte */
+    text-align: center; /* Centre le texte (le libellé) lui-même */
+    /* REMARQUE: Si le label est dans un <div> plus grand, cette propriété peut ne pas suffire. 
+       Il faudra forcer le conteneur du label à être centré. */
 }	
+	
 .match-equipes-row { display: flex; gap: 15px; align-items: flex-start; justify-content: center; } 
 .match-equipes-row > div { display: flex; flex-direction: column; }
 #equipeLocale, #equipeVisiteur, #terrain { width: 250px; }
+
+.match-equipes-row label, 
+.select-row label {
+    /* 🛑 CHANGEMENT CLÉ 1: S'assurer que le label prend toute la place disponible pour le texte */
+    text-align: center; /* Centre le texte (le libellé) lui-même */
+    /* REMARQUE: Si le label est dans un <div> plus grand, cette propriété peut ne pas suffire. 
+       Il faudra forcer le conteneur du label à être centré. */
+}	
+	
+
 .expulsion-block { padding: 10px; margin-top: 10px; border-radius: 8px; }
 
 /* -----------------------------------------------------------------------------------
  * CHIPS ET CODES
  * ----------------------------------------------------------------------------------- */
 .chips-container { display: flex; gap: 6px; flex-wrap: wrap; margin-bottom: 0; justify-content: center; } 
-.chip { 
-    padding: 4px 12px; 
-    border-radius: 16px; 
-    /* Utilisation de la variable d'accentuation */
-    border: 1px solid var(--couleur-accent); 
-    cursor: pointer; 
-    font-size: 14px; 
-    color: var(--couleur-accent); 
-    background: #fff; /* FOND BLANC POUR L'ÉTAT NORMAL (CORRECTION FINALE) */
-    text-align: center; 
-}
-.chip.selected { 
-    /* Utilisation de la variable d'accentuation et de texte clair */
-    background: var(--couleur-accent); 
-    color: var(--couleur-texte-clair); 
-}
+.chip { padding: 4px 12px; border-radius: 16px; border: 1px solid #0072ce; cursor: pointer; font-size: 14px; color: #0072ce; background: #fff; text-align: center; }
+.chip.selected { background: #0072ce; color: #fff; }
 
 .codes-container { display: flex; flex-wrap: wrap; gap: 6px; justify-content:center; margin-top:10px; width: 100%; }
 .code-chip {
-  border: 1px solid var(--couleur-accent);
-  color: var(--couleur-accent);
-  background: #fff; /* FOND BLANC POUR LES CODES D'EXPULSION */
+  position: relative;
+  padding: 6px 10px;
+  border-radius: 12px;
+  border: 1px solid #0072ce;
+  cursor: pointer;
+  font-size: 13px;
+  color: #0072ce;
+  margin-bottom: 4px;
+  width: 48%; /* Deux chips par ligne */
+  box-sizing: border-box;
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  text-align:center;
+  background: #fff;
+  transition: all 0.2s;
 }
+
 .code-chip.selected {
-  background: var(--couleur-accent);
-  color: var(--couleur-texte-clair);
+  background: #0072ce;
+  color: #fff;
   font-weight: bold;
 }
+
+.code-chip .tooltip {
+  visibility: hidden;
+  width: 300px;
+  background-color: #333;
+  color: #fff;
+  text-align: left;
+  padding: 10px;
+  border-radius: 6px;
+  position: absolute;
+  z-index: 100;
+  bottom: 125%;
+  left: 50%;
+  transform: translateX(-50%);
+  opacity: 0;
+  transition: opacity 0.3s;
+  white-space: pre-line;
+  font-size: 12px;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+}
+
+.code-chip:hover .tooltip {
+  visibility: visible;
+  opacity: 1;
+}
+	
 
 /* -----------------------------------------------------------------------------------
  * ERREURS ET BOUTONS
  * ----------------------------------------------------------------------------------- */
 .error { color: #d93025; font-size: 12px; font-weight: 600; margin-bottom: 6px; display: block; min-height: 16px; }
 
-button[type="submit"], button[type="reset"] { 
-    /* Utilisation de la variable de bouton */
-    background: var(--couleur-bouton-principal); 
-    color: var(--couleur-texte-clair); 
-    padding:10px 20px; 
-    border:none; 
-    border-radius:6px; 
-    cursor:pointer; 
-    font-size:16px; 
-    margin-right: 10px; 
-}
+button[type="submit"], button[type="reset"] { background:#007BFF; color:white; padding:10px 20px; border:none; border-radius:6px; cursor:pointer; font-size:16px; margin-right: 10px; }
 button:hover { background:#0056b3; }
 
+}
+
 /* -----------------------------------------------------------------------------------
- * STRUCTURE ARBITRES (2 Rangées x 3 Colonnes)
+ * NOUVELLE STRUCTURE ARBITRES ET COORDONNÉES (2 Rangées x 3 Colonnes)
  * ----------------------------------------------------------------------------------- */
+
+/* 1. Le conteneur principal empile les deux rangées verticalement */
 .arbitres-coordonnees-container { 
     display: flex; 
-    flex-direction: column; 
-    gap: 15px; 
+    flex-direction: column; /* Empile les deux rangées (les .arbitres-row) l'une sur l'autre */
+    gap: 15px; /* Espacement vertical entre la Rangée 1 et la Rangée 2 */
     width: 100%; 
     align-items: center; 
 }
+
+/* 2. Chaque rangée (le nouveau .arbitres-row) gère l'alignement des 3 champs */
 .arbitres-row {
     display: flex;
-    gap: 15px; 
+    gap: 15px; /* Espacement horizontal entre les champs (comme .match-equipes-row) */
     justify-content: center;
     width: 100%;
     flex-wrap: wrap; 
 }
+
+/* 3. Définition du CHAMP (Label au-dessus de l'Input) */
 .arbitres-row .champ {
+    /* Assure que l'input et le label s'empilent au centre */
     display: flex; 
     flex-direction: column; 
     align-items: center; 
+    
+    /* Gère la largeur de la colonne */
     flex-grow: 1; 
-    flex-basis: 250px; 
+    flex-basis: 250px; /* Taille de base (comme les inputs Équipe/Terrain) */
     min-width: 250px; 
 }
+
+/* 4. Largeur des INPUTS/SELECTS eux-mêmes */
 .arbitres-row input,
 .arbitres-row select { 
     width: 100%; 
-    max-width: 250px; 
+    max-width: 250px; /* Limite la largeur des champs à 250px comme Équipe/Terrain */
     box-sizing: border-box; 
 }
-/* Allonger l'adresse courriel */
+
+/* 1. Allonger l'adresse courriel */
 #courriel {
+    /* Augmente la largeur maximale de l'input du courriel à 350px */
     max-width: 350px; 
 }
-/* Rapetisser le téléphone */
+
+/* 2. Rapetisser le téléphone */
 #telephone {
+    /* Réduit la largeur maximale de l'input du téléphone à 150px (exemple) */
     max-width: 150px; 
 }
+	
+.exp-row input,
+.exp-row select {
+    width: 100%;
+}
+.exp-row { 
+    display: flex; 
+    gap: 20px; 
+    justify-content: center; 
+    align-items: flex-start; 
+    flex-wrap: nowrap; 
+    margin-bottom: 15px;
+}
 
-/* -----------------------------------------------------------------------------------
- * PANELS 3D (Design)
- * ----------------------------------------------------------------------------------- */
+/* 🛑 NOUVEAU: Définition individuelle des largeurs des champs d'expulsion (flex: 0 0 <largeur>) */
+/* Ceci remplace l'ancien bloc .exp-equipe, .exp-numero, .exp-nom */
+.exp-equipe { 
+    flex: 0 0 250px; /* Largeur de 250px pour le sélecteur d'équipe */
+}
+.exp-numero { 
+    flex: 0 0 75px; /* Largeur de 100px pour le numéro du joueur */
+}
+.exp-nom { 
+    flex: 0 0 250px; /* Largeur de 350px pour le nom du joueur */
+}
+
+/* Centrage des labels au-dessus des inputs d'expulsion */
+.exp-row div { 
+    text-align: center; 
+}
+.exp-row label {
+     text-align: center; 
+}
+
+/* En-tête Expulsion (alignement) */
+/* 🛑 NOUVELLE RÈGLE : Empile titre et chips verticalement et les centre */
+.expulsion-header-row {
+    display: flex;
+    flex-direction: column; /* 🛑 CHANGEMENT CLÉ ICI */
+    align-items: center;
+    gap :; 
+    width: 100%;
+    margin-bottom: 5px;
+    padding-bottom: 0px;
+    border-bottom: 1px solid #eee;
+    justify-content: center; /* Gardé pour la compatibilité, mais moins critique avec flex-direction: column */
+}
+
+/* Règle pour s'assurer que le h2 s'adapte au nouveau conteneur */
+.expulsion-header-row h2 {
+    font-size: 1.2em;
+    font-weight: bold;
+    margin: 0;
+    white-space: nowrap;
+    color: #333;
+	text-align: center; /* S'assure que le texte du titre est centré */
+}
+
+/* Règle pour que le conteneur des chips puisse s'étendre (et que les chips y soient centrées) */
+.expulsion-header-row .chips-container {
+    margin: 0;
+    justify-content: center; 
+    width: 100%; 
+   
+}
+	.expulsion-header-row {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0px; /* Réduit le gap entre le titre et les chips s'ils étaient dedans */
+    width: 100%;
+    margin-bottom: 15px; /* ⬅️ Espace réduit sous le titre */
+    padding-bottom: 2px; /* ⬅️ Espace réduit au-dessus du trait de séparation */
+    border-bottom: 0px solid #eee;
+    justify-content: center;
+}
+
+/* Onglets expulsions */
+.tabs { display: flex; gap: 5px; margin-top: 20px; margin-bottom: 15px; flex-wrap: wrap; justify-content:center; width: 100%; }
+.tabs button { padding: 6px 12px; cursor:pointer; border-radius:6px; border:1px solid #0072ce; background:#fff; color:#0072ce; font-size:14px; transition: all 0.2s; }
+.tabs button.active { background:#0072ce; color:#fff; font-weight: bold; }
+.tab-content { display: none; width:100%; }
+.tab-content.active { display: block; }
+
+/* Panels 3D (Design) */
 .panel-3d, .panel-3d-detail, .panel-3d-info { 
     border: 1px solid #ccc; 
     border-radius: 10px; 
     padding: 20px; 
+    
+    /* 🛑 CHANGEMENT CLÉ 1: Utiliser "auto" pour centrer le panneau horizontalement */
     margin: 20px auto; 
     
-    /* Utilisation de la variable de fond de panel */
-    background : var(--couleur-panel-fond);
+    background : #d0d3d4;
     
-	 /* Ombre 3D */
+	 /* 🛑 AJOUT CLÉ POUR L'EFFET 3D (Ombres) */
     box-shadow: 
+        /* Ombre interne claire (simule la lumière venant du haut) */
         inset 0 3px 0 rgba(255, 255, 255, 0.7), 
+        /* Ombre interne foncée (simule la profondeur, le 'creux') */
         inset 0 -3px 0 rgba(0, 0, 0, 0.1),
+        /* Ombre externe subtile (simule l'élévation du panneau) */
         0 8px 6px rgba(0, 0, 0, 0.5); 
 	
 	display: flex; 
     flex-direction: column; 
     align-items: flex-start; 
-    width: 95%; 
-    max-width: 1100px; 
+    
+    /* 🛑 CHANGEMENT CLÉ 2: Définir une largeur maximale (ou fixe) */
+    width: 95%; /* Marge de sécurité pour petits écrans */
+    max-width: 1100px; /* C'est la largeur réelle que le panneau ne dépassera pas. Ajustez cette valeur. */
+    
     box-sizing: border-box; 
 }
+/* La règle suivante assure que les éléments (les champs) à l'intérieur de .panel-3d restent centrés, même si le panneau est plus étroit que la page. */
 .panel-3d { 
     align-items: center; 
 }
 
-/* Styles pour Debug et Destinataires */
+.panel-3d h2, 
+.panel-3d-detail h2, /* AJOUTÉ */
+.panel-3d-info h2 { /* AJOUTÉ */
+    font-size: 30px; 
+    margin-top: 10px; 
+    margin-bottom: 25px; 
+    color : dimgrey; /* (Exemple : Bleu foncé pour une cohérence) */
+    text-shadow: 
+        2px 2px 0px rgba(255, 255, 255, 0.5), 
+        3px 3px 2px rgba(0, 0, 0, 0.2); 
+}
+
+
+.input-error, .input-error:focus {
+  border: 2px solid #d93025 !important;
+  /* Red "halo" effect */
+  box-shadow: 0 0 8px  rgba(217, 48, 37, 0.4);
+}
+	
+	
 #destinatairesContainer label,
 #destinataires,
 #debugContainer h2,
 #debugOutput {
-    color: var(--couleur-texte-clair) !important; 
+    color: white !important; /* Force la couleur pour le texte du debug et des destinataires */
 }
 
 /* -----------------------------------------------------------------------------------
- * BANDEAU D'AVERTISSEMENT FIREFOX
+ * NOUVEAU : BANDEAU D'AVERTISSEMENT FIREFOX
  * ----------------------------------------------------------------------------------- */
 #browser-warning-banner {
     position: fixed;
-    top: -100px; 
+    top: -100px; /* Cache la bannière au-dessus de l'écran */
     left: 0;
     width: 100%;
-    background-color: #ffc107; 
+    background-color: #ffc107; /* Couleur d'avertissement (Jaune/Orange) */
     color: #333;
     text-align: center;
     padding: 10px 20px;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
-    z-index: 9999; 
-    transition: top 0.5s ease-in-out; 
+    z-index: 9999; /* S'assure qu'elle est au-dessus de tout */
+    transition: top 0.5s ease-in-out; /* Animation de glissement */
 }
 
 #browser-warning-banner p {
@@ -279,20 +373,21 @@ button:hover { background:#0056b3; }
     font-size: 1.1em;
 }
 
+/* Classe ajoutée par JavaScript pour afficher la bannière */
 .show-banner {
     top: 0 !important;
 }
+
+
 </style>
 </head>
-
-/*<body class="theme-fonce">*/
 <body>
 
 <div id="browser-warning-banner">
     <p><strong>Avis :</strong> Ce formulaire est optimisé pour les navigateurs **Chrome** ou **Edge**. Des problèmes d'affichage peuvent survenir avec **Firefox**. L'utilisation d'un navigateur recommandé est fortement suggérée. </p>
 </div>
 
-<h1>RAPPORT D'EXPULSION 9:45 </h1>
+<h1>RAPPORT D'EXPULSION 00:20 </h1>
 
 <form id="rapportForm" novalidate>
 

@@ -513,7 +513,7 @@ button:hover {
 
 <h1>
     RAPPORT D'EXPULSION
-    <span style="font-size: 0.5em; margin-left: 20px;">v.01-10-2025 19:00</span>
+    <span style="font-size: 0.5em; margin-left: 20px;">v.01-10-2025 19:10</span>
 </h1>
 
 <div class="theme-selector">
@@ -2000,7 +2000,7 @@ function createCodeChips(expulsionIndex, codesData, panel) {
 async function envoyerRapportParEmail(data) {
   const emailUrl = "https://script.google.com/macros/s/AKfycbzptS_pTHRw9HERRy6ZjLKfkY25GTgOkHbJMaSi7h9wd2tFyiF0zKWaw9T-HoArXrrw/exec"; // ton URL
   const rapportHTML = genererRapportExpulsion(data);
-  const adresseDeDestination = "ump_77@videotron.ca,loleduc@videotron.ca";
+  const adresseDeDestination = "ump_77@videotron.ca,loleduc@videotron.ca,dlabonte@arbars.ca";
 
   const payload = {
     htmlContent: rapportHTML,

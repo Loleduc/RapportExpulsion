@@ -1,4 +1,4 @@
-<!doctype html>
+<!doctype html><!doctype html>
 <html lang="fr">
 <head>
 <meta charset="UTF-8">
@@ -14,13 +14,36 @@
     font-family: Arial, sans-serif; 
     padding: 20px; 
     /* 🛑 CORRECTION CLÉ : Dégradé de Pantone 282 C (#00255c) à 285 C (#0073e6) */
-  /*  background: linear-gradient(to bottom, #00255c 0%, #0073e6 100%); */
+  
 	background: linear-gradient(to bottom, #0073e6 00%,  #00255c 100%);
     /* Le dégradé se fait sur toute la page, mais vous pouvez aussi le forcer sur 100vh */
     min-height: 100vh;
-    
-    /* 🛑 Ancien background-color: #f4f4f4; est remplacé par le dégradé ci-dessus. */
+    }
+#browser-warning-banner {
+    position: fixed;
+    top: -100px; /* Cache la bannière au-dessus de l'écran */
+    left: 0;
+    width: 100%;
+    background-color: #ffc107; /* Couleur d'avertissement (Jaune/Orange) */
+    color: #333;
+    text-align: center;
+    padding: 10px 20px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+    z-index: 9999; /* S'assure qu'elle est au-dessus de tout */
+    transition: top 0.5s ease-in-out; /* Animation de glissement */
 }
+
+#browser-warning-banner p {
+    margin: 0;
+    font-size: 1.1em;
+}
+
+/* Classe ajoutée par JavaScript pour afficher la bannière */
+.show-banner {
+    top: 0 !important;
+}	
+	
+	
 h1 { 
 	font-size: 72px;
     text-align: center; 
@@ -149,7 +172,7 @@ input, select, textarea { padding: 8px; margin-bottom: 6px; border-radius: 6px; 
 button[type="submit"], button[type="reset"] { background:#007BFF; color:white; padding:10px 20px; border:none; border-radius:6px; cursor:pointer; font-size:16px; margin-right: 10px; }
 button:hover { background:#0056b3; }
 
-#details, #infos_complementaires { width: 100%; resize: vertical; min-height: 80px; padding: 8px; font-size: 14px; border-radius: 6px; border: 1px solid #ccc; box-sizing: border-box; overflow: hidden; }
+}
 
 /* -----------------------------------------------------------------------------------
  * STRUCTURES COMPLEXES (Arbitres, Expulsions)
@@ -340,12 +363,15 @@ button:hover { background:#0056b3; }
 #debugOutput {
     color: white !important; /* Force la couleur pour le texte du debug et des destinataires */
 }
-
 </style>
 </head>
 <body>
 
-<h1>RAPPORT D'EXPULSION   23:25</h1>
+<div id="browser-warning-banner">
+    <p><strong>Avis :</strong> Ce formulaire est optimisé pour les navigateurs **Chrome** ou **Edge**. Des problèmes d'affichage peuvent survenir avec **Firefox**. L'utilisation d'un navigateur recommandé est fortement suggérée. </p>
+</div>
+
+<h1>RAPPORT D'EXPULSION   23:45/h1>
 
 <form id="rapportForm" novalidate>
 
@@ -507,6 +533,19 @@ const CODE_SEPARATOR = '||';
 // -------------------------------------------------------------
 // SECTION: LOGIQUE DE GÉNÉRATION DU RAPPORT HTML (Client-Side JS)
 // -------------------------------------------------------------
+
+document.addEventListener('DOMContentLoaded', () => {
+    // 1. Récupérer la chaîne d'identification du navigateur
+    const userAgent = navigator.userAgent;
+    const banner = document.getElementById('browser-warning-banner');
+
+    // 2. Vérifier si la chaîne contient "Firefox" (et si la bannière existe)
+    //    L'utilisation de .includes("Firefox") est suffisante pour cette vérification.
+    if (userAgent.includes("Firefox") && banner) {
+        // 3. Si c'est Firefox, ajouter la classe CSS qui déclenche l'animation
+        banner.classList.add('show-banner');
+    }
+});
 
 
 async function chargerDonneesCodes(url) {
@@ -893,17 +932,9 @@ function genererRapportExpulsion(customData) {
                 td[style*="f2f2f2"] { background-color: #f2f2f2 !important; -webkit-print-color-adjust: exact; }
                 td[style*="a3a3a3"] { background-color: #a3a3a3 !important; -webkit-print-color-adjust: exact; }
             }
-        </style>
+         </style>
         </head>
-        <body>
-            <div class="content-wrapper">
-                ${message}
-                <p style="text-align:center; font-size:12px; color:#999; margin-top:0; padding-bottom:10px;">
-                    Rapport généré le ${journee}.
-                </p>
-            </div>
-        </body>
-        </html>
+      </html>
     `;
     
     return finalHTML;

@@ -345,7 +345,7 @@ button:hover { background:#0056b3; }
 </head>
 <body>
 
-<h1>RAPPORT D'EXPULSION 19:05</h1>
+<h1>RAPPORT D'EXPULSION 22:10</h1>
 
 <form id="rapportForm" novalidate>
 
@@ -810,13 +810,11 @@ function genererRapportExpulsion(customData) {
         <td colspan="2" style="${styleCell}">${customData[12]?.reponse || "N/A"}</td>
         <td style="${styleCell}"><b> Date et heure du rapport : </b></td>
         <td style="${styleCell}">${journee}</td>
-        </tr>
-    </table>`; // Fermeture du tableau des officiels
+        </tr>`; // Fermeture du tableau des officiels
 
     // ----------------------------------------------------
     // 5. COORDONNÉES (Tableau 5) - Reste le même
     // ----------------------------------------------------
-    message += `<table style="${styleTable}">`; 
     message += `
         <tr>
         <td colspan="5" style="${styleSectionHeaderTD}"><h3 style="${styleSectionHeaderTH}; margin: 0; padding: 0;">COORDONNÉES</h3></td>

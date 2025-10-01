@@ -187,7 +187,7 @@ button:hover { background:#0056b3; }
     width: 100%; 
 }
 
-.arbitres-col { 
+/*.arbitres-col { 
     display: flex; 
     flex-direction: column; 
     /* Rapprochement vertical : 5px de gap (réduit de 10px) */
@@ -196,8 +196,23 @@ button:hover { background:#0056b3; }
     flex-grow: 0; 
     /* Laisser le min-width par défaut pour la flexibilité si besoin, ou le fixer à 300px */
     min-width: 300px; 
+} */
+
+.arbitres-col { 
+    display: flex; 
+    flex-direction: column; 
+    /* Rapprochement vertical : 5px de gap (réduit de 10px) */
+    gap: 5px; 
+    /* Permet à la colonne de grandir, mais fixe sa taille de base */
+    flex-grow: 1; 
+    /* Largeur de base. L'ancienne min-width était trop rigide. */
+    flex-basis: 300px; 
+    
+    /* 🛑 NOUVEAU: S'assurer qu'elle peut se rétrécir jusqu'à 250px */
+    min-width: 250px; 
 }
 
+/* ... (Le reste de votre CSS reste le même) ... */
 .arbitres-col .champ { 
     display: flex; 
     flex-direction: column; 
@@ -372,7 +387,7 @@ button:hover { background:#0056b3; }
     <p><strong>Avis :</strong> Ce formulaire est optimisé pour les navigateurs **Chrome** ou **Edge**. Des problèmes d'affichage peuvent survenir avec **Firefox**. L'utilisation d'un navigateur recommandé est fortement suggérée. </p>
 </div>
 
-<h1>RAPPORT D'EXPULSION 23:50 </h1>
+<h1>RAPPORT D'EXPULSION 23:55 </h1>
 
 <form id="rapportForm" novalidate>
 

@@ -345,7 +345,7 @@ button:hover { background:#0056b3; }
 </head>
 <body>
 
-<h1>RAPPORT D'EXPULSION   23:00</h1>
+<h1>RAPPORT D'EXPULSION   23:05</h1>
 
 <form id="rapportForm" novalidate>
 
@@ -520,6 +520,17 @@ async function chargerDonneesCodes(url) {
     } catch (erreur) {
         console.error("Erreur lors du chargement des données depuis GitHub:", erreur);
         return {}; 
+    }
+}
+
+async function chargerDonneesRegions(url) {
+    try {
+        const reponse = await fetch(url, { method: 'GET' });
+        if (!reponse.ok) throw new Error(`Erreur HTTP: ${reponse.status}`);
+        return await reponse.json(); 
+    } catch (erreur) {
+        console.error("Erreur lors du chargement des données depuis GitHub:", erreur);
+        return null; 
     }
 }
 

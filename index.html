@@ -163,37 +163,37 @@ button:hover { background:#0056b3; }
     width: 100%; 
 }
 
-.arbitres-col { 
+.arbitres-coordonnees-container { 
+    /* Le conteneur principal empile les deux rangées (TOP et BOTTOM) verticalement */
     display: flex; 
-    flex-direction: column; 
-    /* Rapprochement vertical : 5px de gap (réduit de 10px) */
-    gap: 5px; 
-    /* Forcer la colonne à ne pas s'étirer (elle est maintenant fixée par la largeur de l'input à 300px) */
-    flex-grow: 0; 
-    /* Laisser le min-width par défaut pour la flexibilité si besoin, ou le fixer à 300px */
-    min-width: 300px; 
+    flex-direction: column; /* Pour empiler TOP row sur BOTTOM row */
+    gap: 15px; /* Espacement entre la rangée du haut et celle du bas */
+    width: 100%; 
+    align-items: center; /* Centrage général */
 }
 
-.arbitres-col .champ { 
+/* Ces classes gèrent les 3 colonnes de la rangée */
+.arbitres-row-top,
+.arbitres-row-bottom {
+    display: flex;
+    gap: 15px; /* Espacement entre les colonnes */
+    justify-content: center;
+    width: 100%;
+    flex-wrap: wrap; /* Assure que les colonnes passent à la ligne sur mobile */
+}
+
+/* Ces règles remplacent l'ancienne logique .arbitres-col */
+.arbitres-row-top .champ,
+.arbitres-row-bottom .champ { 
+    /* Permet à la colonne de se rétrécir un peu sur mobile si nécessaire */
+    flex-grow: 1; 
+    flex-basis: 280px; /* Taille de base légèrement réduite pour la fluidité */
+    min-width: 250px; 
+    
+    /* Assure que l'input et le label s'empilent à l'intérieur du champ */
     display: flex; 
-    flex-direction: column; 
-    /* 🛑 Assure que le label et l'input sont centrés (en plus du .arbitres-col) */
+    flex-direction: column;
     align-items: center; 
-}
-
-.arbitres-col label { 
-    font-weight: bold; 
-    /* 🛑 Rapprochement vertical : réduire l'espace sous le label */
-    margin-bottom: 2px; 
-    white-space: nowrap; 
-    /* 🛑 Centrer le texte du label */
-    text-align: center; 
-}
-
-/* Règle pour contrôler la largeur et le rapprochement de l'input */
-.arbitres-col input, .arbitres-col select { 
-    width: 300px; 
-    box-sizing: border-box; 
 }
 	
 .exp-row input,
@@ -377,7 +377,7 @@ button:hover { background:#0056b3; }
     <p><strong>Avis :</strong> Ce formulaire est optimisé pour les navigateurs **Chrome** ou **Edge**. Des problèmes d'affichage peuvent survenir avec **Firefox**. L'utilisation d'un navigateur recommandé est fortement suggérée. </p>
 </div>
 
-<h1>RAPPORT D'EXPULSION 00:00 </h1>
+<h1>RAPPORT D'EXPULSION 00:06 </h1>
 
 <form id="rapportForm" novalidate>
 
@@ -417,48 +417,45 @@ button:hover { background:#0056b3; }
 
 <div class="panel-3d arbitres-panel panel-step">
   <h2>Arbitres et Coordonnées</h2>
-  <div class="arbitres-coordonnees-container">
-    <div class="arbitres-col">
-      <div class="champ">
+<div class="arbitres-coordonnees-container">
+    <div class="arbitres-row-top">
+      <div class="champ" style="min-width: 300px;">
         <label for="arbitreMarbre">Arbitre au marbre</label>
         <input type="text" id="arbitreMarbre" tabindex="10" required>
         <div class="error"></div>
       </div>
-      <div class="champ">
+      <div class="champ" style="min-width: 300px;">
+        <label for="arbitreButs">Arbitre sur les buts</label>
+        <input type="text" id="arbitreButs" tabindex="11" required>
+        <div class="error"></div>
+      </div>
+      <div class="champ" style="min-width: 300px;">
+        <label for="marqueur">Marqueur</label>
+        <input type="text" id="marqueur" tabindex="12" required>
+        <div class="error"></div>
+      </div>
+    </div>
+
+    <div class="arbitres-row-bottom">
+      <div class="champ" style="min-width: 300px;">
         <label for="arbitreRapport">Arbitre faisant le rapport</label>
         <select id="arbitreRapport" disabled tabindex="13" required>
           <option value="">-- Sélectionner un arbitre --</option>
         </select>
         <div class="error"></div>
       </div>
-    </div>
-
-    <div class="arbitres-col">
-      <div class="champ">
-        <label for="arbitreButs">Arbitre sur les buts</label>
-        <input type="text" id="arbitreButs" tabindex="11" required>
-        <div class="error"></div>
-      </div>
-      <div class="champ">
+      <div class="champ" style="min-width: 300px;">
         <label for="courriel">Adresse courriel</label>
         <input type="email" id="courriel" tabindex="14" required>
         <div class="error"></div>
       </div>
-    </div>
-
-    <div class="arbitres-col">
-      <div class="champ">
-        <label for="marqueur">Marqueur</label>
-        <input type="text" id="marqueur" tabindex="12" required>
-        <div class="error"></div>
-      </div>
-      <div class="champ">
+      <div class="champ" style="min-width: 300px;">
         <label for="telephone">Téléphone</label>
-        <input type="tel" id="telephone" required tabindex="15" placeholder="(000) 000-0000" > 
+        <input type="tel" id="telephone" required tabindex="15" placeholder="(000) 000-0000"> 
         <div class="error"></div>
       </div>
     </div>
-  </div>
+   </div>
 </div>
 
 <div class="panel-3d panel-step" id="expulsionsPanel">

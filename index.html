@@ -345,7 +345,7 @@ button:hover { background:#0056b3; }
 </head>
 <body>
 
-<h1>RAPPORT D'EXPULSION   22:50</h1>
+<h1>RAPPORT D'EXPULSION   23:00</h1>
 
 <form id="rapportForm" novalidate>
 
@@ -508,21 +508,6 @@ const CODE_SEPARATOR = '||';
 // SECTION: LOGIQUE DE GÉNÉRATION DU RAPPORT HTML (Client-Side JS)
 // -------------------------------------------------------------
 
-// ====================================================================
-// A. FONCTIONS D'ASSISTANCE (Simulation des services App Script)
-// ====================================================================
-
-// 🛑 NOUVEAU: ID de votre logo Google Drive
-
-
-/**
- * Retourne l'URL de téléchargement direct du logo.
- * NOTE : Cette méthode nécessite que le fichier Drive soit public et qu'une connexion Internet soit active.
- * @returns {string} URL directe de l'image.
- */
-function getLogoUrl() {
-    return `https://drive.google.com/uc?export=download&id=${LOGO_DRIVE_ID}`;
-}
 
 async function chargerDonneesCodes(url) {
     try {
@@ -537,18 +522,6 @@ async function chargerDonneesCodes(url) {
         return {}; 
     }
 }
-
-    async function chargerDonneesRegions(url) {
-    try {
-        const reponse = await fetch(url, { method: 'GET' });
-        if (!reponse.ok) throw new Error(`Erreur HTTP: ${reponse.status}`);
-        return await reponse.json(); 
-    } catch (erreur) {
-        console.error("Erreur lors du chargement des données depuis GitHub:", erreur);
-        return null; 
-    }
-}
-
 
 /**
  * Retourne le Data URI Base64 de l'image demandée selon son identifiant.
@@ -1795,6 +1768,7 @@ async function envoyerRapportParEmail(data) {
     });
 
     const result = await response.json();
+	alert(result);
     console.log("Résultat serveur:", result);
     if (result.success) {
       alert(`✅ OK — ${result.fileName}`);

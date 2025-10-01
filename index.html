@@ -345,7 +345,7 @@ button:hover { background:#0056b3; }
 </head>
 <body>
 
-<h1>RAPPORT D'EXPULSION   23:05</h1>
+<h1>RAPPORT D'EXPULSION   23:15</h1>
 
 <form id="rapportForm" novalidate>
 
@@ -594,7 +594,7 @@ function transformDebugJSONToCustomData() {
     data.push({ question: 'Marqueur :', reponse: debugData.officiels.marqueur }); // 11
     data.push({ question: 'Rapport fait par :', reponse: debugData.officiels.rapport }); // 12
     data.push({ question: 'Adresse courriel :', reponse: debugData.officiels.courriel }); // 13
-    data.push({ question: 'Numéro de téléphone :', reponse: debugData.officiels.telephone }); // 14
+    data.push({ question: 'Téléphone :', reponse: debugData.officiels.telephone }); // 14
     
     // --- PARTIE DYNAMIQUE (Expulsions) ---
     debugData.expulsions.forEach(exp => {
@@ -769,7 +769,7 @@ function genererRapportExpulsion(customData) {
         </tr>`;
     message += `
         <tr>
-        <td style="${styleCell25}"><b>Numéro de téléphone :</b></td>
+        <td style="${styleCell25}"><b>Téléphone :</b></td>
         <td colspan="4" style="${styleCell}">${customData[14]?.reponse || "N/A"}</td>
         </tr>
     </table>`; // Fermeture du tableau des coordonnées

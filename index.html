@@ -7,48 +7,154 @@
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/themes/material_blue.css"> 	
 
 <style>
+/* ===================================================================================
+ * 1. DÉFINITION DES THÈMES (Variables CSS)
+ * -----------------------------------------------------------------------------------
+ * Les thèmes sont définis par des classes appliquées au <body>.
+ * =================================================================================== */
+
+/* Thème 1 : Thème Bleu (Votre thème original) */
+.theme-bleu {
+    /* Couleurs du Dégradé de Fond (body) */
+    --couleur-fond-haut: #0073e6;    /* Bleu vif (Pantone 285 C) */
+    --couleur-fond-bas: #00255c;     /* Bleu foncé (Pantone 282 C) */
+
+    /* Couleurs d'Accentuation (Bleu) */
+    --couleur-accent: #0072ce;
+    --couleur-ombre-h1-fonce: #0056b3;
+    --couleur-bouton-principal: #007BFF;
+    --couleur-bouton-hover: #0056b3;
+
+    /* Couleurs des Panels */
+    --couleur-panel-fond: #d0d3d4;   /* Gris clair des panels 3D */
+
+    /* Couleurs du Texte */
+    --couleur-texte-principal: #333; /* Noir/Gris foncé */
+    --couleur-texte-clair: white;    /* Texte blanc arrière plan des chips */
+    --couleur-texte-h2: dimgrey;     /* Gris pour les H2 */
+    
+    /* NOUVEAU: Couleur spécifique pour le titre H1 */
+    --couleur-h1-titre: white; 
+
+    /* Couleurs Diverses */
+    --couleur-bordure-grise: #ccc;
+    --couleur-erreur: #d93025;
+    --couleur-avertissement: #ffc107;
+}
+
+/* Thème 2 : Thème blanc (Corrigé) */
+.theme-blanc {
+    /* Couleurs du Dégradé de Fond (body) */
+    --couleur-fond-haut: #fff;    /*Blanc */
+    --couleur-fond-bas: #fff;     /* blanc */
+
+    /* Couleurs d'Accentuation (Bleu maintenu pour les clics/chips) */
+    --couleur-accent: #0072ce;
+    --couleur-ombre-h1-fonce: #0056b3;
+    --couleur-bouton-principal: #007BFF;
+    --couleur-bouton-hover: #0056b3;
+
+    /* Couleurs des Panels */
+    --couleur-panel-fond: #d0d3d4;   /* Gris BQ */
+
+    /* Couleurs du Texte */
+    --couleur-texte-principal: #041e42; /* bleu BQ */
+    --couleur-texte-clair: white;      /* Texte blanc arrière plan des chips (pour le fond des chips) */
+    --couleur-texte-h2: #0072CE;       /* Bleu BQ clair pour les H2 */
+    
+    /* NOUVEAU: Couleur spécifique pour le titre H1 (Bleu BQ pour le rendre visible sur fond blanc) */
+    --couleur-h1-titre: #0072CE;
+
+    /* Couleurs Diverses */
+    --couleur-bordure-grise: #666;
+    --couleur-erreur: #ff6347;        /* Rouge-orangé pour les erreurs */
+    --couleur-avertissement: #ffc107;
+}
+
+/* Thème 3 : theme-bleu-bleu  (Corrigé) */
+.theme-bleu-bleu {
+    /* Couleurs du Dégradé de Fond (body) */
+    --couleur-fond-haut: #0073e6;    /* Bleu vif (Pantone 285 C) */
+    --couleur-fond-bas: #00255c;     /* Bleu foncé (Pantone 282 C) */
+
+    /* Couleurs d'Accentuation (Bleu) */
+    --couleur-accent: #0072ce;
+    --couleur-ombre-h1-fonce: #0056b3;
+    --couleur-bouton-principal: #007BFF;
+    --couleur-bouton-hover: #0056b3;
+
+    /* Couleurs des Panels */
+    --couleur-panel-fond: #d0d3d4;   /* Gris clair des panels 3D */
+
+    /* Couleurs du Texte */
+    --couleur-texte-principal: #333; /* Noir/Gris foncé */
+    --couleur-texte-clair: white;    /* Texte blanc arrière plan des chips */
+    --couleur-texte-h2: #0072CE;     /* Gris pour les H2 */
+    
+    /* NOUVEAU: Couleur spécifique pour le titre H1 */
+    --couleur-h1-titre: white; 
+
+    /* Couleurs Diverses */
+    --couleur-bordure-grise: #ccc;
+    --couleur-erreur: #d93025;
+    --couleur-avertissement: #ffc107;
+}
+
+
+
 /* -----------------------------------------------------------------------------------
- * CSS GÉNÉRAL (AJUSTÉ: INPUT PADDING À 8PX POUR UNE MEILLEURE HAUTEUR)
+ * CSS GÉNÉRAL (MODIFICATION DE LA RÈGLE H1)
  * ----------------------------------------------------------------------------------- */
  body { 
     font-family: Arial, sans-serif; 
     padding: 20px; 
-    /* 🛑 CORRECTION CLÉ : Dégradé de Pantone 282 C (#00255c) à 285 C (#0073e6) */
-  /*  background: linear-gradient(to bottom, #00255c 0%, #0073e6 100%); */
-	background: linear-gradient(to bottom, #0073e6 00%,  #00255c 100%);
-    /* Le dégradé se fait sur toute la page, mais vous pouvez aussi le forcer sur 100vh */
+    /* Utilisation des variables pour le dégradé */
+	background: linear-gradient(to bottom, var(--couleur-fond-haut) 00%,  var(--couleur-fond-bas) 100%);
     min-height: 100vh;
-    
-    /* 🛑 Ancien background-color: #f4f4f4; est remplacé par le dégradé ci-dessus. */
 }
 h1 { 
-	font-size: 72px;
+    font-size: 72px;
     text-align: center; 
-    /* 🛑 CORRECTION CLÉ : Couleur du texte changée à blanc */
-    color: white; 
-    /* color: #ffffff; fonctionnerait aussi */
-    /* Vous pouvez aussi ajouter un peu de marge si vous trouvez que le titre est trop près du bord */
+    /* 🚀 CORRECTION : Utilise la nouvelle variable indépendante pour le H1 */
+    color: var(--couleur-h1-titre); 
     margin-bottom: 25px; 
-	text-shadow: 
-        /* Ombre légère pour la profondeur (plus proche) */
-        2px 2px 0px #0056b3, 
-        /* Ombre plus foncée pour la distance (plus loin) */
-        4px 4px 0px #00255c, 
-        /* Ombre la plus éloignée pour l'effet de projection */
+    text-shadow: 
+        2px 2px 0px var(--couleur-ombre-h1-fonce), 
+        4px 4px 0px var(--couleur-fond-bas), 
         6px 6px 5px rgba(0, 0, 0, 0.5); 
 }
-h2 { font-size: 30px;  margin-top: 10px; margin-bottom: 25px; color : dimgrey; 
-	text-shadow: 
-        /* Ombre légère pour la profondeur (plus proche) */
+h2 { 
+    font-size: 30px;  
+    margin-top: 10px; 
+    margin-bottom: 25px; 
+    color : var(--couleur-texte-h2);  
+    text-shadow: 
         2px 2px 0px #000, 
-        /* Ombre plus foncée pour la distance (plus loin) */
-        4px 4px 0px #d0d3d4, 
-        /* Ombre la plus éloignée pour l'effet de projection */
-        6px 6px 5px rgba(0, 0, 0, 0.1); }
+        4px 4px 0px var(--couleur-panel-fond), 
+        6px 6px 5px rgba(0, 0, 0, 0.1); 
+}
 
-label { display: block; margin: 8px 0 4px; font-weight: bold; }
-/* Augmentation du padding des inputs à 8px pour une meilleure visibilité et hauteur */
-input, select, textarea { padding: 8px; margin-bottom: 6px; border-radius: 6px; border: 1px solid #ccc; font-size: 14px; box-sizing: border-box; }
+label { 
+    display: block; 
+    margin: 8px 0 4px; 
+    font-weight: bold; 
+    /* La couleur du texte principal est utilisée ici, définie par le thème */
+    color: var(--couleur-texte-principal);
+}
+input, select, textarea { 
+    padding: 8px; 
+    margin-bottom: 6px; 
+    border-radius: 6px; 
+    border: 1px solid var(--couleur-bordure-grise); 
+    font-size: 14px; 
+    /* 🛑 CLÉ : Assure que le padding et la bordure sont inclus dans la largeur */
+    box-sizing: border-box; 
+    /* La couleur du texte principal est utilisée ici, définie par le thème */
+    color: var(--couleur-texte-principal);
+    
+    /* 🛑 AJOUTEZ/VÉRIFIEZ CECI : Empêche le débordement horizontal */
+    max-width: 100%;
+}
 
 #matchNumero { width: 140px; }
 #matchDate { width: 220px; }
@@ -61,24 +167,18 @@ input, select, textarea { padding: 8px; margin-bottom: 6px; border-radius: 6px; 
 
 .match-row label, 
 .select-row label {
-    /* 🛑 CHANGEMENT CLÉ 1: S'assurer que le label prend toute la place disponible pour le texte */
-    text-align: center; /* Centre le texte (le libellé) lui-même */
-    /* REMARQUE: Si le label est dans un <div> plus grand, cette propriété peut ne pas suffire. 
-       Il faudra forcer le conteneur du label à être centré. */
-}	
-	
+    text-align: center; 
+} 
+    
 .match-equipes-row { display: flex; gap: 15px; align-items: flex-start; justify-content: center; } 
 .match-equipes-row > div { display: flex; flex-direction: column; }
 #equipeLocale, #equipeVisiteur, #terrain { width: 250px; }
 
 .match-equipes-row label, 
 .select-row label {
-    /* 🛑 CHANGEMENT CLÉ 1: S'assurer que le label prend toute la place disponible pour le texte */
-    text-align: center; /* Centre le texte (le libellé) lui-même */
-    /* REMARQUE: Si le label est dans un <div> plus grand, cette propriété peut ne pas suffire. 
-       Il faudra forcer le conteneur du label à être centré. */
-}	
-	
+    text-align: center; 
+} 
+    
 
 .expulsion-block { padding: 10px; margin-top: 10px; border-radius: 8px; }
 
@@ -86,18 +186,31 @@ input, select, textarea { padding: 8px; margin-bottom: 6px; border-radius: 6px; 
  * CHIPS ET CODES
  * ----------------------------------------------------------------------------------- */
 .chips-container { display: flex; gap: 6px; flex-wrap: wrap; margin-bottom: 0; justify-content: center; } 
-.chip { padding: 4px 12px; border-radius: 16px; border: 1px solid #0072ce; cursor: pointer; font-size: 14px; color: #0072ce; background: #fff; text-align: center; }
-.chip.selected { background: #0072ce; color: #fff; }
+.chip { 
+    padding: 4px 12px; 
+    border-radius: 16px; 
+    border: 1px solid var(--couleur-accent); 
+    cursor: pointer; 
+    font-size: 14px; 
+    color: var(--couleur-accent); 
+    /* Cette couleur définit le fond des chips */
+    background: var(--couleur-texte-clair); 
+    text-align: center; 
+}
+.chip.selected { 
+    background: var(--couleur-accent); 
+    color: var(--couleur-texte-clair); 
+}
 
 .codes-container { display: flex; flex-wrap: wrap; gap: 6px; justify-content:center; margin-top:10px; width: 100%; }
 .code-chip {
   position: relative;
   padding: 6px 10px;
   border-radius: 12px;
-  border: 1px solid #0072ce;
+  border: 1px solid var(--couleur-accent);
   cursor: pointer;
   font-size: 13px;
-  color: #0072ce;
+  color: var(--couleur-accent);
   margin-bottom: 4px;
   width: 48%; /* Deux chips par ligne */
   box-sizing: border-box;
@@ -105,21 +218,21 @@ input, select, textarea { padding: 8px; margin-bottom: 6px; border-radius: 6px; 
   justify-content:center;
   align-items:center;
   text-align:center;
-  background: #fff;
+  background: var(--couleur-texte-clair);
   transition: all 0.2s;
 }
 
 .code-chip.selected {
-  background: #0072ce;
-  color: #fff;
+  background: var(--couleur-accent);
+  color: var(--couleur-texte-clair);
   font-weight: bold;
 }
 
 .code-chip .tooltip {
   visibility: hidden;
   width: 300px;
-  background-color: #333;
-  color: #fff;
+  background-color: var(--couleur-texte-principal); 
+  color: var(--couleur-texte-clair); 
   text-align: left;
   padding: 10px;
   border-radius: 6px;
@@ -139,73 +252,82 @@ input, select, textarea { padding: 8px; margin-bottom: 6px; border-radius: 6px; 
   visibility: visible;
   opacity: 1;
 }
-	
+    
 
 /* -----------------------------------------------------------------------------------
  * ERREURS ET BOUTONS
  * ----------------------------------------------------------------------------------- */
-.error { color: #d93025; font-size: 12px; font-weight: 600; margin-bottom: 6px; display: block; min-height: 16px; }
-
-button[type="submit"], button[type="reset"] { background:#007BFF; color:white; padding:10px 20px; border:none; border-radius:6px; cursor:pointer; font-size:16px; margin-right: 10px; }
-button:hover { background:#0056b3; }
-
+.error { 
+    color: var(--couleur-erreur); 
+    font-size: 12px; 
+    font-weight: 600; 
+    margin-bottom: 6px; 
+    display: block; 
+    min-height: 16px; 
 }
+
+button[type="submit"], button[type="reset"] { 
+    background: var(--couleur-bouton-principal); 
+    color: var(--couleur-texte-clair); 
+    padding:10px 20px; 
+    border:none; 
+    border-radius:6px; 
+    cursor:pointer; 
+    font-size:16px; 
+    margin-right: 10px; 
+}
+button:hover { 
+    background: var(--couleur-ombre-h1-fonce); 
+}
+
 
 /* -----------------------------------------------------------------------------------
  * NOUVELLE STRUCTURE ARBITRES ET COORDONNÉES (2 Rangées x 3 Colonnes)
  * ----------------------------------------------------------------------------------- */
 
-/* 1. Le conteneur principal empile les deux rangées verticalement */
 .arbitres-coordonnees-container { 
     display: flex; 
-    flex-direction: column; /* Empile les deux rangées (les .arbitres-row) l'une sur l'autre */
-    gap: 15px; /* Espacement vertical entre la Rangée 1 et la Rangée 2 */
+    flex-direction: column; 
+    gap: 15px; 
     width: 100%; 
     align-items: center; 
 }
 
-/* 2. Chaque rangée (le nouveau .arbitres-row) gère l'alignement des 3 champs */
 .arbitres-row {
     display: flex;
-    gap: 15px; /* Espacement horizontal entre les champs (comme .match-equipes-row) */
+    gap: 15px; 
     justify-content: center;
     width: 100%;
     flex-wrap: wrap; 
 }
 
-/* 3. Définition du CHAMP (Label au-dessus de l'Input) */
+/* Règle qui assure l'empilement (label au-dessus de l'input) et le centrage */
 .arbitres-row .champ {
-    /* Assure que l'input et le label s'empilent au centre */
     display: flex; 
     flex-direction: column; 
     align-items: center; 
-    
-    /* Gère la largeur de la colonne */
     flex-grow: 1; 
-    flex-basis: 250px; /* Taille de base (comme les inputs Équipe/Terrain) */
+    flex-basis: 250px; 
     min-width: 250px; 
 }
 
-/* 4. Largeur des INPUTS/SELECTS eux-mêmes */
 .arbitres-row input,
 .arbitres-row select { 
     width: 100%; 
-    max-width: 250px; /* Limite la largeur des champs à 250px comme Équipe/Terrain */
+    max-width: 250px; 
     box-sizing: border-box; 
 }
 
 /* 1. Allonger l'adresse courriel */
 #courriel {
-    /* Augmente la largeur maximale de l'input du courriel à 350px */
     max-width: 350px; 
 }
 
 /* 2. Rapetisser le téléphone */
 #telephone {
-    /* Réduit la largeur maximale de l'input du téléphone à 150px (exemple) */
     max-width: 150px; 
 }
-	
+    
 .exp-row input,
 .exp-row select {
     width: 100%;
@@ -219,118 +341,115 @@ button:hover { background:#0056b3; }
     margin-bottom: 15px;
 }
 
-/* 🛑 NOUVEAU: Définition individuelle des largeurs des champs d'expulsion (flex: 0 0 <largeur>) */
-/* Ceci remplace l'ancien bloc .exp-equipe, .exp-numero, .exp-nom */
+/* 🛠️ CORRECTION CLÉ : Assure que le label est au-dessus de l'input/select et centré */
+/* S'applique aux trois conteneurs de champ dans la ligne d'expulsion */
+.exp-equipe, .exp-numero, .exp-nom {
+    display: flex; 
+    flex-direction: column; 
+    align-items: center; 
+}
+
+/* Définition individuelle des largeurs des champs d'expulsion */
 .exp-equipe { 
     flex: 0 0 250px; /* Largeur de 250px pour le sélecteur d'équipe */
 }
 .exp-numero { 
-    flex: 0 0 75px; /* Largeur de 100px pour le numéro du joueur */
+    flex: 0 0 75px; /* Largeur de 75px pour le numéro du joueur */
 }
 .exp-nom { 
-    flex: 0 0 250px; /* Largeur de 350px pour le nom du joueur */
+    flex: 0 0 250px; /* Largeur de 250px pour le nom du joueur */
 }
 
-/* Centrage des labels au-dessus des inputs d'expulsion */
+/* Centrage du texte des labels d'expulsion (texte à l'intérieur du label) */
 .exp-row div { 
     text-align: center; 
 }
 .exp-row label {
-     text-align: center; 
+      text-align: center; 
 }
 
 /* En-tête Expulsion (alignement) */
-/* 🛑 NOUVELLE RÈGLE : Empile titre et chips verticalement et les centre */
 .expulsion-header-row {
     display: flex;
-    flex-direction: column; /* 🛑 CHANGEMENT CLÉ ICI */
+    flex-direction: column;
     align-items: center;
-    gap :; 
+    gap: 0px; 
     width: 100%;
-    margin-bottom: 5px;
-    padding-bottom: 0px;
-    border-bottom: 1px solid #eee;
-    justify-content: center; /* Gardé pour la compatibilité, mais moins critique avec flex-direction: column */
+    margin-bottom: 15px; 
+    padding-bottom: 2px; 
+    border-bottom: 0px solid #eee;
+    justify-content: center;
 }
 
-/* Règle pour s'assurer que le h2 s'adapte au nouveau conteneur */
 .expulsion-header-row h2 {
     font-size: 1.2em;
     font-weight: bold;
     margin: 0;
     white-space: nowrap;
-    color: #333;
-	text-align: center; /* S'assure que le texte du titre est centré */
+    color: var(--couleur-texte-principal);
+    text-align: center; 
 }
 
-/* Règle pour que le conteneur des chips puisse s'étendre (et que les chips y soient centrées) */
 .expulsion-header-row .chips-container {
     margin: 0;
     justify-content: center; 
     width: 100%; 
-   
-}
-	.expulsion-header-row {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 0px; /* Réduit le gap entre le titre et les chips s'ils étaient dedans */
-    width: 100%;
-    margin-bottom: 15px; /* ⬅️ Espace réduit sous le titre */
-    padding-bottom: 2px; /* ⬅️ Espace réduit au-dessus du trait de séparation */
-    border-bottom: 0px solid #eee;
-    justify-content: center;
+    
 }
 
 /* Onglets expulsions */
 .tabs { display: flex; gap: 5px; margin-top: 20px; margin-bottom: 15px; flex-wrap: wrap; justify-content:center; width: 100%; }
-.tabs button { padding: 6px 12px; cursor:pointer; border-radius:6px; border:1px solid #0072ce; background:#fff; color:#0072ce; font-size:14px; transition: all 0.2s; }
-.tabs button.active { background:#0072ce; color:#fff; font-weight: bold; }
+.tabs button { 
+    padding: 6px 12px; 
+    cursor:pointer; 
+    border-radius:6px; 
+    border:1px solid var(--couleur-accent); 
+    background:var(--couleur-texte-clair); 
+    color:var(--couleur-accent); 
+    font-size:14px; 
+    transition: all 0.2s; 
+}
+.tabs button.active { 
+    background:var(--couleur-accent); 
+    color:var(--couleur-texte-clair); 
+    font-weight: bold; 
+}
 .tab-content { display: none; width:100%; }
 .tab-content.active { display: block; }
 
 /* Panels 3D (Design) */
 .panel-3d, .panel-3d-detail, .panel-3d-info { 
-    border: 1px solid #ccc; 
+    border: 1px solid var(--couleur-bordure-grise); 
     border-radius: 10px; 
     padding: 20px; 
-    
-    /* 🛑 CHANGEMENT CLÉ 1: Utiliser "auto" pour centrer le panneau horizontalement */
     margin: 20px auto; 
+    background : var(--couleur-panel-fond);
     
-    background : #d0d3d4;
-    
-	 /* 🛑 AJOUT CLÉ POUR L'EFFET 3D (Ombres) */
+    /* Ombre 3D */
     box-shadow: 
-        /* Ombre interne claire (simule la lumière venant du haut) */
         inset 0 3px 0 rgba(255, 255, 255, 0.7), 
-        /* Ombre interne foncée (simule la profondeur, le 'creux') */
         inset 0 -3px 0 rgba(0, 0, 0, 0.1),
-        /* Ombre externe subtile (simule l'élévation du panneau) */
         0 8px 6px rgba(0, 0, 0, 0.5); 
-	
-	display: flex; 
+    
+    display: flex; 
     flex-direction: column; 
     align-items: flex-start; 
     
-    /* 🛑 CHANGEMENT CLÉ 2: Définir une largeur maximale (ou fixe) */
-    width: 95%; /* Marge de sécurité pour petits écrans */
-    max-width: 1100px; /* C'est la largeur réelle que le panneau ne dépassera pas. Ajustez cette valeur. */
-    
+    width: 95%; 
+    max-width: 1100px; 
     box-sizing: border-box; 
 }
-/* La règle suivante assure que les éléments (les champs) à l'intérieur de .panel-3d restent centrés, même si le panneau est plus étroit que la page. */
 .panel-3d { 
     align-items: center; 
 }
 
 .panel-3d h2, 
-.panel-3d-detail h2, /* AJOUTÉ */
-.panel-3d-info h2 { /* AJOUTÉ */
+.panel-3d-detail h2, 
+.panel-3d-info h2 { 
     font-size: 30px; 
     margin-top: 10px; 
     margin-bottom: 25px; 
-    color : dimgrey; /* (Exemple : Bleu foncé pour une cohérence) */
+    color : var(--couleur-texte-h2); 
     text-shadow: 
         2px 2px 0px rgba(255, 255, 255, 0.5), 
         3px 3px 2px rgba(0, 0, 0, 0.2); 
@@ -338,40 +457,39 @@ button:hover { background:#0056b3; }
 
 
 .input-error, .input-error:focus {
-  border: 2px solid #d93025 !important;
-  /* Red "halo" effect */
-  box-shadow: 0 0 8px  rgba(217, 48, 37, 0.4);
+    border: 2px solid var(--couleur-erreur) !important;
+    box-shadow: 0 0 8px  rgba(217, 48, 37, 0.4);
 }
 
-#detailExpulsion,
-#informationsSupplementaires {
+/* Règle de correction de largeur des textarea */
+#details,
+#infos_complementaires {
     width: 100%;
 }
 
-
-	
+    
 #destinatairesContainer label,
 #destinataires,
 #debugContainer h2,
 #debugOutput {
-    color: white !important; /* Force la couleur pour le texte du debug et des destinataires */
+    color: var(--couleur-texte-clair) !important; 
 }
 
 /* -----------------------------------------------------------------------------------
- * NOUVEAU : BANDEAU D'AVERTISSEMENT FIREFOX
+ * BANDEAU D'AVERTISSEMENT FIREFOX
  * ----------------------------------------------------------------------------------- */
 #browser-warning-banner {
     position: fixed;
-    top: -100px; /* Cache la bannière au-dessus de l'écran */
+    top: -100px; 
     left: 0;
     width: 100%;
-    background-color: #ffc107; /* Couleur d'avertissement (Jaune/Orange) */
-    color: #333;
+    background-color: var(--couleur-avertissement); 
+    color: var(--couleur-texte-principal);
     text-align: center;
     padding: 10px 20px;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
-    z-index: 9999; /* S'assure qu'elle est au-dessus de tout */
-    transition: top 0.5s ease-in-out; /* Animation de glissement */
+    z-index: 9999; 
+    transition: top 1.5s ease-in-out; 
 }
 
 #browser-warning-banner p {
@@ -383,17 +501,29 @@ button:hover { background:#0056b3; }
 .show-banner {
     top: 0 !important;
 }
-
-
 </style>
 </head>
-<body>
+
+
+<body class="theme-bleu-bleu">
 
 <div id="browser-warning-banner">
     <p><strong>Avis :</strong> Ce formulaire est optimisé pour les navigateurs **Chrome** ou **Edge**. Des problèmes d'affichage peuvent survenir avec **Firefox**. L'utilisation d'un navigateur recommandé est fortement suggérée. </p>
 </div>
 
-<h1>RAPPORT D'EXPULSION 9:55 </h1>
+<h1>
+    RAPPORT D'EXPULSION
+    <span style="font-size: 0.5em; margin-left: 20px;">v.01-10-2025 19:00</span>
+</h1>
+
+<div class="theme-selector">
+    <label for="theme-choice">Choisir un thème :</label>
+    <select id="theme-choice" onchange="changerTheme(this.value)">
+        <option value="theme-bleu">Fond Bleu, écritures grises(Défaut)</option>
+        <option value="theme-bleu-bleu">Fond Bleu, écritures bleues</option>    
+        <option value="theme-blanc">Fond Blanc</option>
+      </select>
+</div>
 
 <form id="rapportForm" novalidate>
 
@@ -549,23 +679,89 @@ const destinatairesDiv = document.getElementById("destinataires");
 const CODE_SEPARATOR = '||';
 
 
+// ===================================================================
+// 💡 NOUVEAU CODE : Fonction de Changement de Thème
+// ===================================================================
+
+function changerTheme(themeClass) {
+    const body = document.body;
+    
+    // 1. Définir la liste de tous les thèmes possibles
+    const themes = ['theme-bleu', 'theme-blanc','theme-bleu-bleu'];
+
+    // 2. Retirer TOUTES les classes de thème existantes
+    themes.forEach(theme => {
+        body.classList.remove(theme);
+    });
+
+    // 3. Ajouter la nouvelle classe de thème
+    if (themeClass) {
+        body.classList.add(themeClass);
+    }
+    
+    // 4. (Optionnel mais recommandé) Sauvegarder le choix dans le stockage local du navigateur
+    //    pour que le thème persiste après le rechargement de la page
+    localStorage.setItem('themeChoisi', themeClass);
+}
+
+// ===================================================================
+// 💡 NOUVEAU CODE : Appliquer le Thème Sauvegardé au Chargement de la Page
+// ===================================================================
+
+// Ce code doit être exécuté au chargement (dans document.addEventListener('DOMContentLoaded'))
+
+function chargerThemeSauvegarde() {
+    const themeSauvegarde = localStorage.getItem('themeChoisi');
+    const select = document.getElementById('theme-choice');
+    
+    if (themeSauvegarde) {
+        // Appliquer le thème si un est sauvegardé
+        changerTheme(themeSauvegarde);
+        
+        // Mettre à jour le sélecteur pour qu'il affiche le bon thème
+        if (select) {
+            select.value = themeSauvegarde;
+        }
+    } else {
+        // Appliquer le thème par défaut si rien n'est sauvegardé
+        changerTheme('theme-bleu'); 
+    }
+}
+
+
 // -------------------------------------------------------------
 // SECTION: LOGIQUE DE GÉNÉRATION DU RAPPORT HTML (Client-Side JS)
 // -------------------------------------------------------------
 
 document.addEventListener('DOMContentLoaded', () => {
-    // 1. Récupérer la chaîne d'identification du navigateur
-    const userAgent = navigator.userAgent;
+    
+    // Récupération des éléments et variables
+    const userAgent = navigator.userAgent.toLowerCase();
+    const isFirefox = userAgent.includes('firefox');
     const banner = document.getElementById('browser-warning-banner');
+    
+    // Délai de masquage : 10 secondes
+    const delaiMasquage = 10000; 
 
-    // 2. Vérifier si la chaîne contient "Firefox" (et si la bannière existe)
-    //    L'utilisation de .includes("Firefox") est suffisante pour cette vérification.
-    if (userAgent.includes("Firefox") && banner) {
-        // 3. Si c'est Firefox, ajouter la classe CSS qui déclenche l'animation
-        banner.classList.add('show-banner');
+    if (banner) {
+        
+        // 1. LOGIQUE D'AFFICHAGE : Afficher la bannière SEULEMENT si c'est Firefox
+        if (isFirefox) {
+            // 🚀 CORRECTION CLÉ : On ajoute la classe pour rendre la bannière visible immédiatement.
+            banner.classList.add('show-banner');
+            
+            // 2. LOGIQUE DE MASQUAGE : Lancer le minuteur pour la cacher après le délai
+            setTimeout(() => {
+                
+                // Retirer la classe 'show-banner', ce qui déclenche la transition CSS (top: -100px)
+                banner.classList.remove('show-banner');
+                
+            }, delaiMasquage);
+        }
+        
+        // Si ce n'est pas Firefox, le code ne fait rien et la bannière reste masquée par défaut.
     }
 });
-
 
 async function chargerDonneesCodes(url) {
     try {

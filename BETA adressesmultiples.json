@@ -56,19 +56,19 @@
 				"Junior AA" : {
 					"Equipes" : [
 						"Ducs de Longueuils",
-						"Jets de Montréal",
+						"Jets de MontrÃ©al",
 						"Cardinals de Lasalle",
 						"Patriotes des Laurentides",
-						"Seigneurs élites de Repentigny",
+						"Seigneurs Ã©lites de Repentigny",
 						"Guerriers de Richelieu-Yamaska",
 						"Cobras Capri Bar-Serie du Roussillon"
 					],
 					"EmailsSpecifiques" : [ "loleduc@videotron.ca" ],
 					"Terrains" : [
-						"Stade Léo-Asselin",
-						"Parc Louis-Choinière",
-						"Parc Leblanc\r\n",
-						"Parc Paul-Pratt\r\n"
+						"Stade LÃ©o-Asselin",
+						"Parc Louis-ChoiniÃ©re",
+						"Parc Leblanc",
+						"Parc Paul-Pratt"
 					]
 				}
 			},
@@ -85,11 +85,11 @@
 					"EmailsSpecifiques" : [ "loleduc@videotron.ca" ],
 					"Terrains" : [
 						"Stade Jacques-Desautels",
-						"Parc Rabastallière",
+						"Parc RabastalliÃ¨re",
 						"Parc Fontrouge",
-						"Parc Célanese",
+						"Parc CÃ©lanese",
 						"Parc Optimiste",
-						"Stade René St-Germain",
+						"Stade RenÃ© St-Germain",
 						"Parc de Sainte-Marie-de-Monnoir"
 					]
 				}

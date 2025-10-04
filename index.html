@@ -3,6 +3,18 @@
 <head>
 <meta charset="UTF-8">
 <title>Rapport d'expulsion</title>
+<script>
+    // 1. Définition de la variable de version globalement (accessible partout)
+    window.CONFIG = {
+        VERSION: '0.03102025.0850 ' // Mettez à jour ce numéro manuellement pour chaque version
+    };
+
+    // 2. Modification immédiate du titre (Option 2)
+    // Le script s'exécute dès qu'il est lu et met à jour le titre.
+    document.title = document.title + ' ' + CONFIG.VERSION;
+    
+</script>
+
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/themes/material_blue.css"> 	
 
@@ -218,6 +230,7 @@ input, select, textarea {
   justify-content:center;
   align-items:center;
   text-align:center;
+  position: relative;
   background: var(--couleur-texte-clair);
   transition: all 0.2s;
 }
@@ -227,6 +240,29 @@ input, select, textarea {
   color: var(--couleur-texte-clair);
   font-weight: bold;
 }
+
+.code-chip.tooltip-champ {
+    /* Annulation des styles de boutons */
+    border: none !important;
+    padding: 0 !important;
+    margin: 0 !important;
+    width: auto !important; 
+    background: none !important;
+    cursor: default !important;
+    
+    /* Maintient les propriétés essentielles pour le positionnement du tooltip */
+    position: relative; 
+    display: block; /* S'assure que le conteneur prend la bonne place */
+    
+    /* ❌ J'AI SUPPRIMÉ : visibility: hidden !important; et opacity: 0 !important; 
+       Ces règles masquaient tout le champ de formulaire, pas seulement le tooltip. */
+}
+
+.code-chip.tooltip-champ .tooltip {
+    visibility: hidden !important;
+    opacity: 0 !important;
+}
+
 
 .code-chip .tooltip {
   visibility: hidden;
@@ -249,10 +285,9 @@ input, select, textarea {
 }
 
 .code-chip:hover .tooltip {
-  visibility: visible;
-  opacity: 1;
-}
-    
+   visibility: visible !important;
+   opacity: 1 !important;
+}   
 
 /* -----------------------------------------------------------------------------------
  * ERREURS ET BOUTONS
@@ -465,6 +500,7 @@ button:hover {
 #details,
 #infos_complementaires {
     width: 100%;
+	height: 150px;
 }
 
     
@@ -492,6 +528,35 @@ button:hover {
     transition: top 1.5s ease-in-out; 
 }
 
+/* Styles pour le titre */
+.mon-titre-personnalise {
+    color: #007bff; /* Bleu vif */
+    font-family: 'Georgia', serif;
+    font-size: 2em;
+    font-weight: bold;
+    text-shadow: 1px 1px 2px #ccc;
+}
+
+/* Styles pour le texte du message */
+.mon-texte-personnalise {
+    color: var(--couleur-texte-clair);
+    font-style: italic;
+    line-height: 1.5;
+}
+
+/* Styles pour le background de la fenêtre d'alerte */
+.swal2-popup.mon-background-personnalise {
+    /* Exemple: fond jaune clair */
+    background-color: var(--couleur-panel-fond);
+    
+    /* Vous pouvez aussi ajouter d'autres styles pour la boîte */
+  /*  border: 3px solid #ffcc00;
+    border-radius: 15px; */
+	box-shadow: 
+        0 4px 8px rgba(0, 0, 0, 0.2), /* Ombre standard */
+        0 10px 20px rgba(0, 0, 0, 0.15); /* Ombre plus large pour la profondeur */
+}
+
 #browser-warning-banner p {
     margin: 0;
     font-size: 1.1em;
@@ -513,10 +578,10 @@ button:hover {
 
 <h1>
     RAPPORT D'EXPULSION
-    <span style="font-size: 0.5em; margin-left: 20px;">v.01-10-2025 19:10</span>
+    <span style="font-size: 0.5em; margin-left: 20px;">v.01-10-2025 23:25</span>
 </h1>
 
-<div class="theme-selector">
+<div id="theme-selector" class="theme-selector" style="display: none;">
     <label for="theme-choice">Choisir un thème :</label>
     <select id="theme-choice" onchange="changerTheme(this.value)">
         <option value="theme-bleu">Fond Bleu, écritures grises(Défaut)</option>
@@ -545,20 +610,31 @@ button:hover {
 <div class="panel-3d panel-step">
  <h2>Équipes et terrain</h2>
     <div class="match-equipes-row">
-  <div>
-    <label>Équipe locale</label>
-    <input type="text" id="equipeLocale" list="equipesDataList" tabindex="7" required>
-    <div class="error"></div>
-  </div>
-  <div>
-    <label>Équipe visiteur</label>
-    <input type="text" id="equipeVisiteur" list="equipesDataList" tabindex="8" required>
-    <div class="error"></div>
-  </div>
-  <div><label>Terrain</label><input type="text" name="terrain" id="terrain" tabindex="9" required><div class="error"></div></div>
+        
+  <div class="code-chip tooltip-champ"> 
+  <label>Équipe locale</label>
+  <input type="text" id="equipeLocale" list="equipesDataList" placeholder="Sélectionner ou saisir une équipe" tabindex="7" required>
+  <span class="tooltip">Si un nom d'équipe n'apparait pas dans la liste,<br> vous pouvez simplement inscrire le nom de l'équipe dans le champ.</span> 
+  <div class="error"></div>
+</div>
+
+<div class="code-chip tooltip-champ">
+  <label>Équipe visiteur</label>
+  <input type="text" id="equipeVisiteur" list="equipesDataList" placeholder="Sélectionner ou saisir une équipe"  tabindex="8" required>
+  <span class="tooltip">Si un nom d'équipe n'apparait pas dans la liste,<br> vous pouvez simplement inscrire le nom de l'équipe dans le champ.</span>
+  <div class="error"></div>
+</div>
+        
+<div class="code-chip tooltip-champ">
+  <label>Terrain</label>
+  <input type="text" id="terrain" list="terrainsDataList" placeholder="Sélectionner ou saisir un terrain"  tabindex="9" required>
+  <span class="tooltip">Si un nom d'un terrain n'apparait pas dans la liste,<br> vous pouvez simplement inscrire le nom du parc dans le champ.</span>
+  <div class="error"></div>
+</div>
 </div>
 
 <datalist id="equipesDataList"></datalist>
+<datalist id="terrainsDataList"></datalist>
 </div>
 
 <div class="panel-3d arbitres-panel panel-step">
@@ -623,9 +699,16 @@ button:hover {
 </div>
 
 <div class="panel-3d-info panel-step">
-  <h2>Informations complémentaires</h2>
-  <textarea name="infos_complementaires" id="infos_complementaires"></textarea>
+    <h2>Informations complémentaires</h2>
+    <textarea name="infos_complementaires" id="infos_complementaires">
+Le participant a-t-il reçu un avertissement avant d’être expulsé ?
+
+La situation était-elle d’une longue durée ?
+
+Une fois le terrain quitté par le participant, a-t-il quitté les environs du terrain et est-il resté invisible ?
+</textarea>
 </div>
+
 
 <div style="margin-top: 20px; text-align: center;">
     <button type="submit">Envoyer le rapport</button>
@@ -647,7 +730,20 @@ button:hover {
   </div>   <pre id="debugOutput" style="color: white;"></pre>
 </div>
 </div>	
-	
+
+<div id="htmlContainer" style="color: white; display: none;">
+  <div style="font-size: 1.5em; font-weight: bold; margin-top: 10px; margin-bottom: 25px;">
+     Debug HTML
+  </div>   <pre id="htmlOutput" style="color: white;"></pre>
+</div>
+
+<div id="champsContainer" style="color: white; display: none;">
+  <div style="font-size: 1.5em; font-weight: bold; margin-top: 10px; margin-bottom: 25px;">
+     Champs Requis
+  </div>   <pre id="champsOutput" style="color: white;"></pre>
+</div>
+
+</div>	
 	
 	
 	
@@ -656,6 +752,7 @@ button:hover {
 <script src="https://cdnjs.cloudflare.com/ajax/libs/imask/6.4.2/imask.min.js"></script> 
 <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
 <script src="https://cdn.jsdelivr.net/npm/flatpickr/dist/l10n/fr.js"></script> 
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 <script>
 /*const regionUrl = "https://script.google.com/macros/s/AKfycby5mjKpMvPhV4jQdNPuO7H8NIcaRh_P3SRoqQSJLu8IzrMn7s5ytmZxbYXody-nqVKS-A/exec";
 const codesUrl = "https://script.google.com/macros/s/AKfycbxTNlQ5JFpIDIBSTWARTT3v1ztYXexP9zMuVwwAdWC43acGQGA1cPibQYqSyCabhzEd/exec"; 
@@ -727,6 +824,21 @@ function chargerThemeSauvegarde() {
         changerTheme('theme-bleu'); 
     }
 }
+
+   // S'assure que le code s'exécute après le chargement du DOM
+    document.addEventListener('DOMContentLoaded', function() {
+        // 1. Récupérer la classe actuelle du body (ex: "theme-bleu-bleu")
+        const themeActif = document.body.className;
+
+        // 2. Récupérer le menu déroulant
+        const selecteurTheme = document.getElementById('theme-choice');
+
+        // 3. Si le menu existe, définir sa valeur pour qu'elle corresponde au thème actif
+        if (selecteurTheme) {
+            // Le navigateur sélectionnera automatiquement l'option dont la 'value' correspond.
+            selecteurTheme.value = themeActif;
+        }
+    })
 
 
 // -------------------------------------------------------------
@@ -876,7 +988,6 @@ function transformDebugJSONToCustomData() {
 function genererRapportExpulsion(customData) {
     let message = "";
     
-    
     // 🎨 Styles centralisés (aucun changement)
     // Marge basse de 30px pour plus d'espace entre les tableaux
     const styleTable = "width: 100%; max-width: 900px; border-collapse: collapse; font-family: Arial, sans-serif; font-size: 14px; margin: 0 auto 30px auto; border: 1px solid #ddd;";
@@ -898,14 +1009,19 @@ function genererRapportExpulsion(customData) {
     // Style pour l'entête principale
     const styleMainHeaderBG = "background-color: #a3a3a3; -webkit-print-color-adjust: exact;";
 
+    const styleTitleRow = "background-color: #f2f2f2; -webkit-print-color-adjust: exact;"; // Style de ligne de titre d'ancienne fonction
 
     // Récupération des données clés (avec vérification d'existence)
     const region = (customData[2] && customData[2].reponse) ? customData[2].reponse.toUpperCase() : "RÉGION INDÉTERMINÉE";
     const numeroMatch = (customData[0] && customData[0].reponse) ? customData[0].reponse : "N/A";
 
+    // Assurez-vous que les variables LOGO_GAUCHE et LOGO_DROITE sont définies dans votre code global
+    const logoGauche = typeof LOGO_GAUCHE !== 'undefined' ? LOGO_GAUCHE : '';
+    const logoDroite = typeof LOGO_DROITE !== 'undefined' ? LOGO_DROITE : '';
     
-    let journee = getCurrentDateTime();
-    let delaisheure = delaiEntreDates(customData[1].reponse, journee);
+    // Les fonctions utilitaires (assurez-vous qu'elles sont définies globalement)
+    const journee = getCurrentDateTime();
+    const delaisheure = delaiEntreDates(customData[1].reponse, journee);
 
     if (delaisheure) {
         message += `
@@ -920,110 +1036,146 @@ function genererRapportExpulsion(customData) {
     message += `<div style="font-family: 'Segoe UI', sans-serif; font-size: 15px;">`;
     
     // ----------------------------------------------------
-    // 1, 2, 3. FUSION : BANDEAU DE TITRE, INFORMATIONS SUR LE MATCH, ÉQUIPES ET TERRAIN
+    // 1. TABLEAU PRINCIPAL DES DONNÉES FIXES (0 à 14)
     // ----------------------------------------------------
     message += `<table style="${styleTable}">`; 
-    
-    // 1. BANDEAU DE TITRE
+
+    // BANDEAU DE TITRE
     message += `
-        <tr>
+         <tr>
             
-            <td style="width: 15%; text-align: center; padding: 10px; ${styleMainHeaderBG}">
-                <img src="${LOGO_GAUCHE}" alt=" " style="max-height: 60px;">
+            <td style="width: 20%; text-align: center; padding: 20px 10px; ${styleMainHeaderBG}">
+                <img src="${logoGauche}" alt=" " style="max-height: 90px;">
             </td>
-            <td colspan="3" style="padding: 10px; text-align: center; vertical-align: middle; color: white; ${styleMainHeaderBG}">
-                <div style="font-size: 26px; font-weight: bold;">(${region}) Rapport d'expulsion</div>
-                <div style="font-size: 26px; margin-top: 5px;">Match # ${numeroMatch}</div>
+            
+            <td colspan="3" style="padding: 20px 10px; text-align: center; vertical-align: middle; color: white; ${styleMainHeaderBG}">
+                <div style="font-size: 40px; font-weight: bold;">(${region}) Rapport d'expulsion</div>
+                <div style="font-size: 32px; margin-top: 8px;">Match # ${numeroMatch}</div>
             </td>
-            <td style="width: 15%; text-align: center; padding: 10px; ${styleMainHeaderBG}">
-                <img src="${LOGO_DROITE}" alt=" " style="max-height: 60px;">
+            
+            <td style="width: 20%; text-align: center; padding: 20px 10px; ${styleMainHeaderBG}">
+                <img src="${logoDroite}" alt=" " style="max-height: 90px;">
             </td>
-          
-        </tr>`;
+            
+        </tr>
+    `;
 
-    // 2. INFORMATIONS SUR LE MATCH
-    message += `
-        <tr>
-        <td colspan="5" style="${styleSectionHeaderTD}"><h3 style="${styleSectionHeaderTH}; margin: 0; padding: 0;">INFORMATIONS SUR LE MATCH</h3></td>
-        </tr>
-        <tr>
-        <td colspan="2" style="${styleCell30}"><b>Date et Heure du match :</b></td> 
-        <td style="${styleCell}">${(customData[1]?.reponse || "N/A").replace('T', ' ')}</td> <td style="${styleCell}">
-        <b>Région du Match :</b></td>
-        <td style="${styleCell}">${customData[2]?.reponse || "N/A"}</td>
-        </tr>`;
-    message += `
-        <tr>
-        <td colspan="3" style="${styleCell}"><b>Ligue :</b> &nbsp;&nbsp;${customData[3]?.reponse || "N/A"}</td>
-        <td style="${styleCell25}"><b>Catégorie :</b> &nbsp;&nbsp;${customData[4]?.reponse || "N/A"}</td>
-        <td style="${styleCell25}"><b>Classe :</b> &nbsp;&nbsp;${customData[5]?.reponse || "N/A"}</td>
-        </tr>`;
-    
-    // 3. ÉQUIPES ET TERRAIN
-    message += `
-        <tr>
-        <td colspan="5" style="${styleSectionHeaderTD}"><h3 style="${styleSectionHeaderTH}; margin: 0; padding: 0;">ÉQUIPES ET TERRAIN</h3></td>
-        </tr>
-        <tr>
-        <td style="${styleCell15}"><b>Équipe locale :</b></td>
-        <td colspan="2" style="${styleCell}">${customData[6]?.reponse || "N/A"}</td>
-        <td style="${styleCell15}"><b>Équipe visiteur :</b></td>
-        <td style="${styleCell}">${customData[7]?.reponse || "N/A"}</td>
-        </tr>`;
-    message += `
-        <tr>
-        <td style="${styleCell25}"><b>Terrain :</b></td>
-        <td colspan="4" style="${styleCell}">${customData[8]?.reponse || "N/A"}</td>
-        </tr>
-    </table>`; // Fermeture du tableau principal fusionné
+    // 🧩 Sections fixes (Jusqu'à l'index 14) - RÉINSERTION DU BLOC FOR/SWITCH
+    for (let i = 0; i < 15; i++) {
+        if (!customData[i]) continue;
+
+        let question = customData[i].question;
+        let answer = customData[i].reponse;
+        
+        // La variable `courrierArbitre` est nécessaire pour l'ancienne fonction, bien qu'elle ne soit pas utilisée ailleurs ici
+        let courrierArbitre = ""; 
+
+        // Les styles de l'ancienne fonction pour l'en-tête de section
+        const styleHeaderCell = "padding: 10px; text-align: left; font-size: 16px; border-top: 1px solid #ddd; color: #555555;"; 
+
+        switch (i) {
+            case 0: break;
+            case 1: 
+                if (!customData[2]) break;
+                const displayDate = (answer || "N/A").replace('T', ' ');
+                message += `
+                    <tr>
+                    <td colspan="5" style="${styleSectionHeaderTD}"><h3 style="${styleSectionHeaderTH}; margin: 0; padding: 0;">INFORMATIONS SUR LE MATCH</h3></td>
+                    </tr>
+                    <tr>
+                    <td colspan="2" style="${styleCell30}"><b>Date et Heure du match :</b></td> 
+                    <td style="${styleCell}">${displayDate}</td> 
+                    <td style="${styleCell}"><b>Région du Match :</b></td>
+                    <td style="${styleCell}">${customData[2].reponse}</td>
+                    </tr>`;
+                break;
+            case 3:
+                if (!customData[4] || !customData[5]) break;
+                message += `
+                    <tr>
+                    <td colspan="3" style="${styleCell}"><b>Ligue :</b> &nbsp;&nbsp;${customData[3].reponse}</td>
+                    <td style="${styleCell25}"><b>Catégorie :</b> &nbsp;&nbsp;${customData[4].reponse}</td>
+                    <td style="${styleCell25}"><b>Classe :</b> &nbsp;&nbsp;${customData[5].reponse}</td>
+                    </tr>`;
+                i += 2;
+                break;
+            case 6:
+                if (!customData[7]) break;
+                message += `
+                    <tr>
+                    <td colspan="5" style="${styleSectionHeaderTD}"><h3 style="${styleSectionHeaderTH}; margin: 0; padding: 0;">ÉQUIPES ET TERRAIN</h3></td>
+                    </tr>
+                    <tr>
+                    <td style="${styleCell15}"><b>Équipe locale :</b></td>
+                    <td colspan="2" style="${styleCell}">${answer}</td>
+                    <td style="${styleCell15}"><b>Équipe visiteur :</b></td>
+                    <td style="${styleCell}">${customData[7].reponse}</td>
+                    </tr>`;
+                i++;
+                break;
+            case 8:
+                message += `
+                    <tr>
+                    <td style="${styleCell25}"><b>Terrain :</b></td>
+                    <td colspan="4" style="${styleCell}">${answer}</td>
+                    </tr>`;
+                break;
+            case 9:
+                if (!customData[10]) break;
+                message += `
+                    <tr>
+                    <td colspan="5" style="${styleSectionHeaderTD}"><h3 style="${styleSectionHeaderTH}; margin: 0; padding: 0;">OFFICIELS</h3></td>
+                    </tr>
+                    <tr>
+                    <td style="${styleCell25}"><b>Arbitre au marbre :</b></td>
+                    <td colspan="2" style="${styleCell}">${answer}</td>
+                    <td style="${styleCell}"><b>Arbitre sur les buts :</b></td>
+                    <td style="${styleCell}">${customData[10].reponse}</td>
+                    </tr>`;
+                i++;
+                break;
+            case 11:
+                message += `
+                    <tr>
+                    <td style="${styleCell25}"><b>Marqueur :</b></td>
+                    <td colspan="4" style="${styleCell}">${answer}</td>
+                    </tr>`;
+                break;
+            case 12:
+                message += `
+                    <tr>
+                    <td style="${styleCell25}"><b>Rapport fait par :</b></td>
+                    <td colspan="2" style="${styleCell}">${answer}</td>
+                    <td style="${styleCell}"><b> Date et heure du rapport : </b></td>
+                    <td style="${styleCell}">${journee}</td>
+                    </tr>`; 
+                break;
+            case 13:
+                message += `
+                    <tr>
+                    <td colspan="5" style="${styleSectionHeaderTD}"><h3 style="${styleSectionHeaderTH}; margin: 0; padding: 0;">COORDONNÉES</h3></td>
+                    </tr>
+                    <tr>
+                    <td style="${styleCell25}"><b>Adresse courriel :</b></td>
+                    <td colspan="4" style="${styleCell}">${answer}</td>
+                    </tr>`;
+                courrierArbitre = answer;
+                break;
+            case 14:
+                message += `
+                    <tr>
+                    <td style="${styleCell25}"><b>Téléphone :</b></td>
+                    <td colspan="4" style="${styleCell}">${answer}</td>
+                    </tr>`;
+                break;
+        }
+    }
+
+    message += `</table>`; // FERMETURE DU TABLEAU 1
 
     // ----------------------------------------------------
-    // 4. OFFICIELS (Tableau 4) - Reste le même
+    // 2. LOGIQUE D'EXPULSION ET BOUCLE (APRES INDEX 14)
     // ----------------------------------------------------
-    message += `<table style="${styleTable}">`; 
-    message += `
-        <tr>
-        <td colspan="5" style="${styleSectionHeaderTD}"><h3 style="${styleSectionHeaderTH}; margin: 0; padding: 0;">OFFICIELS</h3></td>
-        </tr>
-        <tr>
-        <td style="${styleCell25}"><b>Arbitre au marbre :</b></td>
-        <td colspan="2" style="${styleCell}">${customData[9]?.reponse || "N/A"}</td>
-        <td style="${styleCell}"><b>Arbitre sur les buts :</b></td>
-        <td style="${styleCell}">${customData[10]?.reponse || "N/A"}</td>
-        </tr>`;
-    message += `
-        <tr>
-        <td style="${styleCell25}"><b>Marqueur :</b></td>
-        <td colspan="4" style="${styleCell}">${customData[11]?.reponse || "N/A"}</td>
-        </tr>`;
-    message += `
-        <tr>
-        <td style="${styleCell25}"><b>Rapport fait par :</b></td>
-        <td colspan="2" style="${styleCell}">${customData[12]?.reponse || "N/A"}</td>
-        <td style="${styleCell}"><b> Date et heure du rapport : </b></td>
-        <td style="${styleCell}">${journee}</td>
-        </tr>`; // Fermeture du tableau des officiels
-
-    // ----------------------------------------------------
-    // 5. COORDONNÉES (Tableau 5) - Reste le même
-    // ----------------------------------------------------
-    message += `
-        <tr>
-        <td colspan="5" style="${styleSectionHeaderTD}"><h3 style="${styleSectionHeaderTH}; margin: 0; padding: 0;">COORDONNÉES</h3></td>
-        </tr>
-        <tr>
-        <td style="${styleCell25}"><b>Adresse courriel :</b></td>
-        <td colspan="4" style="${styleCell}">${customData[13]?.reponse || "N/A"}</td>
-        </tr>`;
-    message += `
-        <tr>
-        <td style="${styleCell25}"><b>Téléphone :</b></td>
-        <td colspan="4" style="${styleCell}">${customData[14]?.reponse || "N/A"}</td>
-        </tr>
-    </table>`; // Fermeture du tableau des coordonnées
-
-
-    // 🔁 Expulsions et détails (le reste du code est inchangé)
     let expulsionIndex = 1;
     let expulsionTable = "";
     let detailsTable = "";
@@ -1051,8 +1203,8 @@ function genererRapportExpulsion(customData) {
         let answer = customData[i].reponse;
         let titreActuel = norm(question);
 
-        // Les réponses "Oui/Non" des questions complémentaires sont gérées plus tard, on les ignore ici.
-      //  if (titreActuel.includes("avertissement") || titreActuel.includes("longue duree") || titreActuel.includes("environs")) continue; 
+        // Les réponses "Oui/Non" des questions complémentaires sont ignorées ici car gérées à la fin.
+        // if (titreActuel.includes("avertissement") || titreActuel.includes("longue duree") || titreActuel.includes("environs")) continue; 
         
         if (!answer) continue; 
         answer = answer.toString().replace(/\n/g, "<br>"); // Remplace les retours à la ligne par <br>
@@ -1062,7 +1214,7 @@ function genererRapportExpulsion(customData) {
             if (expulsionTable !== "") {
                 message += expulsionTable + "</table>";
             }
-            // Nouvelle table pour l'EXPULSION #N (Utilisation du TD pour la couleur de fond)
+            // Nouvelle table pour l'EXPULSION #N
             expulsionTable = `<table style="${styleTable}; page-break-inside: avoid;">
                 <tr><td colspan="2" style="${styleSectionHeaderTD}"><h3 style="${styleSectionHeaderTH}; margin: 0; padding: 0;">EXPULSION #${expulsionIndex}</h3></td></tr>
                 <tr><td style="${styleCell40}"><b>${question}</b></td><td style="${styleCell}">${answer}</td></tr>`;
@@ -1071,15 +1223,17 @@ function genererRapportExpulsion(customData) {
         }
         
         if (titreActuel.startsWith("codes")) {
+            // **Ceci est la section des codes 1 à 14 pour l'expulsion actuelle**
             let tableau = separerEnTableau(answer);
             let htmlCodes = "<ul style='margin:0; padding-left:20px;'>";
-            tableau.forEach(code => { htmlCodes += `<li>${code}</li>`; });
+            // Ajout de style pour les <li> car la couleur du texte gris (#333333) est spécifiée dans l'ancienne version
+            tableau.forEach(code => { htmlCodes += `<li style="color: #333333;">${code}</li>`; }); 
             htmlCodes += "</ul>";
             expulsionTable += `<tr><td style="${styleCell25}"><b>${question}</b></td><td style="${styleCell}">${htmlCodes}</td></tr>`;
             continue;
         }
 
-        // Ces blocs sont maintenant gérés à la fin, on les ignore ici.
+        // Ces blocs sont gérés à la fin (Détails/Infos complémentaires), on les ignore ici.
         if (titreActuel.startsWith("details concernant") || titreActuel.startsWith("informations complementaires")) {
             continue;
         }
@@ -1104,16 +1258,20 @@ function genererRapportExpulsion(customData) {
     
     // 7. INFORMATIONS COMPLÉMENTAIRES (Tableau séparé)
     const infosComplementaires = getAnswerToQuestion("Informations complémentaires", customData);
-    
+    const avertissement = getAnswerToQuestion("avertissement avant d’être expulsé", customData);
+    const duree = getAnswerToQuestion("longue durée", customData);
+    const environs = getAnswerToQuestion("quitté les environs", customData);
+
     const desc = `
         <ul style='list-style-type: none; margin: 0; padding: 0;'>
-            <li>Le participant a-t-il reçu un avertissement avant d’être expulsé ?</li>
-            <li>La situation était-elle d’une longue durée ?</li>
-            <li>Une fois le terrain quitté par le participant, a-t-il quitté les environs du terrain et est-il resté invisible ?</li>
+            <li>Le participant a-t-il reçu un avertissement avant d’être expulsé ? <b>${avertissement}</b></li>
+            <li>La situation était-elle d’une longue durée ? <b>${duree}</b></li>
+            <li>Une fois le terrain quitté par le participant, a-t-il quitté les environs du terrain et est-il resté invisible ? <b>${environs}</b></li>
         </ul>
     `;
     
-    if (infosComplementaires !== "N/A") {
+    // Condition de l'ancienne fonction pour afficher les infos complémentaires
+    if (infosComplementaires !== "N/A" || avertissement !== "N/A" || duree !== "N/A" || environs !== "N/A") {
         detailsTable += `<table style="${styleTable}; page-break-inside: avoid;">
             <tr><td colspan="2" style="${styleSectionHeaderTD}"><h3 style="${styleSectionHeaderTH}; margin: 0; padding: 0;"><b>Informations complémentaires</b></h3></td></tr>
             <tr><td colspan="2" style="${styleCell}">
@@ -1125,7 +1283,7 @@ function genererRapportExpulsion(customData) {
     }
 
     message += detailsTable;
-    message += `</div>`;
+    message += `</div>`; // Fermeture du DIV de message
 
     // Le HTML final est enveloppé dans une structure de document complète pour être utilisable
     const finalHTML = `
@@ -1147,9 +1305,14 @@ function genererRapportExpulsion(customData) {
                 td[style*="f2f2f2"] { background-color: #f2f2f2 !important; -webkit-print-color-adjust: exact; }
                 td[style*="a3a3a3"] { background-color: #a3a3a3 !important; -webkit-print-color-adjust: exact; }
             }
-         </style>
+        </style>
         </head>
-      </html>
+        <body>
+            <div class="content-wrapper">
+                ${message}
+            </div>
+        </body>
+        </html>
     `;
     
     return finalHTML;
@@ -1165,21 +1328,41 @@ function generateAndDisplayReport() {
 		const customData = transformDebugJSONToCustomData(jsonDebug); // tableau {question, reponse}
 		const htmlContent = genererRapportExpulsion(customData);
 		
-			
-		envoyerRapportParEmail(customData);
-	 
 		
+		envoyerRapportParEmail(customData);
+	    document.getElementById("htmlOutput").textContent = htmlContent;
 		
         // Ouvre le HTML dans une nouvelle fenêtre/onglet pour visualiser le rapport
         const newWindow = window.open();
         newWindow.document.write(htmlContent);
         newWindow.document.close();
-        
-        alert('Rapport HTML généré avec succès dans une nouvelle fenêtre.');
+      
+
+       Swal.fire({
+    title: "Rapport généré avec succès !",
+    icon: "success",
+    draggable: true,
+    customClass: {
+        title: 'mon-titre-personnalise',
+        content: 'mon-texte-personnalise',
+        // 💡 Ajoutez la classe personnalisée pour la fenêtre entière
+        popup: 'mon-background-personnalise' 
+    }
+});
 
     } catch (e) {
-        console.error("Erreur lors de la génération du rapport HTML:", e);
-        alert("Erreur lors de la génération du rapport HTML. Détails dans la console.");
+        Swal.fire({
+            title: "Erreur de génération 😟",
+            text: "Erreur lors de la génération du rapport HTML. Détails dans la console.",
+            icon: "error", // Utilise l'icône d'erreur rouge
+            draggable: true,
+			customClass: {
+			title: 'mon-titre-personnalise',
+			content: 'mon-texte-personnalise',
+			// 💡 Ajoutez la classe personnalisée pour la fenêtre entière
+			popup: 'mon-background-personnalise' 
+            }
+        });
     }
 }
 
@@ -1206,7 +1389,30 @@ function populateEquipesDatalist(dataArray) {
     // Stoker les équipes disponibles dans une variable globale pour l'exclusion
     window.allAvailableTeams = dataArray || []; 
 }
-	
+/**
+ * Peuple la datalist des terrains.
+ * @param {Array<string>} terrains - Liste des noms de terrain.
+ */
+function populateTerrainsDatalist(terrains) {
+    // L'ID de la datalist doit être 'terrainsDataList' comme demandé
+    const datalist = document.getElementById('terrainsDataList');
+    
+    // Nettoyer les options existantes
+    datalist.innerHTML = ''; 
+
+    // Utiliser un Set pour garantir l'unicité et trier les noms de terrain
+    const uniqueTerrains = [...new Set(terrains)].sort();
+
+    if (uniqueTerrains && uniqueTerrains.length > 0) {
+        uniqueTerrains.forEach(terrainName => {
+            const option = document.createElement('option');
+            option.value = terrainName; 
+            datalist.appendChild(option);
+        });
+    }
+    // Note : Pas besoin de stocker dans une variable globale car les terrains dépendent de la sélection de la classe.
+    console.log(`Datalist de terrains peuplée avec ${uniqueTerrains.length} terrains uniques.`);
+}
 	
 /**
  * Gère l'exclusion: si une équipe est sélectionnée comme locale, elle n'est 
@@ -1263,8 +1469,10 @@ function updateEquipeOptions(sourceInputId) {
         // Pour l'instant, on laisse l'utilisateur saisir, la validation finale s'occupera de bloquer l'envoi.
     } else {
         // Nettoyer le message d'erreur
-        document.querySelector('#equipeLocale + .error').textContent = '';
-        document.querySelector('#equipeVisiteur + .error').textContent = '';
+        //document.querySelector('#equipeLocale + .error').textContent = '';
+        //document.querySelector('#equipeVisiteur + .error').textContent = '';
+		clearErrorAfter('#equipeLocale');
+		clearErrorAfter('#equipeVisiteur');
     }
 }
 	
@@ -1292,6 +1500,11 @@ document.getElementById('equipeVisiteur').addEventListener('blur', () => {
 function createSafeCodeKey(codeName) {
     // Remplace les espaces, tirets et autres caractères spéciaux (sauf les points) par des underscores.
     return codeName.replace(/[^a-zA-Z0-9.]+/g, '_').trim();
+}
+
+function clearErrorAfter(selector) {
+  const el = document.querySelector(`${selector} + .error`);
+  if (el) el.textContent = '';
 }
 
 
@@ -1352,6 +1565,20 @@ document.getElementById("regionSelect").addEventListener("change", e => {
     catSelect.innerHTML = "<option value=''>-- Sélectionner une catégorie --</option>";
     classeSelect.innerHTML = "<option value=''>-- Sélectionner une classe --</option>";
     destinatairesDiv.textContent = "";
+	
+	// Réinitialisation des champs Équipe et Terrain et leurs datalists
+    document.getElementById('equipeLocale').value = '';
+    document.getElementById('equipeVisiteur').value = '';
+    document.getElementById('terrain').value = '';
+    
+    // Optionnel, mais recommandé : effacer les messages d'erreur et les options de la datalist
+  //  document.querySelector('#equipeLocale + .error').textContent = '';
+  //  document.querySelector('#equipeVisiteur + .error').textContent = '';
+    clearErrorAfter('#equipeLocale');
+    clearErrorAfter('#equipeVisiteur');
+  
+    populateEquipesDatalist([]); // Vide la datalist des équipes
+    populateTerrainsDatalist([]); // Vide la datalist des terrains
     
     const region = e.target.value;
     
@@ -1378,6 +1605,20 @@ document.getElementById("ligueSelect").addEventListener("change", e => {
     catSelect.innerHTML = "<option value=''>-- Sélectionner une catégorie --</option>";
     classeSelect.innerHTML = "<option value=''>-- Sélectionner une classe --</option>";
     destinatairesDiv.textContent = "";
+	
+	// Réinitialisation des champs Équipe et Terrain et leurs datalists
+    document.getElementById('equipeLocale').value = '';
+    document.getElementById('equipeVisiteur').value = '';
+    document.getElementById('terrain').value = '';
+    
+    // Optionnel, mais recommandé : effacer les messages d'erreur et les options de la datalist
+   // document.querySelector('#equipeLocale + .error').textContent = '';
+   // document.querySelector('#equipeVisiteur + .error').textContent = '';
+    clearErrorAfter('#equipeLocale');
+    clearErrorAfter('#equipeVisiteur');
+    populateEquipesDatalist([]); // Vide la datalist des équipes
+    populateTerrainsDatalist([]); // Vide la datalist des terrains
+	
     if(!ligue) return;
     
     // currentLigueData contient les catégories/classes (ex: 9U A, Senior BB)
@@ -1441,8 +1682,10 @@ document.getElementById("classeSelect").addEventListener("change", e=>{
     document.getElementById('equipeVisiteur').value = '';
     
     // Nettoyer les messages d'erreur au cas où une erreur d'équipe dupliquée était affichée
-    document.querySelector('#equipeLocale + .error').textContent = '';
-    document.querySelector('#equipeVisiteur + .error').textContent = '';
+   // document.querySelector('#equipeLocale + .error').textContent = '';
+   // document.querySelector('#equipeVisiteur + .error').textContent = '';
+    clearErrorAfter('#equipeLocale');
+    clearErrorAfter('#equipeVisiteur');
     // ---------------- FIN NOUVEAU ----------------
     // ... (code pour emails de base et spécifiques) ...
 
@@ -1452,6 +1695,11 @@ document.getElementById("classeSelect").addEventListener("change", e=>{
     // ⬇️ NOUVELLE LOGIQUE POUR LES ÉQUIPES ⬇️
     const availableTeams = (selectedLevelData && selectedLevelData.Equipes) || [];
     populateEquipesDatalist(availableTeams);
+	
+	   // ⬇️ NOUVELLE LOGIQUE POUR LES TERRAINS ⬇️
+    const availableTerrains = (selectedLevelData && selectedLevelData.Terrains) || [];
+    // Appel de la nouvelle fonction !
+    populateTerrainsDatalist(availableTerrains);
 	
     // 2. Concaténer les deux listes d'emails
     const allEmails = [...baseEmails, ...specificEmails];
@@ -1549,13 +1797,16 @@ function setupValidation(){
         // 🛑 AJOUT CLÉ: Nettoyage de TOUS les indicateurs d'erreurs existants
         document.querySelectorAll('.input-error, .field-error').forEach(el => el.classList.remove('input-error', 'field-error'));
         document.querySelectorAll('.error').forEach(el => el.textContent = '');
-        // Nettoyage spécifique pour les erreurs de codes d'expulsion (si vous aviez une erreur précédemment signalée)
+        // Nettoyage spécifique pour les erreurs de codes d'expulsion
         document.querySelectorAll('.error-codes-validation').forEach(el => el.remove()); 
         
         // Assurez-vous que les données de l'onglet actif sont sauvegardées avant la validation
         serializeCurrentExpulsion(); 
         
         let valid = true;
+        // 🛑 CHANGEMENT : Initialise le tableau pour les noms des champs requis manquants
+        const nomsChampsRequisManquants = []; 
+
         const requiredFields = Array.from(form.querySelectorAll('[required]')).filter(f => !f.disabled);
 
         requiredFields.forEach(field=>{
@@ -1583,6 +1834,10 @@ function setupValidation(){
             if (shouldSignalError) { 
                 setFieldError(field, errorMessage); 
                 valid = false;
+                
+                // 🛑 AJOUT : Récupérer et stocker le nom du champ
+                const fieldName = field.id || field.name || field.placeholder || 'Champ sans ID/Name';
+                nomsChampsRequisManquants.push(fieldName);
             }
         });
 
@@ -1605,6 +1860,7 @@ function setupValidation(){
                     }
                     errorSpan.textContent = 'Sélectionnez au moins un code d\'expulsion.';
                     valid = false;
+                    // Note: L'ajout à la liste de noms n'est pas fait ici car l'affichage est géré séparément
                 }
             } else {
                  // S'assurer de retirer l'erreur si l'expulsion est valide
@@ -1618,10 +1874,20 @@ function setupValidation(){
         // --- FIN NOUVELLE LOGIQUE ---
 
         if(valid){
+            // Si la validation réussit, effacer le contenu de la zone de débogage des champs requis
+            document.getElementById('champsOutput').textContent = ''; 
+            
             document.getElementById('debugOutput').textContent = JSON.stringify(generateDebugJSON(), null, 4);
             // 🛑 APPEL DE LA FONCTION DE GÉNÉRATION HTML
             generateAndDisplayReport(); 
         } else {
+            // 🛑 AJOUT : Afficher la liste des champs manquants si le formulaire est invalide
+            const listeNoms = nomsChampsRequisManquants.length > 0 
+                ? '- ' + nomsChampsRequisManquants.join('\n- ')
+                : 'Aucun champ requis de base manquant (vérifiez les codes d\'expulsion)';
+                
+            document.getElementById('champsOutput').textContent = listeNoms;
+
             document.getElementById('debugOutput').textContent = 'Formulaire invalide — corrigez les champs en rouge.';
             alert('⚠️ Certains champs sont vides ou incomplets. Corrigez les champs en rouge.');
             const invalids = Array.from(form.querySelectorAll('.input-error, .error-codes-validation')).filter(f => !f.disabled);
@@ -1776,154 +2042,144 @@ function createExpulsionTabs(nbExpulsions) {
     const tabsContainer = document.getElementById("expTabs");
     const expulsionsContainer = document.getElementById("expulsionsContainer");
     const maxExpulsions = 6;
-    
+
     const equipeLocale = document.getElementById('equipeLocale')?.value.trim();
     const equipeVisiteur = document.getElementById('equipeVisiteur')?.value.trim();
-    
+
     // 1. Préparer les options d'équipe pour les selects
     let equipeOptions = `<option value="">-- Sélectionner équipe --</option>`;
-    
-    if (equipeLocale) { equipeOptions += `<option value="${equipeLocale}">${equipeLocale}</option>`; }
-    else { equipeOptions += `<option value="" disabled>Locale (à remplir)</option>`; }
-    
-    if (equipeVisiteur) { equipeOptions += `<option value="${equipeVisiteur}">${equipeVisiteur}</option>`; }
-    else { equipeOptions += `<option value="" disabled>Visiteur (à remplir)</option>`; }
+    if (equipeLocale) {
+        equipeOptions += `<option value="${equipeLocale}">${equipeLocale}</option>`;
+    } else {
+        equipeOptions += `<option value="" disabled>Locale (à remplir)</option>`;
+    }
 
+    if (equipeVisiteur) {
+        equipeOptions += `<option value="${equipeVisiteur}">${equipeVisiteur}</option>`;
+    } else {
+        equipeOptions += `<option value="" disabled>Visiteur (à remplir)</option>`;
+    }
 
-    // 2. Gérer la visibilité des onglets et créer/mettre à jour les panneaux
+    // 2. Trouver l'onglet actif avant la mise à jour
+    const activeTabIndex = document.querySelector("#expTabs button.active")
+        ? parseInt(document.querySelector("#expTabs button.active").textContent.split(' ')[1])
+        : 1;
+
+    // 3. Effacer les anciens boutons avant de recréer
+    tabsContainer.innerHTML = '';
+
     let firstVisiblePanel = null;
     let firstVisibleButton = null;
-    
-    // Trouver l'index de l'onglet qui était actif avant la mise à jour
-    const activeTabIndex = document.querySelector("#expTabs button.active") ? parseInt(document.querySelector("#expTabs button.active").textContent.split(' ')[1]) : 1;
 
-    // Vider les anciens boutons d'onglet avant de les recréer
-    tabsContainer.innerHTML = ''; 
-
-    for (let i = 1; i <= maxExpulsions; i++) {
-        const tabId = `expulsion-${i}`;
-        let panel = document.getElementById(tabId);
-        const isVisible = i <= nbExpulsions;
-
-        if (isVisible) {
-            // Créer/mettre à jour le panneau
-            if (!panel) {
-                panel = document.createElement("div");
-                panel.id = tabId;
-                panel.classList.add("tab-content");
-                expulsionsContainer.appendChild(panel); 
-                
-                // Le contenu doit être recréé pour un nouveau panneau
-                panel.innerHTML = `
-                    <div class="expulsion-block">
-                        <div class="exp-row">
-                            <div class="exp-equipe">
-                                <label>Équipe fautive</label>
-                                <select name="expulsion${i}-equipe" required tabindex="${20 + i}">
-                                    ${equipeOptions}
-                                </select>
-                            </div>
-                            <div class="exp-numero">
-                                <label>Numéro</label>
-                                <input type="number" name="expulsion${i}-numero" min="0" required tabindex="${20 + i + maxExpulsions}">
-                            </div>
-                            <div class="exp-nom">
-                                <label>Nom de la personne fautive</label>
-                                <input type="text" name="expulsion${i}-nom" required tabindex="${20 + i + (maxExpulsions * 2)}">
-                            </div>
-                        </div>
-                        
-                        <div class="panel-3d-detail" style="width: 100%; margin: 15px auto 0; padding: 15px;">
-                            <h3 style="margin-top:0; font-size: 1.1em; text-align:center; width: 100%;">Codes d'expulsion (Sélection multiple)</h3>
-                            <input type="hidden" name="expulsion${i}-codes">
-                            <div class="codes-container" id="expulsion-${i}-codes"></div>
-                        </div>
-                    </div>
-                `;
-                    // 🛑 CRÉATION INITIALE des chips avec les listeners
-                createCodeChips(i, jsonCodes, panel); 
-
-            } else {
-                // Mise à jour des options de l'équipe (sans perdre la sélection)
-                const selectEquipe = panel.querySelector('select[name^="expulsion"][name$="-equipe"]');
-                const currentValue = selectEquipe ? selectEquipe.value : '';
-                if(selectEquipe) {
-                    selectEquipe.innerHTML = equipeOptions;
-                    selectEquipe.value = currentValue; 
-                }
-                    // 🛑 MISE À JOUR des chips (pour s'assurer que les listeners sont là et que la structure est à jour)
-                createCodeChips(i, jsonCodes, panel);
-            }
-            
-            // LOGIQUE D'ACTIVATION/DÉSACTIVATION DES CHAMPS
-            const requiredFields = panel.querySelectorAll('[required]');
-            const selectEquipeField = panel.querySelector('select[name^="expulsion"]');
-            const toutesEquipesRemplies = equipeLocale && equipeVisiteur;
-            const estDesactiveCarEquipeVide = !toutesEquipesRemplies;
-
-            if (selectEquipeField) {
-                selectEquipeField.disabled = estDesactiveCarEquipeVide || !isVisible;
-            }
-            requiredFields.forEach(field => {
-                field.disabled = !isVisible || estDesactiveCarEquipeVide;
-                if(!isVisible || estDesactiveCarEquipeVide) {
-                    if (field.type === 'select-one' || field.type === 'text' || field.type === 'number') {
-                        field.value = ''; 
-                    }
-                    clearFieldError(field); 
-                }
-            });
-            
-            // Créer le bouton d'onglet
-            const tabBtn = document.createElement("button");
-            tabBtn.type = "button";
-            tabBtn.textContent = `Expulsion ${i}`;
-            
-            // Événement pour changer d'onglet
-            tabBtn.addEventListener("click", () => {
-                // 🛑 1. Sauvegarder l'état actuel AVANT de changer d'onglet
-                serializeCurrentExpulsion();
-
-                // 2. Changer d'onglet
-                document.querySelectorAll("#expTabs button").forEach(btn => btn.classList.remove("active"));
-                document.querySelectorAll("#expulsionsContainer .tab-content").forEach(p => p.classList.remove("active"));
-                tabBtn.classList.add("active");
-                panel.classList.add("active");
-                
-                // 🛑 3. Charger les données du NOUVEL onglet
-                loadExpulsionData(i, panel);
-            });
-            tabsContainer.appendChild(tabBtn);
-
-            // Charger les données de persistance AVANT d'activer
-            // loadExpulsionData(i, panel); // Fait plus bas après l'activation.
-            
-            if (!firstVisibleButton || i === activeTabIndex) firstVisibleButton = tabBtn;
-            if (!firstVisiblePanel || i === activeTabIndex) firstVisiblePanel = panel;
-            
-        } else {
-            // Masquer les panneaux en trop
-            if (panel) panel.classList.remove("active");
-            // Important: Effacer les données des onglets masqués dans l'objet de persistance
-            if (expulsionsData[i]) delete expulsionsData[i]; 
-            panel?.querySelectorAll('[required]').forEach(clearFieldError);
+    // 🧹 4. Supprimer complètement les panneaux excédentaires du DOM
+    for (let i = nbExpulsions + 1; i <= maxExpulsions; i++) {
+        const panelToRemove = document.getElementById(`expulsion-${i}`);
+        if (panelToRemove) {
+            panelToRemove.remove(); // supprime complètement du DOM
+        }
+        if (expulsionsData[i]) {
+            delete expulsionsData[i]; // supprime aussi les données persistées
         }
     }
-    
-    // Masquer les panneaux qui ne sont plus visibles
-    for(let i = nbExpulsions + 1; i <= maxExpulsions; i++){
-        document.getElementById(`expulsion-${i}`)?.classList.remove('active');
+
+    // 5. Recréer ou mettre à jour les panneaux visibles
+    for (let i = 1; i <= nbExpulsions; i++) {
+        const tabId = `expulsion-${i}`;
+        let panel = document.getElementById(tabId);
+
+        if (!panel) {
+            panel = document.createElement("div");
+            panel.id = tabId;
+            panel.classList.add("tab-content");
+            expulsionsContainer.appendChild(panel);
+
+            // Contenu du bloc d'expulsion
+            panel.innerHTML = `
+                <div class="expulsion-block">
+                    <div class="exp-row">
+                        <div class="exp-equipe">
+                            <label>Équipe fautive</label>
+                            <select name="expulsion${i}-equipe" required tabindex="${20 + i}">
+                                ${equipeOptions}
+                            </select>
+                        </div>
+                        <div class="exp-numero">
+                            <label>Numéro</label>
+                            <input type="number" name="expulsion${i}-numero" min="0" required tabindex="${20 + i + maxExpulsions}">
+                        </div>
+                        <div class="exp-nom">
+                            <label>Nom de la personne fautive</label>
+                            <input type="text" name="expulsion${i}-nom" required tabindex="${20 + i + (maxExpulsions * 2)}">
+                        </div>
+                    </div>
+                    
+                    <div class="panel-3d-detail" style="width: 100%; margin: 15px auto 0; padding: 15px;">
+                        <h3 style="margin-top:0; font-size: 1.1em; text-align:center; width: 100%;">Codes d'expulsion (Sélection multiple)</h3>
+                        <input type="hidden" name="expulsion${i}-codes">
+                        <div class="codes-container" id="expulsion-${i}-codes"></div>
+                    </div>
+                </div>
+            `;
+
+            // 🧩 Création initiale des chips avec les listeners
+            createCodeChips(i, jsonCodes, panel);
+        } else {
+            // Mise à jour des options d'équipe
+            const selectEquipe = panel.querySelector('select[name^="expulsion"][name$="-equipe"]');
+            const currentValue = selectEquipe ? selectEquipe.value : '';
+            if (selectEquipe) {
+                selectEquipe.innerHTML = equipeOptions;
+                selectEquipe.value = currentValue;
+            }
+            createCodeChips(i, jsonCodes, panel);
+        }
+
+        // 6. Gestion de l’état actif/désactivé selon les équipes
+        const requiredFields = panel.querySelectorAll('[required]');
+        const selectEquipeField = panel.querySelector('select[name^="expulsion"]');
+        const toutesEquipesRemplies = equipeLocale && equipeVisiteur;
+        const estDesactiveCarEquipeVide = !toutesEquipesRemplies;
+
+        if (selectEquipeField) {
+            selectEquipeField.disabled = estDesactiveCarEquipeVide;
+        }
+        requiredFields.forEach(field => {
+            field.disabled = estDesactiveCarEquipeVide;
+            if (estDesactiveCarEquipeVide) {
+                if (['select-one', 'text', 'number'].includes(field.type)) {
+                    field.value = '';
+                }
+                clearFieldError(field);
+            }
+        });
+
+        // 7. Création du bouton d'onglet
+        const tabBtn = document.createElement("button");
+        tabBtn.type = "button";
+        tabBtn.textContent = `Expulsion ${i}`;
+
+        tabBtn.addEventListener("click", () => {
+            serializeCurrentExpulsion();
+            document.querySelectorAll("#expTabs button").forEach(btn => btn.classList.remove("active"));
+            document.querySelectorAll("#expulsionsContainer .tab-content").forEach(p => p.classList.remove("active"));
+            tabBtn.classList.add("active");
+            panel.classList.add("active");
+            loadExpulsionData(i, panel);
+        });
+
+        tabsContainer.appendChild(tabBtn);
+
+        if (!firstVisibleButton || i === activeTabIndex) firstVisibleButton = tabBtn;
+        if (!firstVisiblePanel || i === activeTabIndex) firstVisiblePanel = panel;
     }
 
-    // Activer l'onglet qui était actif (ou le premier s'il n'existe plus)
+    // 8. Activer le bon onglet
     if (firstVisibleButton && firstVisiblePanel) {
         firstVisibleButton.classList.add("active");
         firstVisiblePanel.classList.add("active");
-        // Recharger les données pour l'onglet qui devient actif (y compris la sélection par défaut)
         loadExpulsionData(parseInt(firstVisiblePanel.id.split('-')[1]), firstVisiblePanel);
     }
 }
-
 
 
 // Mise à jour de la liste d'équipes et des onglets lors de la saisie
@@ -2000,7 +2256,7 @@ function createCodeChips(expulsionIndex, codesData, panel) {
 async function envoyerRapportParEmail(data) {
   const emailUrl = "https://script.google.com/macros/s/AKfycbzptS_pTHRw9HERRy6ZjLKfkY25GTgOkHbJMaSi7h9wd2tFyiF0zKWaw9T-HoArXrrw/exec"; // ton URL
   const rapportHTML = genererRapportExpulsion(data);
-  const adresseDeDestination = "ump_77@videotron.ca,loleduc@videotron.ca,dlabonte@arbars.ca";
+  const adresseDeDestination = "ump_77@videotron.ca";
 
   const payload = {
     htmlContent: rapportHTML,
@@ -2126,6 +2382,9 @@ function generateDebugJSON() {
 
             const destContainer = document.getElementById('destinatairesContainer');
             const debugContainer = document.getElementById('debugContainer');
+			const htmlContainer = document.getElementById('htmlContainer');
+            const tempcontainer = document.getElementById('theme-selector');
+		    const temprequis = document.getElementById('champsContainer');
 
             // Définit la fonction de bascule de visibilité
             const toggleVisibility = (element) => {
@@ -2144,6 +2403,9 @@ function generateDebugJSON() {
             // Applique la bascule aux deux conteneurs
             toggleVisibility(destContainer);
             toggleVisibility(debugContainer);
+			toggleVisibility(htmlContainer);
+			toggleVisibility(tempcontainer);
+			toggleVisibility(temprequis);
         }
     });	
 	

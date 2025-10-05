@@ -241,20 +241,128 @@
 			"Tournois" : {
 				"9U A" : {
 					"EmailsSpecifiques" : [ "loleduc@videotron.ca" ]
+				},
+				"9U B" : {
+					"EmailsSpecifiques" : [ "loleduc@videotron.ca" ]
+				},
+				"11U AA" : {
+					"EmailsSpecifiques" : [ "loleduc@videotron.ca" ]
+				},
+				"11U A" : {
+					"EmailsSpecifiques" : [ "loleduc@videotron.ca" ]
+				},
+				"11U B" : {
+					"EmailsSpecifiques" : [ "loleduc@videotron.ca" ]
+				},
+				"13U AA" : {
+					"EmailsSpecifiques" : [ "loleduc@videotron.ca" ]
+				},
+				"13U A" : {
+					"EmailsSpecifiques" : [ "loleduc@videotron.ca" ]
+				},
+				"13U B" : {
+					"EmailsSpecifiques" : [ "loleduc@videotron.ca" ]
+				},
+				"15U AA" : {
+					"EmailsSpecifiques" : [ "loleduc@videotron.ca" ]
+				},
+				"15U A" : {
+					"EmailsSpecifiques" : [ "loleduc@videotron.ca" ]
+				},
+				"15U B" : {
+					"EmailsSpecifiques" : [ "loleduc@videotron.ca" ]
+				},
+				"18U AA" : {
+					"EmailsSpecifiques" : [ "loleduc@videotron.ca" ]
+				},
+				"18U A" : {
+					"EmailsSpecifiques" : [ "loleduc@videotron.ca" ]
+				},
+				"18U B" : {
+					"EmailsSpecifiques" : [ "loleduc@videotron.ca" ]
+				},
+				"Junior BB" : {
+					"EmailsSpecifiques" : [ "loleduc@videotron.ca" ]
+				},
+				"Junior A" : {
+					"EmailsSpecifiques" : [ "loleduc@videotron.ca" ]
 				}
 			},
 			"Régionaux" : {
 				"9U A" : {
+					"EmailsSpecifiques" : [ "loleduc@videotron.ca" ]
+				},
+				"9U B" : {
+					"EmailsSpecifiques" : [ "loleduc@videotron.ca" ]
+				},
+				"11U A" : {
+					"EmailsSpecifiques" : [ "loleduc@videotron.ca" ]
+				},
+				"11U B" : {
+					"EmailsSpecifiques" : [ "loleduc@videotron.ca" ]
+				},
+				"13U A" : {
+					"EmailsSpecifiques" : [ "loleduc@videotron.ca" ]
+				},
+				"13U B" : {
+					"EmailsSpecifiques" : [ "loleduc@videotron.ca" ]
+				},
+				"15U A" : {
+					"EmailsSpecifiques" : [ "loleduc@videotron.ca" ]
+				},
+				"15U B" : {
+					"EmailsSpecifiques" : [ "loleduc@videotron.ca" ]
+				},
+				"18U A" : {
+					"EmailsSpecifiques" : [ "loleduc@videotron.ca" ]
+				},
+				"18U B" : {
 					"EmailsSpecifiques" : [ "loleduc@videotron.ca" ]
 				}
 			},
 			"Super Régionaux" : {
 				"9U A" : {
 					"EmailsSpecifiques" : [ "loleduc@videotron.ca" ]
+				},
+				"9U B" : {
+					"EmailsSpecifiques" : [ "loleduc@videotron.ca" ]
+				},
+				"11U A" : {
+					"EmailsSpecifiques" : [ "loleduc@videotron.ca" ]
+				},
+				"11U B" : {
+					"EmailsSpecifiques" : [ "loleduc@videotron.ca" ]
+				},
+				"13U A" : {
+					"EmailsSpecifiques" : [ "loleduc@videotron.ca" ]
+				},
+				"13U B" : {
+					"EmailsSpecifiques" : [ "loleduc@videotron.ca" ]
+				},
+				"15U A" : {
+					"EmailsSpecifiques" : [ "loleduc@videotron.ca" ]
+				},
+				"15U B" : {
+					"EmailsSpecifiques" : [ "loleduc@videotron.ca" ]
+				},
+				"18U A" : {
+					"EmailsSpecifiques" : [ "loleduc@videotron.ca" ]
+				},
+				"18U B" : {
+					"EmailsSpecifiques" : [ "loleduc@videotron.ca" ]
 				}
 			},
 			"Provinciaux" : {
 				"11U AA" : {
+					"EmailsSpecifiques" : [ "loleduc@videotron.ca" ]
+				},
+				"13U AA" : {
+					"EmailsSpecifiques" : [ "loleduc@videotron.ca" ]
+				},
+				"15U AA" : {
+					"EmailsSpecifiques" : [ "loleduc@videotron.ca" ]
+				},
+				"18U AA" : {
 					"EmailsSpecifiques" : [ "loleduc@videotron.ca" ]
 				}
 			}

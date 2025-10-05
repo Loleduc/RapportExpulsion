@@ -1,20 +1,24 @@
 {
-    "Arbitres": {
-        "Jean Dubois": {
-            "Courriel": "j.dubois@arbitre.ca",
-            "Groupes": [ "Majeur" ]
-        },
-        "Lucie Gauthier": {
-            "Courriel": "l.gauthier@arbitre.ca",
-            "Groupes": [ "Majeur", "Mineur" ]
-        },
-        "Marc-Antoine Côté": {
-            "Courriel": "m.cote@arbitre.ca",
-            "Groupes": [ "Mineur" ]
-        },
-        "Pierre-Luc Tremblay": {
-            "Courriel": "p.tremblay@arbitre.ca",
-            "Groupes": [ "Majeur" ]
-        }
-    }
+	"Arbitres" : {
+		"Jean Dubois" : {
+			"Courriel" : "j.dubois@arbitre.ca",
+			"Telephone" : "5555555555",
+			"Groupes" : [ "Majeur" ]
+		},
+		"Lucie Gauthier" : {
+			"Courriel" : "l.gauthier@arbitre.ca",
+			"Groupes" : [ "Majeur", "Mineur" ],
+			"Telephone" : "444 444 4444"
+		},
+		"Marc-Antoine Côté" : {
+			"Courriel" : "m.cote@arbitre.ca",
+			"Telephone" : "(333) 333-3333",
+			"Groupes" : [ "Mineur" ]
+		},
+		"Pierre-Luc Tremblay" : {
+			"Courriel" : "p.tremblay@arbitre.ca",
+			"Telephone" : "222-222-2222",
+			"Groupes" : [ "Majeur" ]
+		}
+	}
 }

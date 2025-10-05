@@ -6,13 +6,22 @@
 <script>
     // 1. Définition de la variable de version globalement (accessible partout)
     window.CONFIG = {
-        VERSION: '0.05102025.0930 ' // Mettez à jour ce numéro manuellement pour chaque version
+        VERSION: '0.20251005.1725 ' // Mettez à jour ce numéro manuellement pour chaque version
     };
 
     // 2. Modification immédiate du titre (Option 2)
     // Le script s'exécute dès qu'il est lu et met à jour le titre.
     document.title = document.title + ' ' + CONFIG.VERSION;
-    
+	window.onload = function() {
+    // 1. Obtenir l'élément span par son ID
+    const versionSpan = document.getElementById('version-affichage');
+
+    // 2. Vérifier si l'élément existe avant de le modifier
+    if (versionSpan) {
+        // 3. Mettre à jour le texte du span avec la variable CONFIG.VERSION
+        versionSpan.textContent = 'v.' + CONFIG.VERSION.trim(); // Utilisez .trim() pour retirer l'espace final
+    }
+   };
 </script>
 
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
@@ -578,7 +587,8 @@ button:hover {
 
 <h1>
     RAPPORT D'EXPULSION
-    <span style="font-size: 0.5em; margin-left: 20px;">v.05-10-2025 09:30</span>
+    <span id="version-affichage" style="font-size: 0.5em; margin-left: 20px;">
+        </span>
 </h1>
 
 <div id="theme-selector" class="theme-selector" style="display: none;">
@@ -1355,7 +1365,7 @@ function generateAndDisplayReport() {
         newWindow.document.close();
       
 
-       Swal.fire({
+    Swal.fire({
     title: "Rapport généré avec succès !",
     icon: "success",
     draggable: true,
@@ -1512,6 +1522,7 @@ function clearErrorAfter(selector) {
 function reinitialiserChampsArbitre() {
     const arbitreRapportSelect = document.getElementById("arbitreRapport");
     const courrielInput = document.getElementById("courriel");
+	const telephoneInput = document.getElementById("courriel");
     
     if (arbitreRapportSelect) {
         arbitreRapportSelect.value = '';
@@ -1524,7 +1535,13 @@ function reinitialiserChampsArbitre() {
         courrielInput.value = '';
         clearFieldError(courrielInput);
     }
+
+    if (telephoneInput) {
+        telephoneInput.value = '';
+        clearFieldError(telephoneInput);
+    }
 }
+
 
 
 async function init() {
@@ -2424,6 +2441,109 @@ function generateDebugJSON() {
     return result; // optionnel si tu veux l'utiliser ailleurs
 }
 
+
+
+document.getElementById('effacerBtn').addEventListener('click', function(e) {
+    e.preventDefault(); // Empêche le reset automatique du formulaire
+    
+    // Afficher la confirmation
+    Swal.fire({
+        title: "Êtes-vous certain?",
+        text: "Toutes les données du formulaire seront perdues.",
+        icon: "warning",
+        showCancelButton: true,
+        confirmButtonColor: "#d33",
+        cancelButtonColor: "#3085d6",
+        confirmButtonText: "Oui, effacer!",
+        cancelButtonText: "Annuler",
+        draggable: true,
+        customClass: {
+            title: 'mon-titre-personnalise',
+            content: 'mon-texte-personnalise',
+            popup: 'mon-background-personnalise'
+        }
+    }).then((result) => {
+        // Si l'utilisateur confirme
+        if (result.isConfirmed) {
+            // Réinitialiser les selects de région/ligue/catégorie/classe
+            const regionSelect = document.getElementById("regionSelect");
+            const ligueSelect = document.getElementById("ligueSelect");
+            const categorieSelect = document.getElementById("categorieSelect");
+            const classeSelect = document.getElementById("classeSelect");
+            
+            if (regionSelect) regionSelect.value = '';
+            if (ligueSelect) {
+                ligueSelect.value = '';
+                ligueSelect.innerHTML = "<option value=''>-- Sélectionner une ligue --</option>";
+            }
+            if (categorieSelect) {
+                categorieSelect.value = '';
+                categorieSelect.innerHTML = "<option value=''>-- Sélectionner une catégorie --</option>";
+            }
+            if (classeSelect) {
+                classeSelect.value = '';
+                classeSelect.innerHTML = "<option value=''>-- Sélectionner une classe --</option>";
+            }
+            
+            // Réinitialiser les équipes et terrain
+            document.getElementById('equipeLocale').value = '';
+            document.getElementById('equipeVisiteur').value = '';
+            document.getElementById('terrain').value = '';
+            
+            // Vider les datalists
+            populateEquipesDatalist([]);
+            populateTerrainsDatalist([]);
+            
+            // Réinitialiser les arbitres
+            document.getElementById('arbitreMarbre').value = '';
+            document.getElementById('arbitreButs').value = '';
+            
+            // Vider la datalist des arbitres
+            const arbitresDatalist = document.getElementById('arbitresDatalist');
+            if (arbitresDatalist) {
+                arbitresDatalist.innerHTML = '';
+            }
+            
+            // Réinitialiser le select et les coordonnées de l'arbitre faisant le rapport
+            reinitialiserChampsArbitre();
+            document.getElementById("telephone").value = '';
+            
+            // Réinitialiser les données d'expulsion
+            expulsionsData = {};
+            
+            // Réinitialiser les chips d'expulsion
+            setupExpulsionChips(true);
+            
+            // Vider les destinataires
+            destinatairesDiv.textContent = "";
+            
+            // Nettoyer toutes les erreurs visuelles
+            document.querySelectorAll('.input-error, .field-error').forEach(el => {
+                el.classList.remove('input-error', 'field-error');
+            });
+            document.querySelectorAll('.error').forEach(el => el.textContent = '');
+            
+            // Reset complet du formulaire (pour les champs non gérés manuellement)
+            document.getElementById('rapportForm').reset();
+            
+			
+            // Message de confirmation
+            Swal.fire({
+                title: "Effacé!",
+                text: "Le formulaire a été réinitialisé.",
+                icon: "success",
+                timer: 2000,
+                showConfirmButton: false,
+                draggable: true,
+                customClass: {
+                    title: 'mon-titre-personnalise',
+                    popup: 'mon-background-personnalise'
+                }
+            });
+			
+        }
+    });
+});
     
 
 // ---------------- INITIALISATION FINALE ----------------

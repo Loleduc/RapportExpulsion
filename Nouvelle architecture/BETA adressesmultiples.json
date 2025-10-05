@@ -1,0 +1,241 @@
+{
+	"Regions" : {
+		"RIVE-SUD" : {
+			"_BaseEmails" : [ "rapportdexpulsionrsry@gmail.com", "ump_77@videotron.ca" ],
+			"LBAVR" : {
+				"9U A" : {
+					"EmailsSpecifiques" : [ "loleduc@videotron.ca" ]
+				},
+				"9U B" : {
+					"EmailsSpecifiques" : [ "loleduc@videotron.ca" ]
+				},
+				"11U AA" : {
+					"EmailsSpecifiques" : [ "loleduc@videotron.ca" ]
+				},
+				"11U A" : {
+					"EmailsSpecifiques" : [ "loleduc@videotron.ca" ]
+				},
+				"11U B" : {
+					"EmailsSpecifiques" : [ "loleduc@videotron.ca" ]
+				},
+				"13U AA" : {
+					"EmailsSpecifiques" : [ "loleduc@videotron.ca" ]
+				},
+				"13U A" : {
+					"EmailsSpecifiques" : [ "loleduc@videotron.ca" ]
+				},
+				"13U B" : {
+					"EmailsSpecifiques" : [ "loleduc@videotron.ca" ]
+				},
+				"15U AA" : {
+					"EmailsSpecifiques" : [ "loleduc@videotron.ca" ]
+				},
+				"15U A" : {
+					"EmailsSpecifiques" : [ "loleduc@videotron.ca" ]
+				},
+				"15U B" : {
+					"EmailsSpecifiques" : [ "loleduc@videotron.ca" ]
+				},
+				"18U AA" : {
+					"EmailsSpecifiques" : [ "loleduc@videotron.ca" ]
+				},
+				"18U A" : {
+					"EmailsSpecifiques" : [ "loleduc@videotron.ca" ]
+				},
+				"18U B" : {
+					"EmailsSpecifiques" : [ "loleduc@videotron.ca" ]
+				},
+				"Junior BB" : {
+					"EmailsSpecifiques" : [ "loleduc@videotron.ca" ]
+				},
+				"Junior A" : {
+					"EmailsSpecifiques" : [ "loleduc@videotron.ca" ]
+				}
+			},
+			"LBJAAQ" : {
+				"Junior AA" : {
+					"Equipes" : [
+						"Ducs de Longueuils",
+						"Jets de Montréal",
+						"Cardinals de Lasalle",
+						"Patriotes des Laurentides",
+						"Seigneurs élites de Repentigny",
+						"Guerriers de Richelieu-Yamaska",
+						"Cobras Capri Bar-Serie du Roussillon"
+					],
+					"EmailsSpecifiques" : [ "loleduc@videotron.ca" ],
+					"Terrains" : [
+						"Stade Léo-Asselin",
+						"Parc Louis-Choinière",
+						"Parc Leblanc",
+						"Parc Paul-Pratt"
+					]
+				}
+			},
+			"LBSVF" : {
+				"Senior BB" : {
+					"Equipes" : [
+						"A's Laprairie",
+						"Brewers Drummondville",
+						"Marlins Sorel-Tracy",
+						"Phillies Longueuil",
+						"Pirates St-Bruno",
+						"Rays du Haut-Richelieu"
+					],
+					"EmailsSpecifiques" : [ "loleduc@videotron.ca" ],
+					"Terrains" : [
+						"Stade Jacques-Desautels",
+						"Parc Rabastallière",
+						"Parc Fontrouge",
+						"Parc Célanese",
+						"Parc Optimiste",
+						"Stade René St-Germain",
+						"Parc de Sainte-Marie-de-Monnoir"
+					]
+				}
+			},
+			"LBA30" : {
+				"Senior A" : {
+					"Equipes" : [ "As", "Giants", "Mariners", "Red Sox", "Royals" ],
+					"EmailsSpecifiques" : [ "loleduc@videotron.ca" ],
+					"Terrains" : [ "Parc Harvey", "Parc Pierre-Boucher" ]
+				}
+			},
+			"LBFQ" : {
+				"9U B" : {
+					"EmailsSpecifiques" : [ "loleduc@videotron.ca" ]
+				},
+				"9U A" : {
+					"EmailsSpecifiques" : [ "loleduc@videotron.ca" ]
+				},
+				"11U B" : {
+					"EmailsSpecifiques" : [ "loleduc@videotron.ca" ]
+				},
+				"11U A" : {
+					"EmailsSpecifiques" : [ "loleduc@videotron.ca" ]
+				},
+				"13U B" : {
+					"EmailsSpecifiques" : [ "loleduc@videotron.ca" ]
+				},
+				"13U A" : {
+					"EmailsSpecifiques" : [ "loleduc@videotron.ca" ]
+				},
+				"15U B" : {
+					"EmailsSpecifiques" : [ "loleduc@videotron.ca" ]
+				},
+				"15U A" : {
+					"EmailsSpecifiques" : [ "loleduc@videotron.ca" ]
+				},
+				"21U A" : {
+					"EmailsSpecifiques" : [ "loleduc@videotron.ca" ]
+				},
+				"21U B" : {
+					"EmailsSpecifiques" : [ "loleduc@videotron.ca" ]
+				}
+			}
+		},
+		"RICHELIEU-YAMASKA" : {
+			"_BaseEmails" : [ "rapportdexpulsionrsry@gmail.com", "ump_77@hotmail.com" ],
+			"LBAVR" : {
+				"9U A" : {
+					"EmailsSpecifiques" : [ "loleduc@videotron.ca" ]
+				},
+				"9U B" : {
+					"EmailsSpecifiques" : [ "loleduc@videotron.ca" ]
+				},
+				"11U AA" : {
+					"EmailsSpecifiques" : [ "loleduc@videotron.ca" ]
+				},
+				"11U A" : {
+					"EmailsSpecifiques" : [ "loleduc@videotron.ca" ]
+				},
+				"11U B" : {
+					"EmailsSpecifiques" : [ "loleduc@videotron.ca" ]
+				},
+				"13U AA" : {
+					"EmailsSpecifiques" : [ "loleduc@videotron.ca" ]
+				},
+				"13U A" : {
+					"EmailsSpecifiques" : [ "loleduc@videotron.ca" ]
+				},
+				"13U B" : {
+					"EmailsSpecifiques" : [ "loleduc@videotron.ca" ]
+				},
+				"15U AA" : {
+					"EmailsSpecifiques" : [ "loleduc@videotron.ca" ]
+				},
+				"15U A" : {
+					"EmailsSpecifiques" : [ "loleduc@videotron.ca" ]
+				},
+				"15U B" : {
+					"EmailsSpecifiques" : [ "loleduc@videotron.ca" ]
+				},
+				"18U AA" : {
+					"EmailsSpecifiques" : [ "loleduc@videotron.ca" ]
+				},
+				"18U A" : {
+					"EmailsSpecifiques" : [ "loleduc@videotron.ca" ]
+				},
+				"18U B" : {
+					"EmailsSpecifiques" : [ "loleduc@videotron.ca" ]
+				},
+				"Junior BB" : {
+					"EmailsSpecifiques" : [ "loleduc@videotron.ca" ]
+				},
+				"Junior A" : {
+					"EmailsSpecifiques" : [ "loleduc@videotron.ca" ]
+				}
+			},
+			"LBFQ" : {
+				"9U B" : {
+					"EmailsSpecifiques" : [ "loleduc@videotron.ca" ]
+				},
+				"9U A" : {
+					"EmailsSpecifiques" : [ "loleduc@videotron.ca" ]
+				},
+				"11U B" : {
+					"EmailsSpecifiques" : [ "loleduc@videotron.ca" ]
+				},
+				"11U A" : {
+					"EmailsSpecifiques" : [ "loleduc@videotron.ca" ]
+				},
+				"13U B" : {
+					"EmailsSpecifiques" : [ "loleduc@videotron.ca" ]
+				},
+				"13U A" : {
+					"EmailsSpecifiques" : [ "loleduc@videotron.ca" ]
+				},
+				"15U B" : {
+					"EmailsSpecifiques" : [ "loleduc@videotron.ca" ]
+				},
+				"15U A" : {
+					"EmailsSpecifiques" : [ "loleduc@videotron.ca" ]
+				},
+				"21U A" : {
+					"EmailsSpecifiques" : [ "loleduc@videotron.ca" ]
+				},
+				"21U B" : {
+					"EmailsSpecifiques" : [ "loleduc@videotron.ca" ]
+				}
+			}
+		},
+		"BQ" : {
+			"15U AAA" : {
+				"EmailsSpecifiques" : [ "loleduc@videotron.ca" ]
+			},
+			"18U AAA" : {
+				"EmailsSpecifiques" : [ "loleduc@videotron.ca" ]
+			},
+			"Junior Elite" : {
+				"EmailsSpecifiques" : [ "loleduc@videotron.ca" ]
+			},
+			"Senior Majeur" : {
+				"EmailsSpecifiques" : [ "loleduc@videotron.ca" ]
+			},
+			"Tournois" : {},
+			"R�gionaux" : {},
+			"Super R�gionaux" : "",
+			"Provinciaux" : {}
+		}
+	}
+}

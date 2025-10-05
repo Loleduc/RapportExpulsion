@@ -220,11 +220,13 @@
 			}
 		},
 		"BQ" : {
-			"15U AAA" : {
-				"EmailsSpecifiques" : [ "loleduc@videotron.ca" ]
-			},
-			"18U AAA" : {
-				"EmailsSpecifiques" : [ "loleduc@videotron.ca" ]
+			"Développement AAA" : {
+				"18U AAA" : {
+					"EmailsSpecifiques" : [ "loleduc@videotron.ca" ]
+				},
+				"15U AAA" : {
+					"EmailsSpecifiques" : [ "loleduc@videotron.ca" ]
+				}
 			},
 			"Junior Elite" : {
 				"EmailsSpecifiques" : [ "loleduc@videotron.ca" ]

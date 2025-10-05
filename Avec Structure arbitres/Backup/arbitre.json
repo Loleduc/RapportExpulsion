@@ -1,0 +1,20 @@
+{
+    "Arbitres": {
+        "Jean Dubois": {
+            "Courriel": "j.dubois@arbitre.ca",
+            "Groupes": [ "Majeur" ]
+        },
+        "Lucie Gauthier": {
+            "Courriel": "l.gauthier@arbitre.ca",
+            "Groupes": [ "Majeur", "Mineur" ]
+        },
+        "Marc-Antoine Côté": {
+            "Courriel": "m.cote@arbitre.ca",
+            "Groupes": [ "Mineur" ]
+        },
+        "Pierre-Luc Tremblay": {
+            "Courriel": "p.tremblay@arbitre.ca",
+            "Groupes": [ "Majeur" ]
+        }
+    }
+}

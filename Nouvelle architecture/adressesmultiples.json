@@ -228,11 +228,15 @@
 					"EmailsSpecifiques" : [ "loleduc@videotron.ca" ]
 				}
 			},
-			"Junior Elite" : {
-				"EmailsSpecifiques" : [ "loleduc@videotron.ca" ]
+			"LBJEQ" : {
+				"Junior Elite" : {
+					"EmailsSpecifiques" : [ "loleduc@videotron.ca" ]
+				}
 			},
-			"Senior Majeur" : {
-				"EmailsSpecifiques" : [ "loleduc@videotron.ca" ]
+			"LBMQ" : {
+				"Senior Majeur" : {
+					"EmailsSpecifiques" : [ "loleduc@videotron.ca" ]
+				}
 			},
 			"Tournois" : {
 				"9U A" : {

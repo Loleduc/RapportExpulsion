@@ -591,6 +591,14 @@ button:hover {
         </span>
 </h1>
 
+<h3 style="color: white;">
+<center><u><strong>
+Version développement pour voir la partie courriel inscrire votre courriel dans la section courriel
+</u></strong>
+</center>
+</h3>
+
+
 <div id="theme-selector" class="theme-selector" style="display: none;">
     <label for="theme-choice">Choisir un thème :</label>
     <select id="theme-choice" onchange="changerTheme(this.value)">
@@ -794,7 +802,7 @@ let jsonCodes = {}; // Sera rempli par l'appel à codesUrl
 let expulsionsData = {}; // 🛑 Objet pour stocker les données de chaque expulsion (persistance)
 let ObjetCourriel ="";
 let jsonArbitres = {};
-let adressecouriel ="";
+let adressecourriel ="";
 
 const destinatairesContainer = document.getElementById("destinatairesContainer");
 const destinatairesDiv = document.getElementById("destinataires");
@@ -1781,9 +1789,9 @@ document.getElementById("classeSelect").addEventListener("change", e=>{
 	
 
     const allEmails = [...baseEmails, ...specificEmails];
-    adressecouriel = allEmails.join(", ");
+    adressecourriel = allEmails.join(", ");
     // 3. Mise à jour de destinatairesDiv avec la liste complète
-    destinatairesDiv.textContent = adressecouriel;
+    destinatairesDiv.textContent = adressecourriel;
 });
 	
 // ---------------- Gestion Arbitre Rapport (inchangé) ----------------
@@ -2333,11 +2341,50 @@ function createCodeChips(expulsionIndex, codesData, panel) {
 async function envoyerRapportParEmail(data) {
   const emailUrl = "https://script.google.com/macros/s/AKfycbzptS_pTHRw9HERRy6ZjLKfkY25GTgOkHbJMaSi7h9wd2tFyiF0zKWaw9T-HoArXrrw/exec"; // ton URL
   const rapportHTML = genererRapportExpulsion(data);
-  const adresseDeDestination = "ump_77@videotron.ca"; //adressecouriel à ajouter quand ce sera le temps.
+  // const adresseDeDestination = "ump_77@videotron.ca"; //adressecourriel à ajouter quand ce sera le temps.
+  
+    const courrielUtilisateur = document.getElementById("courriel").value.trim();
+    let listeFinaleCourriels = ""; // Variable locale pour construire la liste finale
 
+    if (document.getElementById("courrielConfirme").checked) {
+        // La case est cochée: L'utilisateur veut une copie. On AJOUTE son courriel
+        
+        // 1. On commence avec la liste globale/par défaut (adressecourriel)
+        listeFinaleCourriels = adressecourriel; 
+        
+        // 2. On ajoute le courriel de l'utilisateur
+        if (courrielUtilisateur.length > 0) {
+            // S'il y a déjà une adresse par défaut, on ajoute une virgule avant la nouvelle.
+            if (adressecourriel.length > 0) {
+                listeFinaleCourriels += ", " + courrielUtilisateur;
+				console.log("Courriels destinataires et utilisateur : ", listeFinaleCourriels);
+            } else {
+                // Si la liste par défaut était vide, on met juste le courriel de l'utilisateur.
+                listeFinaleCourriels = courrielUtilisateur;
+				console.log("Courriels utilsateur seulement : ", listeFinaleCourriels);
+            }
+        }
+        
+      } else {
+         // La case n'est PAS cochée: On envoie SEULEMENT à la liste par défaut.
+          listeFinaleCourriels = adressecourriel; 
+		  console.log("Courriels destinataires seulement : ", listeFinaleCourriels);
+     }
+   
+      // enlever ces deux lignes lors de la mise en service présentement le courriel est envoyé seulement au créateur du rapport
+      listeFinaleCourriels = "";
+      listeFinaleCourriels = document.getElementById("courriel").value;
+
+   
+    // Mettre à jour l'affichage de la DIV
+    // Note: On ne touche pas à la variable globale 'adressecourriel' ici. 
+    // On met à jour l'élément d'affichage 'destinatairesDiv'.
+   destinatairesDiv.textContent = listeFinaleCourriels;
+ 
+   
   const payload = {
     htmlContent: rapportHTML,
-    destinatairesContainer: adresseDeDestination,
+    destinatairesContainer: listeFinaleCourriels,
     sujetCourriel: ObjetCourriel // variable que tu as déjà
   };
 

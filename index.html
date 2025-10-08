@@ -362,6 +362,68 @@ button:hover {
     box-sizing: border-box; 
 }
 
+/*
+ * NOUVELLES RÈGLES POUR LE LAYOUT DES ARBITRES
+ * Ces classes sont appliquées dynamiquement par JavaScript au conteneur .arbitres-row.
+ */
+
+/* 1. Cas 2 arbitres : Centré et plus "collé" */
+.arbitres-row.arbitres-2-cols {
+    /* Ajoute une largeur maximale pour que les champs ne s'étendent pas sur tout le panel */
+    max-width: 550px; 
+    /* Force le centrage du conteneur lui-même si le panel est plus large que 550px */
+    margin-left: auto;
+    margin-right: auto;
+}
+.arbitres-row.arbitres-2-cols .champ {
+    /* Empêche les champs de s'étendre (enlève le flex-grow: 1 par défaut) */
+    flex-grow: 0 !important;
+    /* Laisse le champ s'ajuster à sa taille minimale/maximale définie */
+    flex-basis: auto !important;
+}
+
+/* 2. Cas 3 arbitres : 1/3, 1/3, 1/3 */
+.arbitres-row.arbitres-3-cols {
+    max-width: 100%; /* Assure que le conteneur prend toute la largeur */
+}
+.arbitres-row.arbitres-3-cols .champ {
+    /* flex-basis: calc(33.33% - 10px) 
+       33.33% est la base pour un tiers. On soustrait un peu (10px) 
+       pour compenser les 15px de gap et éviter que les champs ne "wrappe".
+    */
+    flex-grow: 1;
+    flex-basis: calc(33.33% - 10px) !important; 
+    min-width: 150px; /* Permet un meilleur ajustement sur des petits écrans */
+}
+
+/* 3. Cas 4 arbitres : 1/4, 1/4, 1/4, 1/4 */
+.arbitres-row.arbitres-4-cols {
+    max-width: 100%; /* Assure que le conteneur prend toute la largeur */
+}
+.arbitres-row.arbitres-4-cols .champ {
+    /* flex-basis: calc(25% - 11.25px)
+       On soustrait plus précisément 11.25px pour compenser les gaps (3*15px / 4 champs)
+    */
+    flex-grow: 1;
+    flex-basis: calc(25% - 11.25px) !important; 
+    min-width: 150px;
+}
+
+/* Règle de secours : Si aucune classe arbitres-*-cols n'est présente 
+   (ce qui arrive juste après le chargement du HTML et AVANT l'exécution du JS), 
+   on force la mise en page "2 arbitres" par défaut. */
+#arbitres-champs-row:not(.arbitres-2-cols):not(.arbitres-3-cols):not(.arbitres-4-cols) {
+    /* Applique la largeur maximale et le centrage UNIQUEMENT à la rangée des arbitres */
+    max-width: 550px; 
+    margin-left: auto;
+    margin-right: auto;
+}
+/* Neutralise le flex-grow par défaut des champs arbitres dans ce cas par défaut */
+#arbitres-champs-row:not(.arbitres-2-cols):not(.arbitres-3-cols):not(.arbitres-4-cols) .champ {
+    flex-grow: 0 !important;
+    flex-basis: auto !important;
+}
+
 /* 1. Allonger l'adresse courriel */
 #courriel {
     max-width: 350px; 
@@ -672,7 +734,7 @@ Version développement pour voir la partie courriel inscrire votre courriel dans
         </div>
     </div>
     <div class="arbitres-coordonnees-container ">
-        <div class="arbitres-row">
+        <div class="arbitres-row" id="arbitres-champs-row">
             <div class="champ" >
                 <label for="arbitreMarbre">Arbitre au marbre</label>
                 <input type="text" id="arbitreMarbre" list="arbitresDatalist" tabindex="10" required>
@@ -853,67 +915,94 @@ const CODE_SEPARATOR = '||';
  * Gère la visibilité des champs arbitre2but et arbitre3Buts, le label dynamique,
  * ET AJUSTE L'ATTRIBUT 'required' pour la validation.
  */
-function handleRefereeSystemChange(clickedChip) {
-    const chipContainer = document.getElementById('arbitre-system-chips');
-    if (!chipContainer) return;
+/**
+ * Gère le changement du système d'arbitres (2, 3, ou 4) :
+ * 1. Met à jour la sélection visuelle des puces.
+ * 2. Affiche/Masque les champs d'arbitres supplémentaires (2e et 3e but).
+ * 3. Ajoute/Retire l'attribut 'required'.
+ * 4. **APPLIQUE LES CLASSES CSS pour la mise en page (centrage, 1/3, 1/4).**
+ * 5. Appelle la fonction de mise à jour de la liste "Arbitre faisant le rapport".
+ * @param {HTMLElement} chip - L'élément puce sur lequel l'utilisateur a cliqué.
+ */
+function handleRefereeSystemChange(chip) {
 
-    // 1. Gère l'état visuel de la puce (chip)
-    if (clickedChip) {
-        chipContainer.querySelectorAll('.chip').forEach(chip => {
-            chip.classList.remove('selected');
-        });
-        clickedChip.classList.add('selected');
+      if (!chip) {
+        return; 
+      }
+    const value = chip.getAttribute('data-value');
+    const chipsContainer = document.getElementById('arbitre-system-chips');
+    // CIBLEZ LE CONTENEUR DE LA LIGNE D'ARBITRES
+    const arbitresRow = document.getElementById('arbitres-champs-row');
+
+    // 1. Mise à jour visuelle de la puce
+    chipsContainer.querySelectorAll('.chip').forEach(c => c.classList.remove('selected'));
+    chip.classList.add('selected');
+
+    // Champs pour 3e et 4e arbitre
+    const arbitre2ButGroup = document.getElementById('group-arbitre2but');
+    const arbitre3ButGroup = document.getElementById('group-arbitre3but');
+    const arbitre2ButInput = document.getElementById('arbitre2but');
+    const arbitre3ButInput = document.getElementById('arbitre3Buts');
+
+    // Cache tout par défaut et réinitialise 'required'
+    [arbitre2ButGroup, arbitre3ButGroup].forEach(g => {
+        if (g) g.style.display = 'none';
+    });
+    [arbitre2ButInput, arbitre3ButInput].forEach(i => {
+        if (i) i.removeAttribute('required');
+    });
+
+    // 2 & 3. Affichage/Masquage des champs et ajout de 'required'
+    if (value === '3' || value === '4') {
+        if (arbitre2ButGroup) arbitre2ButGroup.style.display = 'flex';
+        if (arbitre2ButInput) arbitre2ButInput.setAttribute('required', 'required');
+    }
+    if (value === '4') {
+        if (arbitre3ButGroup) arbitre3ButGroup.style.display = 'flex';
+        if (arbitre3ButInput) arbitre3ButInput.setAttribute('required', 'required');
     }
 
-    // 2. Récupérer la valeur du système d'arbitrage sélectionné
-    const selectedChip = chipContainer.querySelector('.chip.selected');
-    const selectedValue = selectedChip ? parseInt(selectedChip.getAttribute('data-value')) : 2; // Par défaut à 2
+    // 4. *** APPLICATION DES CLASSES CSS (CLÉ DE LA DEMANDE) ***
+    // Retirer toutes les classes de layout et appliquer la nouvelle
+    arbitresRow.classList.remove('arbitres-2-cols', 'arbitres-3-cols', 'arbitres-4-cols');
+    
+    if (value === '2') {
+        arbitresRow.classList.add('arbitres-2-cols');
+    } else if (value === '3') {
+        arbitresRow.classList.add('arbitres-3-cols');
+    } else if (value === '4') {
+        arbitresRow.classList.add('arbitres-4-cols');
+    }
+    
+    // 5. Mise à jour de la liste de rapport
+    if (typeof updateArbitreRapport === 'function') {
+        updateArbitreRapport();
+    }
+}
 
-    // 3. Cibler les éléments à manipuler
-    const arbitre2butGroup = document.getElementById('group-arbitre2but');
-    const arbitre3butGroup = document.getElementById('group-arbitre3but');
-    const arbitre2butInput = document.getElementById('arbitre2but');
-    const arbitre3butInput = document.getElementById('arbitre3Buts');
-    const arbitre2butLabel = arbitre2butGroup ? arbitre2butGroup.querySelector('label') : null;
 
-    // --- Logique pour arbitre2but (apparaît à 3 ou 4) ---
-    if (arbitre2butGroup && arbitre2butInput && arbitre2butLabel) {
-        if (selectedValue >= 3) {
-            // Afficher le champ et le rendre REQUIS
-            arbitre2butGroup.style.display = 'flex';
-            arbitre2butInput.setAttribute('required', 'required'); // <<< AJOUT DU REQUIS
+function setupRefereeSystemChips() {
+    const chips = document.querySelectorAll('#arbitre-system-chips .chip');
+    chips.forEach(chip => {
+        // Ajout de l'écouteur de clic
+        chip.addEventListener('click', () => handleRefereeSystemChange(chip));
+    });
 
-            // Logique de changement de Label
-            if (selectedValue === 3) {
-                // Si 3 arbitres, le label doit être "Arbitre 3ième but"
-                arbitre2butLabel.textContent = 'Arbitre 3ième but';
-            } else if (selectedValue === 4) {
-                // Si 4 arbitres, le label doit être "Arbitre 2ième but"
-                arbitre2butLabel.textContent = 'Arbitre 2ième but';
-            }
-
-        } else {
-            // Cacher et retirer le REQUIS
-            arbitre2butGroup.style.display = 'none';
-            arbitre2butInput.removeAttribute('required'); // <<< RETRAIT DU REQUIS (corrige la validation)
-            arbitre2butInput.value = ''; // EFFACER LA VALEUR
+    // 💡 Point clé : Trouver la puce par défaut
+    const defaultChip = document.querySelector('#arbitre-system-chips .chip.selected');
+    
+    if (defaultChip) {
+        // CAS 1 : Si une puce a la classe 'selected', on l'utilise pour initialiser le layout.
+        handleRefereeSystemChange(defaultChip); 
+    } else {
+        // CAS 2 : Si aucune puce n'est 'selected', on force l'initialisation sur "2 Arbitres" 
+        //         et on lui ajoute la classe 'selected' pour l'affichage visuel.
+        const chip2 = document.querySelector('#arbitre-system-chips .chip[data-value="2"]');
+        if (chip2) {
+             chip2.classList.add('selected'); // Ajout pour la sélection visuelle
+             handleRefereeSystemChange(chip2);
         }
     }
-
-    // --- Logique pour arbitre3Buts (apparaît seulement à 4) ---
-    if (arbitre3butGroup && arbitre3butInput) {
-        if (selectedValue === 4) {
-            // Afficher le champ et le rendre REQUIS
-            arbitre3butGroup.style.display = 'flex';
-            arbitre3butInput.setAttribute('required', 'required'); // <<< AJOUT DU REQUIS
-        } else {
-            // Cacher et retirer le REQUIS
-            arbitre3butGroup.style.display = 'none';
-            arbitre3butInput.removeAttribute('required'); // <<< RETRAIT DU REQUIS (corrige la validation)
-            arbitre3butInput.value = ''; // EFFACER LA VALEUR
-        }
-    }
-	updateArbitreRapport(); 
 }
 
 // ===================================================================
@@ -1159,22 +1248,23 @@ function transformDebugJSONToCustomData() {
 function genererRapportExpulsion(customData) {
     let message = "";
     
-    // 🎨 Styles centralisés
+    // 🎨 STYLES CENTRALISÉS
     const styleTable = "width: 100%; max-width: 900px; border-collapse: collapse; font-family: Arial, sans-serif; font-size: 14px; margin: 0 auto 30px auto; border: 1px solid #ddd;";
-    const styleSectionHeaderTD = "padding: 10px; text-align: left; font-size: 16px; border-top: 1px solid #ddd; background-color: #f2f2f2; -webkit-print-color-adjust: exact;";
+    const styleSectionHeaderTD = "padding: 10px; text-align: left; font-size: 16px; border-top: 1px solid #ddd; background-color: #f2f2f2;  -webkit-print-color-adjust: exact;"; 
     const styleSectionHeaderTH = "text-align: left; font-weight: bold; font-size: 16px; color: #333;"; 
     const cellPadding = "5px 8px"; 
-    const styleCell = `padding: ${cellPadding}; border: 1px solid #ddd; width: auto; background-color: white; -webkit-print-color-adjust: exact;`; 
-    const styleCell15 = `padding: ${cellPadding}; border: 1px solid #ddd; width: 15%; background-color: white; -webkit-print-color-adjust: exact;`;
-    const styleCell25 = `padding: ${cellPadding}; border: 1px solid #ddd; width: 25%; background-color: white; -webkit-print-color-adjust: exact;`;
-    const styleCell40 = `padding: ${cellPadding}; border: 1px solid #ddd; width: 40%; background-color: white; -webkit-print-color-adjust: exact;`;
+    
+    // LARGEURS DE COLONNES (Basé sur 5 colonnes visuelles)
+    // 20% | 30% | 20% | 30%
+    const styleLabel20 = `padding: ${cellPadding}; border: 1px solid #ddd; width: 20%; font-weight: bold; background-color: #f7f7f7; -webkit-print-color-adjust: exact;`; 
+    const styleValue30 = `padding: ${cellPadding}; border: 1px solid #ddd; width: 30%; background-color: white; -webkit-print-color-adjust: exact;`;
     const styleMainHeaderBG = "background-color: #a3a3a3; -webkit-print-color-adjust: exact;";
+    const styleCellFull = `padding: ${cellPadding}; border: 1px solid #ddd; width: 100%; background-color: white; -webkit-print-color-adjust: exact;`;
 
-    // Récupération des données clés (avec vérification d'existence)
+    // Récupération des données clés (inchangé)
     const region = (customData[2] && customData[2].reponse) ? customData[2].reponse.toUpperCase() : "RÉGION INDÉTERMINÉE";
     const numeroMatch = (customData[0] && customData[0].reponse) ? customData[0].reponse : "N/A";
-
-    // Les fonctions utilitaires (doivent être définies globalement : getCurrentDateTime, delaiEntreDates, LOGO_GAUCHE, LOGO_DROITE)
+    // ... (Logos, dates et message d'erreur si présent) ...
     const logoGauche = typeof LOGO_GAUCHE !== 'undefined' ? LOGO_GAUCHE : '';
     const logoDroite = typeof LOGO_DROITE !== 'undefined' ? LOGO_DROITE : '';
     const journee = typeof getCurrentDateTime === 'function' ? getCurrentDateTime() : new Date().toISOString().replace('T', ' ').substring(0, 16);
@@ -1188,16 +1278,11 @@ function genererRapportExpulsion(customData) {
             <br>
         `;
     }
-
-    // Début du corps HTML
-    message += `<div style="font-family: 'Segoe UI', sans-serif; font-size: 15px;">`;
     
-    // ----------------------------------------------------
-    // 1. TABLEAU PRINCIPAL DES DONNÉES FIXES (MATCH / ÉQUIPES)
-    // ----------------------------------------------------
+    message += `<div style="font-family: 'Segoe UI', sans-serif; font-size: 15px;">`;
     message += `<table style="${styleTable}">`; 
 
-    // BANDEAU DE TITRE
+    // BANDEAU DE TITRE (inchangé)
     message += `
           <tr>
             <td style="width: 20%; text-align: center; padding: 20px 10px; ${styleMainHeaderBG}">
@@ -1213,9 +1298,8 @@ function genererRapportExpulsion(customData) {
         </tr>
     `;
 
-    // 🧩 Sections fixes (Match, Équipes) - La boucle principale ignore les officiels/coordonnées
+    // INFORMATIONS SUR LE MATCH / ÉQUIPES ET TERRAIN (inchangé)
     for (let i = 0; i < customData.length; i++) {
-        // On s'arrête juste avant les données des officiels
         if (customData[i] && (customData[i].question.includes("Arbitre au marbre") || customData[i].question.includes("Marqueur") || customData[i].question.includes("Adresse courriel"))) break;
         
         let question = customData[i].question;
@@ -1226,24 +1310,26 @@ function genererRapportExpulsion(customData) {
             case 1: 
                 if (!customData[2]) break;
                 const displayDate = (answer || "N/A").replace('T', ' ');
+                
                 message += `
                     <tr>
                     <td colspan="5" style="${styleSectionHeaderTD}"><h3 style="${styleSectionHeaderTH}; margin: 0; padding: 0;">INFORMATIONS SUR LE MATCH</h3></td>
                     </tr>
                     <tr>
-                    <td colspan="2" style="${styleCell25}"><b>Date et Heure du match :</b></td> 
-                    <td style="${styleCell}">${displayDate}</td> 
-                    <td style="${styleCell15}"><b>Région du Match :</b></td>
-                    <td style="${styleCell}">${customData[2].reponse}</td>
+                    <td style="${styleLabel20}">Date & Heure :</td> 
+                    <td style="${styleValue30}">${displayDate}</td> 
+                    <td style="${styleLabel20}">Région :</td>
+                    <td colspan="2" style="${styleValue30}">${customData[2].reponse}</td>
                     </tr>`;
                 break;
             case 3:
                 if (!customData[4] || !customData[5]) break;
                 message += `
                     <tr>
-                    <td colspan="3" style="${styleCell}"><b>Ligue :</b> &nbsp;&nbsp;${customData[3].reponse}</td>
-                    <td style="${styleCell25}"><b>Catégorie :</b> &nbsp;&nbsp;${customData[4].reponse}</td>
-                    <td style="${styleCell25}"><b>Classe :</b> &nbsp;&nbsp;${customData[5].reponse}</td>
+                    <td style="${styleLabel20}">Ligue :</td>
+                    <td style="${styleValue30}">${customData[3].reponse}</td>
+                    <td style="${styleLabel20}">Catégorie/Classe :</td>
+                    <td colspan="2" style="${styleValue30}">${customData[4].reponse} / ${customData[5].reponse}</td>
                     </tr>`;
                 i += 2;
                 break;
@@ -1254,34 +1340,33 @@ function genererRapportExpulsion(customData) {
                     <td colspan="5" style="${styleSectionHeaderTD}"><h3 style="${styleSectionHeaderTH}; margin: 0; padding: 0;">ÉQUIPES ET TERRAIN</h3></td>
                     </tr>
                     <tr>
-                    <td style="${styleCell15}"><b>Équipe locale :</b></td>
-                    <td colspan="2" style="${styleCell}">${answer}</td>
-                    <td style="${styleCell15}"><b>Équipe visiteur :</b></td>
-                    <td style="${styleCell}">${customData[7].reponse}</td>
+                    <td style="${styleLabel20}">Équipe locale :</td>
+                    <td colspan="2" style="${styleValue30}">${answer}</td>
+                    <td style="${styleLabel20}">Équipe visiteur :</td>
+                    <td style="${styleValue30}">${customData[7].reponse}</td>
                     </tr>`;
                 i++;
                 break;
             case 8:
                 message += `
                     <tr>
-                    <td style="${styleCell25}"><b>Terrain :</b></td>
-                    <td colspan="4" style="${styleCell}">${answer}</td>
+                    <td style="${styleLabel20}">Terrain :</td>
+                    <td colspan="4" style="${styleCellFull}">${answer}</td>
                     </tr>`;
                 break;
         }
     }
     
     // ----------------------------------------------------
-    // 1.5. SECTION OFFICIELS ET COORDONNÉES (ADAPTÉE)
+    // 1.5. SECTION OFFICIELS ET COORDONNÉES
     // ----------------------------------------------------
     
-    // Trouve l'index de départ pour la section OFFICIELS
     let debutOfficielsIndex = customData.findIndex(item => item && item.question.includes('Arbitre au marbre'));
     
     if (debutOfficielsIndex !== -1) {
         message += `
             <tr>
-            <td colspan="4" style="${styleSectionHeaderTD}"><h3 style="${styleSectionHeaderTH}; margin: 0; padding: 0;">OFFICIELS</h3></td>
+            <td colspan="5" style="${styleSectionHeaderTD}"><h3 style="${styleSectionHeaderTH}; margin: 0; padding: 0;">OFFICIELS ET CONTACT</h3></td>
             </tr>`;
         
         let officielsHtml = '';
@@ -1292,12 +1377,12 @@ function genererRapportExpulsion(customData) {
         // Extraction des données
         for (let i = debutOfficielsIndex; i < customData.length; i++) {
             const item = customData[i];
-            
             if (!item || item.question.startsWith("Nom de l'équipe fautive")) break; 
             
-            if (item.question.includes('Arbitre')) {
+            if (item.question.includes('Arbitre') && item.reponse) { // 💡 CORRECTION : Ajout de la vérification item.reponse
                 arbitresRow.push({ question: item.question.replace(':', ''), reponse: item.reponse });
             } else if (item.question.includes('Marqueur') || item.question.includes('Rapport fait par')) {
+                // On garde ces éléments même s'ils sont vides pour les utiliser dans la ligne suivante.
                 autresOfficiels.push({ question: item.question.replace(':', ''), reponse: item.reponse });
             } else if (item.question.includes('Adresse courriel') || item.question.includes('Téléphone')) {
                 coordonnees.push({ question: item.question.replace(':', ''), reponse: item.reponse });
@@ -1305,91 +1390,87 @@ function genererRapportExpulsion(customData) {
         }
 
         // ---------------------------------------------
-        // --- AFFICHAGE DES ARBITRES (DEUX PAR LIGNE) ---
+        // --- AFFICHAGE DES ARBITRES (CORRECTION DU X ROUGE) ---
         // ---------------------------------------------
         
-        // Regroupe les arbitres deux par deux
+        // 💡 CORRECTION DU X ROUGE : La ligne n'est générée que s'il y a un arbitre.
         for (let i = 0; i < arbitresRow.length; i += 2) {
             const arbitre1 = arbitresRow[i];
             const arbitre2 = arbitresRow[i+1];
 
+            // On s'assure que la boucle a trouvé AU MOINS un arbitre valide
+            if (!arbitre1) continue;
+
             officielsHtml += `<tr>`;
             
             // Arbitre 1
-            officielsHtml += `<td style="${styleCell25}"><b>${arbitre1.question} :</b></td>`;
-            officielsHtml += `<td style="${styleCell25}">${arbitre1.reponse}</td>`;
+            officielsHtml += `<td style="${styleLabel20}">${arbitre1.question} :</td>`;
+            officielsHtml += `<td style="${styleValue30}">${arbitre1.reponse}</td>`;
 
             // Arbitre 2 (si existe)
             if (arbitre2) {
-                officielsHtml += `<td style="${styleCell25}"><b>${arbitre2.question} :</b></td>`;
-                officielsHtml += `<td style="${styleCell25}">${arbitre2.reponse}</td>`;
-              
+                officielsHtml += `<td style="${styleLabel20}">${arbitre2.question} :</td>`;
+                officielsHtml += `<td style="${styleValue30}">${arbitre2.reponse}</td>`;
             } else {
                 // Si un seul arbitre dans la paire, fusionner le reste des colonnes
-                officielsHtml += `<td colspan="3" style="${styleCell}"></td>`;
+                // C'est ce bloc qui permet de s'assurer qu'il y a 4 colonnes visuelles et que les largeurs sont respectées.
+                officielsHtml += `<td colspan="2" style="${styleCell}"></td>`; // Prend 20% + 30% des colonnes restantes
             }
-
             officielsHtml += `</tr>`;
         }
 
 
-        // ------------------------------------------------
-        // --- AFFICHAGE MARQUEUR ---
-        // ------------------------------------------------
-
-        // Marqueur (sur une ligne complète)
+        // --- AFFICHAGE MARQUEUR (inchangé) ---
         const marqueur = autresOfficiels.find(o => o.question.includes('Marqueur'));
-        if (marqueur) {
+        if (marqueur && marqueur.reponse) { // Ne pas afficher si la réponse est vide
             officielsHtml += `
                 <tr>
-                    <td style="${styleCell25}"><b>${marqueur.question} :</b></td>
-                    <td colspan="4" style="${styleCell}">${marqueur.reponse}</td>
+                    <td style="${styleLabel20}">${marqueur.question} :</td>
+                    <td colspan="4" style="${styleCellFull}">${marqueur.reponse}</td>
                 </tr>
             `;
         }
 
-        // ------------------------------------------------
-        // --- AFFICHAGE RAPPORTEUR ET DATE (REGROUPÉS) ---
-        // ------------------------------------------------
-
-        // Rapport fait par + Date et heure du rapport (sur une seule ligne)
+        // --- AFFICHAGE RAPPORT ET DATE (inchangé) ---
         const rapporteur = autresOfficiels.find(o => o.question.includes('Rapport fait par'));
-        let rapportDate = `<b>Date et heure du rapport :</b> ${journee}`;
-        if (rapporteur) {
+        const rapportDate = `<b>Date et heure du rapport :</b> ${journee}`;
+        
+        if (rapporteur && rapporteur.reponse) { // Ne pas afficher si la réponse est vide
             officielsHtml += `
                 <tr>
-                    <td style="${styleCell}"><b>${rapporteur.question} :</b></td>
-                    <td colspan="2" style="${styleCell}">${rapporteur.reponse}</td>
-                    <td colspan="2" style="${styleCell25}">${rapportDate}</td>
+                    <td style="${styleLabel20}">${rapporteur.question} :</td>
+                    <td colspan="4" style="${styleCellFull}">
+                        <span style="font-weight: bold;">${rapporteur.reponse}</span> 
+                        <span style="float: right;">${rapportDate}</span>
+                    </td> 
                 </tr>
             `;
         }
         
-        // --- Affichage des COORDONNÉES (2 COLONNES VISUELLES) ---
-        if (coordonnees.length > 0) {
-            officielsHtml += `
-                <tr>
-                <td colspan="5" style="${styleSectionHeaderTD}"><h3 style="${styleSectionHeaderTH}; margin: 0; padding: 0;">COORDONNÉES</h3></td>
-                </tr>`;
-                
-            // On s'assure d'avoir l'email puis le téléphone
-            const email = coordonnees.find(c => c.question.includes('Adresse courriel'));
-            const phone = coordonnees.find(c => c.question.includes('Téléphone'));
+        // --- AFFICHAGE COORDONNÉES (inchangé) ---
+        const email = coordonnees.find(c => c.question.includes('Adresse courriel'));
+        const phone = coordonnees.find(c => c.question.includes('Téléphone'));
+        
+        if (email || phone) {
+            officielsHtml += `<tr>`;
             
-            if (email) {
-                 officielsHtml += `
-                     <tr>
-                     <td style="${styleCell25}"><b>${email.question} :</b></td>
-                     <td colspan="4" style="${styleCell}">${email.reponse}</td>
-                     </tr>`;
+            // Email (Label + Valeur)
+            if (email && email.reponse) {
+                officielsHtml += `<td style="${styleLabel20}">Courriel :</td>`;
+                officielsHtml += `<td style="${styleValue30}">${email.reponse}</td>`;
+            } else {
+                 officielsHtml += `<td colspan="2" style="${styleCell}"></td>`;
             }
-            if (phone) {
-                 officielsHtml += `
-                     <tr>
-                     <td style="${styleCell25}"><b>${phone.question} :</b></td>
-                     <td colspan="4" style="${styleCell}">${phone.reponse}</td>
-                     </tr>`;
+
+            // Téléphone (Label + Valeur)
+            if (phone && phone.reponse) {
+                officielsHtml += `<td style="${styleLabel20}">Téléphone :</td>`;
+                officielsHtml += `<td colspan="2" style="${styleValue30}">${phone.reponse}</td>`;
+            } else {
+                officielsHtml += `<td colspan="2" style="${styleCell}"></td>`;
             }
+            
+            officielsHtml += `</tr>`;
         }
         
         message += officielsHtml;
@@ -1397,8 +1478,9 @@ function genererRapportExpulsion(customData) {
     
     message += `</table>`; // FERMETURE DU TABLEAU 1
 
+    // ... (Le reste de la fonction est inchangé) ...
     // ----------------------------------------------------
-    // 2. LOGIQUE D'EXPULSION ET BOUCLE (Format 2 colonnes visuelles)
+    // 2. LOGIQUE D'EXPULSION ET BOUCLE 
     // ----------------------------------------------------
     let expulsionIndex = 1;
     let expulsionTable = "";
@@ -1434,7 +1516,7 @@ function genererRapportExpulsion(customData) {
                 // Nouvelle table d'expulsion (2 colonnes visuelles)
                 expulsionTable = `<table style="${styleTable}; page-break-inside: avoid;">
                     <tr><td colspan="5" style="${styleSectionHeaderTD}"><h3 style="${styleSectionHeaderTH}; margin: 0; padding: 0;">EXPULSION #${expulsionIndex}</h3></td></tr>
-                    <tr><td style="${styleCell25}"><b>${question}</b></td><td colspan="4" style="${styleCell}">${answer}</td></tr>`;
+                    <tr><td style="${styleLabel20}">${question}</td><td colspan="4" style="${styleCellFull}">${answer}</td></tr>`;
                 expulsionIndex++;
                 continue;
             }
@@ -1444,7 +1526,7 @@ function genererRapportExpulsion(customData) {
                 let htmlCodes = "<ul style='margin:0; padding-left:20px;'>";
                 tableau.forEach(code => { htmlCodes += `<li style="color: #333333;">${code}</li>`; }); 
                 htmlCodes += "</ul>";
-                expulsionTable += `<tr><td style="${styleCell25}"><b>${question}</b></td><td colspan="4" style="${styleCell}">${htmlCodes}</td></tr>`;
+                expulsionTable += `<tr><td style="${styleLabel20}">${question}</td><td colspan="4" style="${styleCellFull}">${htmlCodes}</td></tr>`;
                 continue;
             }
 
@@ -1453,19 +1535,19 @@ function genererRapportExpulsion(customData) {
             }
 
             // Toutes les autres questions/réponses utilisent un format 2 colonnes visuelles
-            expulsionTable += `<tr><td style="${styleCell25}"><b>${question}</b></td><td colspan="4" style="${styleCell}">${answer}</td></tr>`;
+            expulsionTable += `<tr><td style="${styleLabel20}">${question}</td><td colspan="4" style="${styleCellFull}">${answer}</td></tr>`;
         }
         if (expulsionTable !== "") message += expulsionTable + "</table>"; 
     }
     
-    // --- Ajout des détails et informations complémentaires (blocs globaux - 2 colonnes visuelles) ---
+    // --- Ajout des détails et informations complémentaires (blocs globaux) ---
     
     // 6. DÉTAILS CONCERNANT LES EXPULSIONS (Tableau séparé)
     const detailsGlobal = getAnswerToQuestion("Détails concernant les expulsions", customData);
     if (detailsGlobal !== "N/A") {
         detailsTable += `<table style="${styleTable}; page-break-inside: avoid;">
-            <tr><td colspan="5" style="${styleSectionHeaderTD}"><h3 style="${styleSectionHeaderTH}; margin: 0; padding: 0;"><b>Détails concernant les expulsions</b></h3></td></tr>
-            <tr><td colspan="5" style="${styleCell}">${detailsGlobal.replace(/\n/g, "<br>")}</td></tr>
+            <tr><td colspan="5" style="${styleSectionHeaderTD}"><h3 style="${styleSectionHeaderTH}; margin: 0; padding: 0;">DÉTAILS CONCERNANT LES EXPULSIONS</h3></td></tr>
+            <tr><td colspan="5" style="${styleCellFull}">${detailsGlobal.replace(/\n/g, "<br>")}</td></tr>
         </table>`;
     }
     
@@ -1474,9 +1556,8 @@ function genererRapportExpulsion(customData) {
 
     if (infosComplementaires !== "N/A") {
         detailsTable += `<table style="${styleTable}; page-break-inside: avoid;">
-            <tr><td colspan="5" style="${styleSectionHeaderTD}"><h3 style="${styleSectionHeaderTH}; margin: 0; padding: 0;"><b>Informations complémentaires</b></h3></td></tr>
-            <tr><td colspan="5" style="${styleCell}">
-                <hr style="border: 0; border-top: 1px solid #ddd; margin: 10px 0;">
+            <tr><td colspan="5" style="${styleSectionHeaderTD}"><h3 style="${styleSectionHeaderTH}; margin: 0; padding: 0;">INFORMATIONS COMPLÉMENTAIRES</h3></td></tr>
+            <tr><td colspan="5" style="${styleCellFull}">
                 <p style="margin: 0;">${infosComplementaires.replace(/\n/g, "<br>")}</p>
             </td></tr>
         </table>`;
@@ -1485,7 +1566,7 @@ function genererRapportExpulsion(customData) {
     message += detailsTable;
     message += `</div>`; // Fermeture du DIV de message
 
-    // Le HTML final est enveloppé dans une structure de document complète pour être utilisable
+    // Le HTML final est enveloppé dans une structure de document complète
     const finalHTML = `
         <!doctype html>
         <html lang="fr">
@@ -1501,8 +1582,9 @@ function genererRapportExpulsion(customData) {
                 table { page-break-inside: auto !important; margin-bottom: 30px !important; }
                 tr { page-break-inside: avoid !important; page-break-after: auto !important; }
                 /* S'assurer que les couleurs de fond sont imprimées */
-                td[style*="f2f2f2"] { background-color: #f2f2f2 !important; -webkit-print-color-adjust: exact; }
                 td[style*="a3a3a3"] { background-color: #a3a3a3 !important; -webkit-print-color-adjust: exact; }
+                td[style*="334d66"] { background-color: #334d66 !important; -webkit-print-color-adjust: exact; }
+                td[style*="f7f7f7"] { background-color: #f7f7f7 !important; -webkit-print-color-adjust: exact; }
             }
         </style>
         </head>
@@ -1715,6 +1797,7 @@ function reinitialiserChampsArbitre() {
 
 
 async function init() {
+    
     setupValidation();
     
     // 1. Démarrer les deux requêtes en parallèle SANS AWAIT
@@ -1758,7 +1841,10 @@ async function init() {
     });
 
     // 5. Setup des chips d'expulsion après chargement des codes
-    setupExpulsionChips(); 
+    setupRefereeSystemChips();
+	setupExpulsionChips(); 
+	 
+	
 } 
     
     
@@ -1954,6 +2040,8 @@ document.getElementById("classeSelect").addEventListener("change", e=>{
     adressecourriel = allEmails.join(", ");
     // 3. Mise à jour de destinatairesDiv avec la liste complète
     destinatairesDiv.textContent = adressecourriel;
+	
+	
 });
 	
 // ---------------- Gestion Arbitre Rapport (inchangé) ----------------

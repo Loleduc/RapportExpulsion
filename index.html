@@ -6,7 +6,7 @@
 <script>
     // 1. Définition de la variable de version globalement (accessible partout)
     window.CONFIG = {
-        VERSION: '0.20251008.2305 ' // Mettez à jour ce numéro manuellement pour chaque version
+        VERSION: '0.20251009.18:10 ' // Mettez à jour ce numéro manuellement pour chaque version
     };
 
     // 2. Modification immédiate du titre (Option 2)
@@ -1019,60 +1019,72 @@ document.addEventListener('DOMContentLoaded', () => {
  */
 function handleRefereeSystemChange(chip) {
 
-      if (!chip) {
-        return; 
-      }
-    const value = chip.getAttribute('data-value');
-    const chipsContainer = document.getElementById('arbitre-system-chips');
-    // CIBLEZ LE CONTENEUR DE LA LIGNE D'ARBITRES
-    const arbitresRow = document.getElementById('arbitres-champs-row');
+      if (!chip) {
+        return; // Arrête la fonction si la puce cliquée est nulle (par sécurité)
+      }
+    const value = chip.getAttribute('data-value'); // Récupère la valeur du système d'arbitrage (ex: '2', '3', '4')
+    const chipsContainer = document.getElementById('arbitre-system-chips'); // Conteneur des puces de sélection
+    // CIBLEZ LE CONTENEUR DE LA LIGNE D'ARBITRES
+    const arbitresRow = document.getElementById('arbitres-champs-row'); // La ligne (<div>) qui contient tous les champs d'arbitres
 
-    // 1. Mise à jour visuelle de la puce
-    chipsContainer.querySelectorAll('.chip').forEach(c => c.classList.remove('selected'));
-    chip.classList.add('selected');
+    // 1. Mise à jour visuelle de la puce
+    chipsContainer.querySelectorAll('.chip').forEach(c => c.classList.remove('selected')); // Désélectionne toutes les puces
+    chip.classList.add('selected'); // Sélectionne la puce cliquée
 
-    // Champs pour 3e et 4e arbitre
-    const arbitre2ButGroup = document.getElementById('group-arbitre2but');
-    const arbitre3ButGroup = document.getElementById('group-arbitre3but');
-    const arbitre2ButInput = document.getElementById('arbitre2but');
-    const arbitre3ButInput = document.getElementById('arbitre3Buts');
+    // Champs pour 3e et 4e arbitre
+    // NOTE : 'arbitre2but' est le nom du champ pour le 3e arbitre (pour 4 arbitres)
+    // NOTE : 'arbitre3Buts' est le nom du champ pour le 4e arbitre (pour 4 arbitres)
+    const arbitre2ButGroup = document.getElementById('group-arbitre2but'); // Conteneur du 3e arbitre (le 2e but)
+    const arbitre3ButGroup = document.getElementById('group-arbitre3but'); // Conteneur du 4e arbitre (le 3e but)
+    const arbitre2ButInput = document.getElementById('arbitre2but'); // Le champ <input> du 3e arbitre
+    const arbitre3ButInput = document.getElementById('arbitre3Buts'); // Le champ <input> du 4e arbitre
 
-    // Cache tout par défaut et réinitialise 'required'
-    [arbitre2ButGroup, arbitre3ButGroup].forEach(g => {
-        if (g) g.style.display = 'none';
-    });
-    [arbitre2ButInput, arbitre3ButInput].forEach(i => {
-        if (i) i.removeAttribute('required');
-    });
+    // Cache tout par défaut et réinitialise 'required'
+    [arbitre2ButGroup, arbitre3ButGroup].forEach(g => {
+        if (g) g.style.display = 'none'; // Cache les deux groupes (3e et 4e arbitre)
+    });
+    [arbitre2ButInput, arbitre3ButInput].forEach(i => {
+        if (i) i.removeAttribute('required'); // Retire l'attribut 'required' des deux champs
+        if (i) i.value = ''; // Vide les champs (bonne pratique quand on les masque)
+    });
 
-    // 2 & 3. Affichage/Masquage des champs et ajout de 'required'
-    if (value === '3' || value === '4') {
-        if (arbitre2ButGroup) arbitre2ButGroup.style.display = 'flex';
-        if (arbitre2ButInput) arbitre2ButInput.setAttribute('required', 'required');
-    }
-    if (value === '4') {
-        if (arbitre3ButGroup) arbitre3ButGroup.style.display = 'flex';
-        if (arbitre3ButInput) arbitre3ButInput.setAttribute('required', 'required');
-    }
-
-    // 4. *** APPLICATION DES CLASSES CSS (CLÉ DE LA DEMANDE) ***
-    // Retirer toutes les classes de layout et appliquer la nouvelle
-    arbitresRow.classList.remove('arbitres-2-cols', 'arbitres-3-cols', 'arbitres-4-cols');
+    // 2 & 3. Affichage/Masquage des champs et ajout de 'required'
     
-    if (value === '2') {
-        arbitresRow.classList.add('arbitres-2-cols');
-    } else if (value === '3') {
-        arbitresRow.classList.add('arbitres-3-cols');
-    } else if (value === '4') {
-        arbitresRow.classList.add('arbitres-4-cols');
-    }
-    
-    // 5. Mise à jour de la liste de rapport
-    if (typeof updateArbitreRapport === 'function') {
-        updateArbitreRapport();
-    }
+    // --- CORRECTION APPLIQUÉE ICI ---
+    // Logique pour afficher les arbitres supplémentaires
+
+    if (value === '3') {
+        // SYSTÈME À 3 ARBITRES : Afficher UNIQUEMENT le 3e arbitre (le champ 'arbitre3Buts')
+        if (arbitre3ButGroup) arbitre3ButGroup.style.display = 'flex'; // Montre le champ 'arbitre3Buts' (4e arbitre dans votre ancienne logique)
+        if (arbitre3ButInput) arbitre3ButInput.setAttribute('required', 'required'); // Le rend requis
+        
+    } else if (value === '4') {
+        // SYSTÈME À 4 ARBITRES : Afficher le 3e et le 4e arbitre (arbitre2but ET arbitre3Buts)
+        if (arbitre2ButGroup) arbitre2ButGroup.style.display = 'flex'; // Montre le champ 'arbitre2but'
+        if (arbitre2ButInput) arbitre2ButInput.setAttribute('required', 'required'); // Le rend requis
+        
+        if (arbitre3ButGroup) arbitre3ButGroup.style.display = 'flex'; // Montre le champ 'arbitre3Buts'
+        if (arbitre3ButInput) arbitre3ButInput.setAttribute('required', 'required'); // Le rend requis
+    }
+    // --- FIN DE LA CORRECTION ---
+
+    // 4. *** APPLICATION DES CLASSES CSS (CLÉ DE LA DEMANDE) ***
+    // Retirer toutes les classes de layout et appliquer la nouvelle
+    arbitresRow.classList.remove('arbitres-2-cols', 'arbitres-3-cols', 'arbitres-4-cols'); // Retire les classes précédentes (pour éviter les conflits)
+    
+    if (value === '2') {
+        arbitresRow.classList.add('arbitres-2-cols'); // Applique la mise en page pour 2 colonnes d'arbitres
+    } else if (value === '3') {
+        arbitresRow.classList.add('arbitres-3-cols'); // Applique la mise en page pour 3 colonnes d'arbitres
+    } else if (value === '4') {
+        arbitresRow.classList.add('arbitres-4-cols'); // Applique la mise en page pour 4 colonnes d'arbitres
+    }
+    
+    // 5. Mise à jour de la liste de rapport
+    if (typeof updateArbitreRapport === 'function') {
+        updateArbitreRapport(); // Appelle la fonction qui met à jour le rapport final
+    }
 }
-
 
 function setupRefereeSystemChips() {
     const chips = document.querySelectorAll('#arbitre-system-chips .chip');

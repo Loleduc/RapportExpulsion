@@ -6,7 +6,7 @@
 <script>
     // 1. Définition de la variable de version globalement (accessible partout)
     window.CONFIG = {
-        VERSION: '0.20251007.2215 ' // Mettez à jour ce numéro manuellement pour chaque version
+        VERSION: '0.20251008.2305 ' // Mettez à jour ce numéro manuellement pour chaque version
     };
 
     // 2. Modification immédiate du titre (Option 2)
@@ -217,6 +217,13 @@ input, select, textarea {
     /* Cette couleur définit le fond des chips */
     background: var(--couleur-texte-clair); 
     text-align: center; 
+	 /* Empêche la sélection du texte par l'utilisateur */
+    user-select: none;
+    
+    /* Ajoutez des préfixes pour une compatibilité maximale avec les navigateurs */
+    -webkit-user-select: none; /* Safari et Chrome */
+    -ms-user-select: none; /* Internet Explorer/Edge */
+    -moz-user-select: none; /* Firefox */
 }
 .chip.selected { 
     background: var(--couleur-accent); 
@@ -902,19 +909,105 @@ const destinatairesDiv = document.getElementById("destinataires");
 const CODE_SEPARATOR = '||';
 
 
-    /**
-     * Gère la visibilité des champs arbitre2but et arbitre3Buts en fonction
-     * du système d'arbitres sélectionné (chips) et efface les champs cachés.
-     */
 /**
- * Gère la visibilité des champs arbitre2but et arbitre3Buts en fonction
- * du système d'arbitres sélectionné (chips), change le label de arbitre2but,
- * et efface les champs cachés.
+ * Réinitialise complètement le bloc d'expulsions en simulant le clic sur la puce '1'
+ * dans le sélecteur du nombre d'expulsions (1, 2, 3...).
  */
-/**
- * Gère la visibilité des champs arbitre2but et arbitre3Buts, le label dynamique,
- * ET AJUSTE L'ATTRIBUT 'required' pour la validation.
- */
+function resetExpulsionData() {
+
+    console.log('Réinitialisation des données d\'expulsion déclenchée par changement de match.');
+    
+    // =====================================================================================
+    // 💥 ÉTAPE 0 : EFFACER LA DONNÉE PERSISTANTE DE L'EXPULSION 1 (LA CLÉ)
+    // =====================================================================================
+    if (typeof expulsionsData !== 'undefined' && expulsionsData[1]) {
+        // Supprimer complètement l'entrée pour Expulsion 1.
+        delete expulsionsData[1];
+        console.log("Donnée expulsionsData[1] effacée, forçant le chargement du code par défaut (55.1 -...).");
+    }
+
+
+    // =====================================================================================
+    // ÉTAPE 1: Forcer la réinitialisation du NOMBRE d'expulsions à 1 (via createExpulsionTabs)
+    // =====================================================================================
+
+    if (typeof createExpulsionTabs === 'function') {
+        // Cet appel reconstruit le DOM et appelle loadExpulsionData(1) à la fin.
+        createExpulsionTabs(1); 
+        console.log("Appel de createExpulsionTabs(1) pour réinitialiser le nombre d'expulsions.");
+    } else {
+        console.error("Erreur: La fonction createExpulsionTabs n'est pas définie ou est inaccessible.");
+    }
+
+    // =====================================================================================
+    // ÉTAPE 2: Simuler le clic sur la puce "1" pour corriger le problème visuel
+    // =====================================================================================
+    const nbExpulsionChipsContainer = document.getElementById('chipsNbExp');
+    let chip1 = null;
+    
+    if (nbExpulsionChipsContainer) {
+        chip1 = nbExpulsionChipsContainer.querySelector('[data-exp-nb="1"]') || 
+                Array.from(nbExpulsionChipsContainer.querySelectorAll('.chip')).find(chip => chip.textContent.trim() === '1');
+    }
+
+    if (chip1) {
+        chip1.click(); // Déclenche la logique de mise à jour visuelle du compteur
+        console.log("Clic simulé sur la puce '1' (compteur).");
+    } else {
+        console.error("Erreur: Impossible de trouver la puce de nombre d'expulsion '1'.");
+    }
+
+    // =====================================================================================
+    // ÉTAPE 3: Effacer les champs spécifiques de l'Expulsion 1 (DOM, maintenance)
+    // =====================================================================================
+    
+    const i = 1; // Expulsion 1
+
+    const equipeField = document.querySelector(`[name="expulsion${i}-equipe"]`);
+    const numeroField = document.querySelector(`[name="expulsion${i}-numero"]`);
+    const nomField = document.querySelector(`[name="expulsion${i}-nom"]`);
+    const codesInputField = document.querySelector(`[name="expulsion${i}-codes"]`);
+
+    if (equipeField) {
+        equipeField.selectedIndex = 0;
+    }
+    if (numeroField) numeroField.value = '';
+    if (nomField) nomField.value = '';
+    
+    if (codesInputField) {
+        codesInputField.value = '';
+    }
+
+    // Désélectionner les puces (chips) de code d'expulsion (nettoyage visuel final)
+    const codesContainer = document.getElementById(`codes_expulsion_${i}`); 
+    if (codesContainer) {
+        codesContainer.querySelectorAll('.code-chip.selected').forEach(chip => {
+            chip.classList.remove('selected');
+        });
+    }
+    // L'appel final à loadExpulsionData(1) (qui se trouve dans createExpulsionTabs)
+    // applique maintenant le code 55.1 -... car expulsionsData[1] est vide.
+}
+
+// ==================================================================================================================
+// ÉCOUTEURS D'ÉVÉNEMENTS POUR LA RÉINITIALISATION (Ajouter au DOMContentLoaded existant ou l'initialiser)
+// ==================================================================================================================
+
+// Attache les écouteurs d'événements 'change' aux sélecteurs (Région, Ligue, Catégorie, Classe).
+document.addEventListener('DOMContentLoaded', () => {
+    // Les IDs des sélecteurs déclencheurs sont : regionSelect, ligueSelect, categorieSelect, classeSelect
+    const selectorsToWatch = ['regionSelect', 'ligueSelect', 'categorieSelect', 'classeSelect'];
+
+    selectorsToWatch.forEach(id => {
+        const selectElement = document.getElementById(id);
+        if (selectElement) {
+            // Appelle la fonction resetExpulsionData() à chaque changement de ces champs
+            selectElement.addEventListener('change', resetExpulsionData);
+        }
+    });
+});
+
+
 /**
  * Gère le changement du système d'arbitres (2, 3, ou 4) :
  * 1. Met à jour la sélection visuelle des puces.
@@ -1254,17 +1347,19 @@ function genererRapportExpulsion(customData) {
     const styleSectionHeaderTH = "text-align: left; font-weight: bold; font-size: 16px; color: #333;"; 
     const cellPadding = "5px 8px"; 
     
-    // LARGEURS DE COLONNES (Basé sur 5 colonnes visuelles)
-    // 20% | 30% | 20% | 30%
-    const styleLabel20 = `padding: ${cellPadding}; border: 1px solid #ddd; width: 20%; font-weight: bold; background-color: #f7f7f7; -webkit-print-color-adjust: exact;`; 
-    const styleValue30 = `padding: ${cellPadding}; border: 1px solid #ddd; width: 30%; background-color: white; -webkit-print-color-adjust: exact;`;
+    // LARGEURS DE COLONNES (Basé sur 4 colonnes)
+    // 25% | 25% | 25% | 25%
+    const styleLabel25 = `padding: ${cellPadding}; border: 1px solid #ddd; width: 25%; font-weight: bold; background-color: #f7f7f7; -webkit-print-color-adjust: exact;`; 
+    const styleValue25 = `padding: ${cellPadding}; border: 1px solid #ddd; width: 25%; background-color: white; -webkit-print-color-adjust: exact;`;
     const styleMainHeaderBG = "background-color: #a3a3a3; -webkit-print-color-adjust: exact;";
+    // Nouveau style pour les labels sur 50% de la ligne (ancienne version)
+    const styleLabel50 = `padding: ${cellPadding}; border: 1px solid #ddd; width: 50%; font-weight: bold; background-color: #f7f7f7; -webkit-print-color-adjust: exact;`;
     const styleCellFull = `padding: ${cellPadding}; border: 1px solid #ddd; width: 100%; background-color: white; -webkit-print-color-adjust: exact;`;
+    const styleCell3Cols = `padding: ${cellPadding}; border: 1px solid #ddd; width: 75%; background-color: white; -webkit-print-color-adjust: exact;`;
 
     // Récupération des données clés (inchangé)
     const region = (customData[2] && customData[2].reponse) ? customData[2].reponse.toUpperCase() : "RÉGION INDÉTERMINÉE";
     const numeroMatch = (customData[0] && customData[0].reponse) ? customData[0].reponse : "N/A";
-    // ... (Logos, dates et message d'erreur si présent) ...
     const logoGauche = typeof LOGO_GAUCHE !== 'undefined' ? LOGO_GAUCHE : '';
     const logoDroite = typeof LOGO_DROITE !== 'undefined' ? LOGO_DROITE : '';
     const journee = typeof getCurrentDateTime === 'function' ? getCurrentDateTime() : new Date().toISOString().replace('T', ' ').substring(0, 16);
@@ -1282,23 +1377,23 @@ function genererRapportExpulsion(customData) {
     message += `<div style="font-family: 'Segoe UI', sans-serif; font-size: 15px;">`;
     message += `<table style="${styleTable}">`; 
 
-    // BANDEAU DE TITRE (inchangé)
+    // BANDEAU DE TITRE (Utilise maintenant colspan="4")
     message += `
-          <tr>
-            <td style="width: 20%; text-align: center; padding: 20px 10px; ${styleMainHeaderBG}">
+        <tr>
+            <td style="width: 25%; text-align: center; padding: 20px 10px; ${styleMainHeaderBG}">
               <img src="${logoGauche}" alt=" " style="max-height: 90px;">
             </td>
-            <td colspan="3" style="padding: 20px 10px; text-align: center; vertical-align: middle; color: white; ${styleMainHeaderBG}">
+            <td colspan="2" style="padding: 20px 10px; text-align: center; vertical-align: middle; color: white; ${styleMainHeaderBG}">
               <div style="font-size: 40px; font-weight: bold;">(${region}) Rapport d'expulsion</div>
               <div style="font-size: 32px; margin-top: 8px;">Match # ${numeroMatch}</div>
             </td>
-            <td style="width: 20%; text-align: center; padding: 20px 10px; ${styleMainHeaderBG}">
+            <td style="width: 25%; text-align: center; padding: 20px 10px; ${styleMainHeaderBG}">
               <img src="${logoDroite}" alt=" " style="max-height: 90px;">
             </td>
         </tr>
     `;
 
-    // INFORMATIONS SUR LE MATCH / ÉQUIPES ET TERRAIN (inchangé)
+    // INFORMATIONS SUR LE MATCH / ÉQUIPES ET TERRAIN
     for (let i = 0; i < customData.length; i++) {
         if (customData[i] && (customData[i].question.includes("Arbitre au marbre") || customData[i].question.includes("Marqueur") || customData[i].question.includes("Adresse courriel"))) break;
         
@@ -1313,23 +1408,23 @@ function genererRapportExpulsion(customData) {
                 
                 message += `
                     <tr>
-                    <td colspan="5" style="${styleSectionHeaderTD}"><h3 style="${styleSectionHeaderTH}; margin: 0; padding: 0;">INFORMATIONS SUR LE MATCH</h3></td>
+                    <td colspan="4" style="${styleSectionHeaderTD}"><h3 style="${styleSectionHeaderTH}; margin: 0; padding: 0;">INFORMATIONS SUR LE MATCH</h3></td>
                     </tr>
                     <tr>
-                    <td style="${styleLabel20}">Date & Heure :</td> 
-                    <td style="${styleValue30}">${displayDate}</td> 
-                    <td style="${styleLabel20}">Région :</td>
-                    <td colspan="2" style="${styleValue30}">${customData[2].reponse}</td>
+                    <td style="${styleLabel25}">Date & Heure :</td> 
+                    <td style="${styleValue25}">${displayDate}</td> 
+                    <td style="${styleLabel25}">Région :</td>
+                    <td style="${styleValue25}">${customData[2].reponse}</td>
                     </tr>`;
                 break;
             case 3:
                 if (!customData[4] || !customData[5]) break;
                 message += `
                     <tr>
-                    <td style="${styleLabel20}">Ligue :</td>
-                    <td style="${styleValue30}">${customData[3].reponse}</td>
-                    <td style="${styleLabel20}">Catégorie/Classe :</td>
-                    <td colspan="2" style="${styleValue30}">${customData[4].reponse} / ${customData[5].reponse}</td>
+                    <td style="${styleLabel25}">Ligue :</td>
+                    <td style="${styleValue25}">${customData[3].reponse}</td>
+                    <td style="${styleLabel25}">Catégorie/Classe :</td>
+                    <td style="${styleValue25}">${customData[4].reponse} / ${customData[5].reponse}</td>
                     </tr>`;
                 i += 2;
                 break;
@@ -1337,21 +1432,22 @@ function genererRapportExpulsion(customData) {
                 if (!customData[7]) break;
                 message += `
                     <tr>
-                    <td colspan="5" style="${styleSectionHeaderTD}"><h3 style="${styleSectionHeaderTH}; margin: 0; padding: 0;">ÉQUIPES ET TERRAIN</h3></td>
+                    <td colspan="4" style="${styleSectionHeaderTD}"><h3 style="${styleSectionHeaderTH}; margin: 0; padding: 0;">ÉQUIPES ET TERRAIN</h3></td>
                     </tr>
                     <tr>
-                    <td style="${styleLabel20}">Équipe locale :</td>
-                    <td colspan="2" style="${styleValue30}">${answer}</td>
-                    <td style="${styleLabel20}">Équipe visiteur :</td>
-                    <td style="${styleValue30}">${customData[7].reponse}</td>
-                    </tr>`;
+                    <td style="${styleLabel25}">${question} </td>
+                    <td style="${styleValue25}"><strong>${answer}</strong></td>
+                    <td style="${styleLabel25}">${customData[7].question} </td>
+                    <td style="${styleValue25}"><strong>${customData[7].reponse}</strong></td>
+                    </tr>
+                    `;
                 i++;
                 break;
             case 8:
                 message += `
                     <tr>
-                    <td style="${styleLabel20}">Terrain :</td>
-                    <td colspan="4" style="${styleCellFull}">${answer}</td>
+                    <td style="${styleLabel25}">Terrain :</td>
+                    <td colspan="3" style="${styleCell3Cols}">${answer}</td>
                     </tr>`;
                 break;
         }
@@ -1366,7 +1462,7 @@ function genererRapportExpulsion(customData) {
     if (debutOfficielsIndex !== -1) {
         message += `
             <tr>
-            <td colspan="5" style="${styleSectionHeaderTD}"><h3 style="${styleSectionHeaderTH}; margin: 0; padding: 0;">OFFICIELS ET CONTACT</h3></td>
+            <td colspan="4" style="${styleSectionHeaderTD}"><h3 style="${styleSectionHeaderTH}; margin: 0; padding: 0;">OFFICIELS ET CONTACT</h3></td>
             </tr>`;
         
         let officielsHtml = '';
@@ -1374,80 +1470,75 @@ function genererRapportExpulsion(customData) {
         let autresOfficiels = []; 
         let coordonnees = []; 
 
-        // Extraction des données
+        // Extraction des données (inchangé)
         for (let i = debutOfficielsIndex; i < customData.length; i++) {
             const item = customData[i];
             if (!item || item.question.startsWith("Nom de l'équipe fautive")) break; 
             
-            if (item.question.includes('Arbitre') && item.reponse) { // 💡 CORRECTION : Ajout de la vérification item.reponse
+            if (item.question.includes('Arbitre') && item.reponse) {
                 arbitresRow.push({ question: item.question.replace(':', ''), reponse: item.reponse });
             } else if (item.question.includes('Marqueur') || item.question.includes('Rapport fait par')) {
-                // On garde ces éléments même s'ils sont vides pour les utiliser dans la ligne suivante.
                 autresOfficiels.push({ question: item.question.replace(':', ''), reponse: item.reponse });
             } else if (item.question.includes('Adresse courriel') || item.question.includes('Téléphone')) {
                 coordonnees.push({ question: item.question.replace(':', ''), reponse: item.reponse });
             }
         }
 
-        // ---------------------------------------------
-        // --- AFFICHAGE DES ARBITRES (CORRECTION DU X ROUGE) ---
-        // ---------------------------------------------
-        
-        // 💡 CORRECTION DU X ROUGE : La ligne n'est générée que s'il y a un arbitre.
+        // --- AFFICHAGE DES ARBITRES ---
         for (let i = 0; i < arbitresRow.length; i += 2) {
             const arbitre1 = arbitresRow[i];
             const arbitre2 = arbitresRow[i+1];
 
-            // On s'assure que la boucle a trouvé AU MOINS un arbitre valide
             if (!arbitre1) continue;
 
             officielsHtml += `<tr>`;
             
             // Arbitre 1
-            officielsHtml += `<td style="${styleLabel20}">${arbitre1.question} :</td>`;
-            officielsHtml += `<td style="${styleValue30}">${arbitre1.reponse}</td>`;
+            officielsHtml += `<td style="${styleLabel25}">${arbitre1.question} :</td>`;
+            officielsHtml += `<td style="${styleValue25}">${arbitre1.reponse}</td>`;
 
             // Arbitre 2 (si existe)
             if (arbitre2) {
-                officielsHtml += `<td style="${styleLabel20}">${arbitre2.question} :</td>`;
-                officielsHtml += `<td style="${styleValue30}">${arbitre2.reponse}</td>`;
+                officielsHtml += `<td style="${styleLabel25}">${arbitre2.question} :</td>`;
+                officielsHtml += `<td style="${styleValue25}">${arbitre2.reponse}</td>`;
             } else {
                 // Si un seul arbitre dans la paire, fusionner le reste des colonnes
-                // C'est ce bloc qui permet de s'assurer qu'il y a 4 colonnes visuelles et que les largeurs sont respectées.
-                officielsHtml += `<td colspan="2" style="${styleCell}"></td>`; // Prend 20% + 30% des colonnes restantes
+                officielsHtml += `<td colspan="2" style="${styleValue25.replace('width: 25%', 'width: 50%')}"></td>`; 
             }
             officielsHtml += `</tr>`;
         }
 
 
-        // --- AFFICHAGE MARQUEUR (inchangé) ---
+        // --- AFFICHAGE MARQUEUR ---
         const marqueur = autresOfficiels.find(o => o.question.includes('Marqueur'));
-        if (marqueur && marqueur.reponse) { // Ne pas afficher si la réponse est vide
+        if (marqueur && marqueur.reponse) {
             officielsHtml += `
                 <tr>
-                    <td style="${styleLabel20}">${marqueur.question} :</td>
-                    <td colspan="4" style="${styleCellFull}">${marqueur.reponse}</td>
+                    <td style="${styleLabel25}">${marqueur.question} :</td>
+                    <td colspan="3" style="${styleCell3Cols}">${marqueur.reponse}</td>
                 </tr>
             `;
         }
 
-        // --- AFFICHAGE RAPPORT ET DATE (inchangé) ---
+        // --- AFFICHAGE RAPPORT ET DATE (Séparé en 4 cellules, inchangé de la dernière correction) ---
         const rapporteur = autresOfficiels.find(o => o.question.includes('Rapport fait par'));
-        const rapportDate = `<b>Date et heure du rapport :</b> ${journee}`;
         
-        if (rapporteur && rapporteur.reponse) { // Ne pas afficher si la réponse est vide
+        if (rapporteur && rapporteur.reponse) {
             officielsHtml += `
                 <tr>
-                    <td style="${styleLabel20}">${rapporteur.question} :</td>
-                    <td colspan="4" style="${styleCellFull}">
-                        <span style="font-weight: bold;">${rapporteur.reponse}</span> 
-                        <span style="float: right;">${rapportDate}</span>
-                    </td> 
+                    <td style="${styleLabel25}">${rapporteur.question} :</td>
+                    <td style="${styleValue25}">
+                        <span style="font-weight: bold;">${rapporteur.reponse}</span>
+                    </td>
+                    <td style="${styleLabel25}">Date du rapport :</td>
+                    <td style="${styleValue25}">
+                        <span style="font-weight: bold;">${journee}</span>
+                    </td>
                 </tr>
             `;
         }
         
-        // --- AFFICHAGE COORDONNÉES (inchangé) ---
+        // --- AFFICHAGE COORDONNÉES ---
         const email = coordonnees.find(c => c.question.includes('Adresse courriel'));
         const phone = coordonnees.find(c => c.question.includes('Téléphone'));
         
@@ -1456,18 +1547,20 @@ function genererRapportExpulsion(customData) {
             
             // Email (Label + Valeur)
             if (email && email.reponse) {
-                officielsHtml += `<td style="${styleLabel20}">Courriel :</td>`;
-                officielsHtml += `<td style="${styleValue30}">${email.reponse}</td>`;
+                officielsHtml += `<td style="${styleLabel25}">Courriel :</td>`;
+                officielsHtml += `<td style="${styleValue25}">${email.reponse}</td>`;
             } else {
-                 officielsHtml += `<td colspan="2" style="${styleCell}"></td>`;
+                 // Fusionne les colonnes si le champ est vide
+                 officielsHtml += `<td colspan="2" style="${styleValue25.replace('width: 25%', 'width: 50%')}"></td>`;
             }
 
             // Téléphone (Label + Valeur)
             if (phone && phone.reponse) {
-                officielsHtml += `<td style="${styleLabel20}">Téléphone :</td>`;
-                officielsHtml += `<td colspan="2" style="${styleValue30}">${phone.reponse}</td>`;
+                officielsHtml += `<td style="${styleLabel25}">Téléphone :</td>`;
+                officielsHtml += `<td style="${styleValue25}">${phone.reponse}</td>`;
             } else {
-                officielsHtml += `<td colspan="2" style="${styleCell}"></td>`;
+                // Fusionne les colonnes si le champ est vide
+                officielsHtml += `<td colspan="2" style="${styleValue25.replace('width: 25%', 'width: 50%')}"></td>`;
             }
             
             officielsHtml += `</tr>`;
@@ -1478,7 +1571,6 @@ function genererRapportExpulsion(customData) {
     
     message += `</table>`; // FERMETURE DU TABLEAU 1
 
-    // ... (Le reste de la fonction est inchangé) ...
     // ----------------------------------------------------
     // 2. LOGIQUE D'EXPULSION ET BOUCLE 
     // ----------------------------------------------------
@@ -1486,7 +1578,7 @@ function genererRapportExpulsion(customData) {
     let expulsionTable = "";
     let detailsTable = "";
     
-    // Fonctions utilitaires
+    // Fonctions utilitaires (inchangé)
     const norm = s => s ? s.toLowerCase().normalize('NFD').replace(/\p{Diacritic}/gu, '').replace(/[’]/g, "'").replace(/\s+/g, ' ').trim() : '';
     const getAnswerToQuestion = (q, data) => {
         if (!Array.isArray(data)) return "N/A"; 
@@ -1513,10 +1605,10 @@ function genererRapportExpulsion(customData) {
                 if (expulsionTable !== "") {
                     message += expulsionTable + "</table>";
                 }
-                // Nouvelle table d'expulsion (2 colonnes visuelles)
+                // Nouvelle table d'expulsion (4 colonnes)
                 expulsionTable = `<table style="${styleTable}; page-break-inside: avoid;">
-                    <tr><td colspan="5" style="${styleSectionHeaderTD}"><h3 style="${styleSectionHeaderTH}; margin: 0; padding: 0;">EXPULSION #${expulsionIndex}</h3></td></tr>
-                    <tr><td style="${styleLabel20}">${question}</td><td colspan="4" style="${styleCellFull}">${answer}</td></tr>`;
+                    <tr><td colspan="4" style="${styleSectionHeaderTD}"><h3 style="${styleSectionHeaderTH}; margin: 0; padding: 0;">EXPULSION #${expulsionIndex}</h3></td></tr>
+                    <tr><td style="${styleLabel25}">${question}</td><td colspan="3" style="${styleCell3Cols}">${answer}</td></tr>`;
                 expulsionIndex++;
                 continue;
             }
@@ -1526,7 +1618,7 @@ function genererRapportExpulsion(customData) {
                 let htmlCodes = "<ul style='margin:0; padding-left:20px;'>";
                 tableau.forEach(code => { htmlCodes += `<li style="color: #333333;">${code}</li>`; }); 
                 htmlCodes += "</ul>";
-                expulsionTable += `<tr><td style="${styleLabel20}">${question}</td><td colspan="4" style="${styleCellFull}">${htmlCodes}</td></tr>`;
+                expulsionTable += `<tr><td style="${styleLabel25}">${question}</td><td colspan="3" style="${styleCell3Cols}">${htmlCodes}</td></tr>`;
                 continue;
             }
 
@@ -1534,8 +1626,8 @@ function genererRapportExpulsion(customData) {
                 continue;
             }
 
-            // Toutes les autres questions/réponses utilisent un format 2 colonnes visuelles
-            expulsionTable += `<tr><td style="${styleLabel20}">${question}</td><td colspan="4" style="${styleCellFull}">${answer}</td></tr>`;
+            // Toutes les autres questions/réponses utilisent un format 2 colonnes visuelles (1 label, 3 colonnes de valeur)
+            expulsionTable += `<tr><td style="${styleLabel25}">${question}</td><td colspan="3" style="${styleCell3Cols}">${answer}</td></tr>`;
         }
         if (expulsionTable !== "") message += expulsionTable + "</table>"; 
     }
@@ -1546,8 +1638,8 @@ function genererRapportExpulsion(customData) {
     const detailsGlobal = getAnswerToQuestion("Détails concernant les expulsions", customData);
     if (detailsGlobal !== "N/A") {
         detailsTable += `<table style="${styleTable}; page-break-inside: avoid;">
-            <tr><td colspan="5" style="${styleSectionHeaderTD}"><h3 style="${styleSectionHeaderTH}; margin: 0; padding: 0;">DÉTAILS CONCERNANT LES EXPULSIONS</h3></td></tr>
-            <tr><td colspan="5" style="${styleCellFull}">${detailsGlobal.replace(/\n/g, "<br>")}</td></tr>
+            <tr><td colspan="4" style="${styleSectionHeaderTD}"><h3 style="${styleSectionHeaderTH}; margin: 0; padding: 0;">DÉTAILS CONCERNANT LES EXPULSIONS</h3></td></tr>
+            <tr><td colspan="4" style="${styleCellFull}">${detailsGlobal.replace(/\n/g, "<br>")}</td></tr>
         </table>`;
     }
     
@@ -1556,8 +1648,8 @@ function genererRapportExpulsion(customData) {
 
     if (infosComplementaires !== "N/A") {
         detailsTable += `<table style="${styleTable}; page-break-inside: avoid;">
-            <tr><td colspan="5" style="${styleSectionHeaderTD}"><h3 style="${styleSectionHeaderTH}; margin: 0; padding: 0;">INFORMATIONS COMPLÉMENTAIRES</h3></td></tr>
-            <tr><td colspan="5" style="${styleCellFull}">
+            <tr><td colspan="4" style="${styleSectionHeaderTD}"><h3 style="${styleSectionHeaderTH}; margin: 0; padding: 0;">INFORMATIONS COMPLÉMENTAIRES</h3></td></tr>
+            <tr><td colspan="4" style="${styleCellFull}">
                 <p style="margin: 0;">${infosComplementaires.replace(/\n/g, "<br>")}</p>
             </td></tr>
         </table>`;
@@ -1598,6 +1690,8 @@ function genererRapportExpulsion(customData) {
     
     return finalHTML;
 }
+
+
 /**
  * Fonction principale appelée après validation pour générer et afficher le rapport.
  */
@@ -1917,7 +2011,7 @@ document.getElementById("ligueSelect").addEventListener("change", e => {
     clearErrorAfter('#equipeVisiteur');
     populateEquipesDatalist([]); // Vide la datalist des équipes
     populateTerrainsDatalist([]); // Vide la datalist des terrains
-	
+
 	
     if(!ligue) return;
     

@@ -6,7 +6,7 @@
 <script>
     // 1. Définition de la variable de version globalement (accessible partout)
     window.CONFIG = {
-        VERSION: '0.20251009.18:10 ' // Mettez à jour ce numéro manuellement pour chaque version
+        VERSION: '0.20251010.18:15' // Mettez à jour ce numéro manuellement pour chaque version
     };
 
     // 2. Modification immédiate du titre (Option 2)
@@ -469,6 +469,15 @@ button:hover {
 .exp-numero { 
     flex: 0 0 75px; /* Largeur de 75px pour le numéro du joueur */
 }
+
+.exp-numero input {
+    /* 1. Centre le texte */
+    text-align: center; 
+    /* 2. Resserre l'input pour mieux correspondre à deux chiffres */
+    width: 60px; 
+    max-width: 60px;
+}
+
 .exp-nom { 
     flex: 0 0 250px; /* Largeur de 250px pour le nom du joueur */
 }
@@ -644,6 +653,36 @@ button:hover {
 .show-banner {
     top: 0 !important;
 }
+
+/* Cache les flèches de défilement (spinners) pour les navigateurs basés sur WebKit (Chrome, Safari) */
+input[type="number"]::-webkit-inner-spin-button,
+input[type="number"]::-webkit-outer-spin-button {
+    -webkit-appearance: none;
+    margin: 0; /* Important pour Firefox */
+}
+
+input[id$="-numero-input"] { 
+    /* 1. Centre le texte */
+    text-align: center; 
+    /* 2. Resserre l'input pour mieux correspondre à deux chiffres */
+    width: 60px; 
+    max-width: 60px;
+}
+
+/* Cache les flèches de défilement pour Mozilla Firefox */
+input[type="number"] {
+    -moz-appearance: textfield;
+}
+
+#pointagelocal, 
+#pointagevisiteur {
+    /* 1. Centre le texte du pointage */
+    text-align: center;
+    /* 2. Resserre le champ pour mieux correspondre à 2 chiffres */
+    width: 60px; 
+    max-width: 60px;
+}
+
 </style>
 </head>
 
@@ -692,37 +731,53 @@ Version développement pour voir la partie courriel inscrire votre courriel dans
     <div><label>Catégorie</label><select id="categorieSelect" tabindex="5" required><option value="">-- Sélectionner une catégorie --</option></select><div class="error"></div></div>
     <div><label>Classe</label><select id="classeSelect" tabindex="6" required><option value="">-- Sélectionner une classe --</option></select><div class="error"></div></div>
   </div>
+   
 </div>
 
 <div class="panel-3d panel-step">
- <h2>Équipes et terrain</h2>
+    <h2>Équipes et terrain</h2>
     <div class="match-equipes-row">
+				
+		 <div class="code-chip tooltip-champ"> 
+			<label>Équipe locale</label>
+			<input type="text" id="equipeLocale" list="equipesDataList" placeholder="Sélectionner ou saisir une équipe" tabindex="8" required>
+			
+			<div class="error"></div>
+			
+			<div>
+				<label>Pointage</label>
+				<input type="text" id="pointagelocal" maxlength="2" inputmode="numeric" pattern="[0-9]*" placeholder="0" tabindex="11">
+			</div>
+			
+			<span class="tooltip">Si un nom d'équipe n'apparait pas dans la liste,<br> vous pouvez simplement inscrire le nom de l'équipe dans le champ.</span> 
+		</div>
+
+		<div class="code-chip tooltip-champ">
+			<label>Équipe visiteur</label>
+			<input type="text" id="equipeVisiteur" list="equipesDataList" placeholder="Sélectionner ou saisir une équipe" tabindex="9" required>
+			
+			<div class="error"></div>
+			
+			<div> 
+				<label>Pointage</label>
+				<input type="text" id="pointagevisiteur" maxlength="2" inputmode="numeric" pattern="[0-9]*" placeholder="0" tabindex="12">
+			</div>
+
+			<span class="tooltip">Si un nom d'équipe n'apparait pas dans la liste,<br> vous pouvez simplement inscrire le nom de l'équipe dans le champ.</span>
+		</div>
         
-  <div class="code-chip tooltip-champ"> 
-  <label>Équipe locale</label>
-  <input type="text" id="equipeLocale" list="equipesDataList" placeholder="Sélectionner ou saisir une équipe" tabindex="7" required>
-  <span class="tooltip">Si un nom d'équipe n'apparait pas dans la liste,<br> vous pouvez simplement inscrire le nom de l'équipe dans le champ.</span> 
-  <div class="error"></div>
+        <div class="code-chip tooltip-champ">
+            <label>Terrain</label>
+            <input type="text" id="terrain" list="terrainsDataList" placeholder="Sélectionner ou saisir un terrain" tabindex="10" required>
+            <span class="tooltip">Si un nom d'un terrain n'apparait pas dans la liste,<br> vous pouvez simplement inscrire le nom du parc dans le champ.</span>
+            <div class="error"></div>
+        </div>
+    </div>
+
+    <datalist id="equipesDataList"></datalist>
+    <datalist id="terrainsDataList"></datalist>
 </div>
 
-<div class="code-chip tooltip-champ">
-  <label>Équipe visiteur</label>
-  <input type="text" id="equipeVisiteur" list="equipesDataList" placeholder="Sélectionner ou saisir une équipe"  tabindex="8" required>
-  <span class="tooltip">Si un nom d'équipe n'apparait pas dans la liste,<br> vous pouvez simplement inscrire le nom de l'équipe dans le champ.</span>
-  <div class="error"></div>
-</div>
-        
-<div class="code-chip tooltip-champ">
-  <label>Terrain</label>
-  <input type="text" id="terrain" list="terrainsDataList" placeholder="Sélectionner ou saisir un terrain"  tabindex="9" required>
-  <span class="tooltip">Si un nom d'un terrain n'apparait pas dans la liste,<br> vous pouvez simplement inscrire le nom du parc dans le champ.</span>
-  <div class="error"></div>
-</div>
-</div>
-
-<datalist id="equipesDataList"></datalist>
-<datalist id="terrainsDataList"></datalist>
-</div>
 
 <div class="panel-3d arbitres-panel panel-step">
     <h2>Arbitres et Coordonnées</h2>
@@ -744,25 +799,25 @@ Version développement pour voir la partie courriel inscrire votre courriel dans
         <div class="arbitres-row" id="arbitres-champs-row">
             <div class="champ" >
                 <label for="arbitreMarbre">Arbitre au marbre</label>
-                <input type="text" id="arbitreMarbre" list="arbitresDatalist" tabindex="10" required>
+                <input type="text" id="arbitreMarbre" list="arbitresDatalist" tabindex="13" required>
                 <div class="error"></div>
             </div>
             
             <div class="champ">
                 <label for="arbitreButs">Arbitre 1er but</label>
-                <input type="text" id="arbitreButs" list="arbitresDatalist" tabindex="11" required>
+                <input type="text" id="arbitreButs" list="arbitresDatalist" tabindex="14" required>
                 <div class="error"></div>
             </div>
             
             <div class="champ" id="group-arbitre2but" style="display: none">
                 <label for="arbitre2but">Arbitre 2ième but</label>
-                <input type="text" id="arbitre2but" list="arbitresDatalist" tabindex="12" required>
+                <input type="text" id="arbitre2but" list="arbitresDatalist" tabindex="15" required>
                 <div class="error"></div>
             </div>
             
             <div class="champ" id="group-arbitre3but" style="display: none">
                 <label for="arbitre3Buts">Arbitre 3ième but</label>
-                <input type="text" id="arbitre3Buts" list="arbitresDatalist" tabindex="13" required >
+                <input type="text" id="arbitre3Buts" list="arbitresDatalist" tabindex="16" required >
                 <div class="error"></div>
             </div>    
             
@@ -775,30 +830,32 @@ Version développement pour voir la partie courriel inscrire votre courriel dans
     <div class="arbitres-row">
         <div class="champ"> 
             <label for="marqueur">Marqueur</label>
-            <input type="text" id="marqueur" tabindex="14">
+            <input type="text" id="marqueur" tabindex="17">
             <div class="error"></div>
         </div>
         <div class="champ">
             <label for="arbitreRapport">Arbitre faisant le rapport</label>
-            <select id="arbitreRapport" disabled tabindex="15" required>
+            <select id="arbitreRapport" disabled tabindex="18" required>
                 <option value="">-- Sélectionner un arbitre --</option>
             </select>
             <div class="error"></div>
         </div>
-        <div class="champ">
-            <label for="courriel">Adresse courriel</label>
-            <input type="email" id="courriel" tabindex="16" required>
-            <div class="error"></div>
+			
+			<div class="champ">
+				<label for="courriel">Adresse courriel</label>
+				<input type="email" id="courriel" tabindex="19" required>
+    
+				<div style="text-align: center; margin-top: 5px;"> <input type="checkbox" id="courrielConfirme" name="courrielConfirme" checked>
+				<label for="courrielConfirme" style="font-size: 0.9em;">Avoir une copie du rapport d'expulsion</label>
+			</div>
 
-            <div style="text-align: center; margin-top: 5px;">
-                <input type="checkbox" id="courrielConfirme" name="courrielConfirme" style="margin-right: 5px;" checked>
-                <label for="courrielConfirme" style="font-size: 0.9em;">Avoir une copie du rapport d'expulsion</label>
-            </div>
-        </div>
+			<div class="error"></div>
+		</div>
+
                 
         <div class="champ">
             <label for="telephone">Téléphone</label>
-            <input type="tel" id="telephone" required tabindex="17" placeholder="(000) 000-0000"> 
+            <input type="tel" id="telephone" required tabindex="20" placeholder="(000) 000-0000"> 
             <div class="error"></div>
         </div>
     </div>
@@ -908,6 +965,74 @@ const destinatairesDiv = document.getElementById("destinataires");
 // 🛑 SÉPARATEUR UNIQUE ET SÛR pour la persistance
 const CODE_SEPARATOR = '||';
 
+
+document.addEventListener('DOMContentLoaded', function() {
+    const inputPointageL = document.getElementById('pointagelocal');
+    const inputPointageV = document.getElementById('pointagevisiteur');
+	
+    // Ajoutez un écouteur d'événement sur la saisie (chaque fois qu'une touche est pressée)
+    if (inputPointageL) {
+        inputPointageL.addEventListener('input', function(event) {
+            // Utilise une expression régulière pour retirer tous les caractères
+            // qui NE sont PAS des chiffres (^\d+).
+            this.value = this.value.replace(/[^0-9]/g, ''); 
+        });
+    }
+	
+	   if (inputPointageV) {
+        inputPointageV.addEventListener('input', function(event) {
+            // Utilise une expression régulière pour retirer tous les caractères
+            // qui NE sont PAS des chiffres (^\d+).
+            this.value = this.value.replace(/[^0-9]/g, ''); 
+        });
+    }
+});
+
+/**
+ * Met en place la validation croisée pour les champs de pointage.
+ * Si un champ (local ou visiteur) contient une valeur, l'autre devient 'required'.
+ * Si les deux champs sont vides, les deux ne sont pas 'required'.
+ */
+function setupScoreValidation() {
+    const localInput = document.getElementById('pointagelocal');
+    const visiteurInput = document.getElementById('pointagevisiteur');
+
+    // S'assurer que les éléments existent dans le DOM
+    if (localInput && visiteurInput) {
+        
+        const validateScoreFields = () => {
+            const localValue = localInput.value.trim();
+            const visiteurValue = visiteurInput.value.trim();
+
+            // Logique de validation:
+
+            // Si le pointage local est saisi, le visiteur devient requis.
+            if (localValue.length > 0) {
+                visiteurInput.setAttribute('required', 'required');
+            } else {
+                visiteurInput.removeAttribute('required');
+            }
+
+            // Si le pointage visiteur est saisi, le local devient requis.
+            if (visiteurValue.length > 0) {
+                localInput.setAttribute('required', 'required');
+            } else {
+                localInput.removeAttribute('required');
+            }
+            
+            // NOTE : Si les deux sont remplis, les deux 'required' sont actifs, 
+            // mais le navigateur n'affiche pas d'erreur car les champs sont remplis.
+            // Si les deux sont vides, les 'required' sont retirés.
+        };
+
+        // 1. Attacher l'écouteur d'événement pour réagir à la saisie
+        localInput.addEventListener('input', validateScoreFields);
+        visiteurInput.addEventListener('input', validateScoreFields);
+
+        // 2. Exécuter au chargement (au cas où les champs sont pré-remplis)
+        validateScoreFields();
+    }
+}
 
 /**
  * Réinitialise complètement le bloc d'expulsions en simulant le clic sur la puce '1'
@@ -1291,13 +1416,15 @@ function transformDebugJSONToCustomData() {
     data.push({ question: 'Catégorie :', reponse: debugData.match.categorie }); // 4
     data.push({ question: 'Classe :', reponse: debugData.match.classe }); // 5
     data.push({ question: 'Équipe locale :', reponse: debugData.equipes.locale }); // 6
-    data.push({ question: 'Équipe visiteur :', reponse: debugData.equipes.visiteur }); // 7
-    data.push({ question: 'Terrain :', reponse: debugData.equipes.terrain }); // 8
+    data.push({ question: 'Pointage locale :', reponse: debugData.equipes.pointagelocal }); // 7  
+    data.push({ question: 'Équipe visiteur :', reponse: debugData.equipes.visiteur }); // 8
+    data.push({ question: 'Pointage visiteur :', reponse: debugData.equipes.pointagevisiteur }); // 9
+	data.push({ question: 'Terrain :', reponse: debugData.equipes.terrain }); // 10
     
     // --- Arbitres standards ---
-    data.push({ question: 'Arbitre au marbre :', reponse: debugData.officiels.marbre }); // 9
+    data.push({ question: 'Arbitre au marbre :', reponse: debugData.officiels.marbre }); // 11
     // Vous devez déterminer si c'est 'Arbitre sur les buts' ou 'Arbitre 1er but'
-    data.push({ question: 'Arbitre 1er but :', reponse: debugData.officiels.buts1 }); // 10
+    data.push({ question: 'Arbitre 1er but :', reponse: debugData.officiels.buts1 }); // 12
 
     // --- Arbitres conditionnels (buts2 et buts3) ---
     
@@ -1353,13 +1480,13 @@ function transformDebugJSONToCustomData() {
 function genererRapportExpulsion(customData) {
     let message = "";
     
-    // 🎨 STYLES CENTRALISÉS
+    // 🎨 STYLES CENTRALISÉS (inchangé)
     const styleTable = "width: 100%; max-width: 900px; border-collapse: collapse; font-family: Arial, sans-serif; font-size: 14px; margin: 0 auto 30px auto; border: 1px solid #ddd;";
-    const styleSectionHeaderTD = "padding: 10px; text-align: left; font-size: 16px; border-top: 1px solid #ddd; background-color: #f2f2f2;  -webkit-print-color-adjust: exact;"; 
+    const styleSectionHeaderTD = "padding: 10px; text-align: left; font-size: 16px; border-top: 1px solid #ddd; background-color: #f2f2f2; -webkit-print-color-adjust: exact;"; 
     const styleSectionHeaderTH = "text-align: left; font-weight: bold; font-size: 16px; color: #333;"; 
     const cellPadding = "5px 8px"; 
     
-    // LARGEURS DE COLONNES (Basé sur 4 colonnes)
+    // LARGEURS DE COLONNES (Basé sur 4 colonnes) (inchangé)
     // 25% | 25% | 25% | 25%
     const styleLabel25 = `padding: ${cellPadding}; border: 1px solid #ddd; width: 25%; font-weight: bold; background-color: #f7f7f7; -webkit-print-color-adjust: exact;`; 
     const styleValue25 = `padding: ${cellPadding}; border: 1px solid #ddd; width: 25%; background-color: white; -webkit-print-color-adjust: exact;`;
@@ -1389,7 +1516,7 @@ function genererRapportExpulsion(customData) {
     message += `<div style="font-family: 'Segoe UI', sans-serif; font-size: 15px;">`;
     message += `<table style="${styleTable}">`; 
 
-    // BANDEAU DE TITRE (Utilise maintenant colspan="4")
+    // BANDEAU DE TITRE (inchangé)
     message += `
         <tr>
             <td style="width: 25%; text-align: center; padding: 20px 10px; ${styleMainHeaderBG}">
@@ -1407,6 +1534,7 @@ function genererRapportExpulsion(customData) {
 
     // INFORMATIONS SUR LE MATCH / ÉQUIPES ET TERRAIN
     for (let i = 0; i < customData.length; i++) {
+        // La condition de rupture reste la même
         if (customData[i] && (customData[i].question.includes("Arbitre au marbre") || customData[i].question.includes("Marqueur") || customData[i].question.includes("Adresse courriel"))) break;
         
         let question = customData[i].question;
@@ -1415,6 +1543,7 @@ function genererRapportExpulsion(customData) {
         switch (i) {
             case 0: break;
             case 1: 
+                // Index 1 (Date) & 2 (Région) (inchangé)
                 if (!customData[2]) break;
                 const displayDate = (answer || "N/A").replace('T', ' ');
                 
@@ -1430,6 +1559,7 @@ function genererRapportExpulsion(customData) {
                     </tr>`;
                 break;
             case 3:
+                // Index 3 (Ligue) & 4 (Catégorie) / 5 (Classe) (inchangé)
                 if (!customData[4] || !customData[5]) break;
                 message += `
                     <tr>
@@ -1441,21 +1571,41 @@ function genererRapportExpulsion(customData) {
                 i += 2;
                 break;
             case 6:
-                if (!customData[7]) break;
+                // ⭐ NOUVEAU: Gère l'équipe locale (index 6) et son pointage (index 7)
+                if (!customData[7] || !customData[8] || !customData[9]) break;
+                
+                // Récupération des données pour plus de clarté
+                const equipeLocale = customData[6];
+                const pointageLocale = customData[7];
+                const equipeVisiteur = customData[8];
+                const pointageVisiteur = customData[9];
+                
                 message += `
                     <tr>
                     <td colspan="4" style="${styleSectionHeaderTD}"><h3 style="${styleSectionHeaderTH}; margin: 0; padding: 0;">ÉQUIPES ET TERRAIN</h3></td>
                     </tr>
                     <tr>
-                    <td style="${styleLabel25}">${question} </td>
-                    <td style="${styleValue25}"><strong>${answer}</strong></td>
-                    <td style="${styleLabel25}">${customData[7].question} </td>
-                    <td style="${styleValue25}"><strong>${customData[7].reponse}</strong></td>
+                    <td style="${styleLabel25}">Équipe locale :</td>
+                    <td style="${styleValue25}">
+                        <strong>${equipeLocale.reponse}</strong>
+                        <span style="display: block; font-size: 0.9em; margin-top: 3px;">
+                            (Pointage: ${pointageLocale.reponse || 'Non disponible'})
+                        </span>
+                    </td>
+                    <td style="${styleLabel25}">Équipe visiteur :</td>
+                    <td style="${styleValue25}">
+                        <strong>${equipeVisiteur.reponse}</strong>
+                        <span style="display: block; font-size: 0.9em; margin-top: 3px;">
+                            (Pointage: ${pointageVisiteur.reponse || 'Non disponible'})
+                        </span>
+                    </td>
                     </tr>
                     `;
-                i++;
+                // Nous sautons les index 7, 8 et 9 car nous venons de les traiter
+                i += 3; 
                 break;
-            case 8:
+            case 10:
+                // Index 10 (Terrain)
                 message += `
                     <tr>
                     <td style="${styleLabel25}">Terrain :</td>
@@ -1466,7 +1616,7 @@ function genererRapportExpulsion(customData) {
     }
     
     // ----------------------------------------------------
-    // 1.5. SECTION OFFICIELS ET COORDONNÉES
+    // 1.5. SECTION OFFICIELS ET COORDONNÉES (inchangé)
     // ----------------------------------------------------
     
     let debutOfficielsIndex = customData.findIndex(item => item && item.question.includes('Arbitre au marbre'));
@@ -1496,7 +1646,7 @@ function genererRapportExpulsion(customData) {
             }
         }
 
-        // --- AFFICHAGE DES ARBITRES ---
+        // --- AFFICHAGE DES ARBITRES --- (inchangé)
         for (let i = 0; i < arbitresRow.length; i += 2) {
             const arbitre1 = arbitresRow[i];
             const arbitre2 = arbitresRow[i+1];
@@ -1521,7 +1671,7 @@ function genererRapportExpulsion(customData) {
         }
 
 
-        // --- AFFICHAGE MARQUEUR ---
+        // --- AFFICHAGE MARQUEUR --- (inchangé)
         const marqueur = autresOfficiels.find(o => o.question.includes('Marqueur'));
         if (marqueur && marqueur.reponse) {
             officielsHtml += `
@@ -1532,7 +1682,7 @@ function genererRapportExpulsion(customData) {
             `;
         }
 
-        // --- AFFICHAGE RAPPORT ET DATE (Séparé en 4 cellules, inchangé de la dernière correction) ---
+        // --- AFFICHAGE RAPPORT ET DATE (Séparé en 4 cellules) --- (inchangé)
         const rapporteur = autresOfficiels.find(o => o.question.includes('Rapport fait par'));
         
         if (rapporteur && rapporteur.reponse) {
@@ -1550,7 +1700,7 @@ function genererRapportExpulsion(customData) {
             `;
         }
         
-        // --- AFFICHAGE COORDONNÉES ---
+        // --- AFFICHAGE COORDONNÉES --- (inchangé)
         const email = coordonnees.find(c => c.question.includes('Adresse courriel'));
         const phone = coordonnees.find(c => c.question.includes('Téléphone'));
         
@@ -1562,8 +1712,8 @@ function genererRapportExpulsion(customData) {
                 officielsHtml += `<td style="${styleLabel25}">Courriel :</td>`;
                 officielsHtml += `<td style="${styleValue25}">${email.reponse}</td>`;
             } else {
-                 // Fusionne les colonnes si le champ est vide
-                 officielsHtml += `<td colspan="2" style="${styleValue25.replace('width: 25%', 'width: 50%')}"></td>`;
+                   // Fusionne les colonnes si le champ est vide
+                   officielsHtml += `<td colspan="2" style="${styleValue25.replace('width: 25%', 'width: 50%')}"></td>`;
             }
 
             // Téléphone (Label + Valeur)
@@ -1584,7 +1734,7 @@ function genererRapportExpulsion(customData) {
     message += `</table>`; // FERMETURE DU TABLEAU 1
 
     // ----------------------------------------------------
-    // 2. LOGIQUE D'EXPULSION ET BOUCLE 
+    // 2. LOGIQUE D'EXPULSION ET BOUCLE (inchangé)
     // ----------------------------------------------------
     let expulsionIndex = 1;
     let expulsionTable = "";
@@ -1644,7 +1794,7 @@ function genererRapportExpulsion(customData) {
         if (expulsionTable !== "") message += expulsionTable + "</table>"; 
     }
     
-    // --- Ajout des détails et informations complémentaires (blocs globaux) ---
+    // --- Ajout des détails et informations complémentaires (blocs globaux) --- (inchangé)
     
     // 6. DÉTAILS CONCERNANT LES EXPULSIONS (Tableau séparé)
     const detailsGlobal = getAnswerToQuestion("Détails concernant les expulsions", customData);
@@ -1670,7 +1820,7 @@ function genererRapportExpulsion(customData) {
     message += detailsTable;
     message += `</div>`; // Fermeture du DIV de message
 
-    // Le HTML final est enveloppé dans une structure de document complète
+    // Le HTML final est enveloppé dans une structure de document complète (inchangé)
     const finalHTML = `
         <!doctype html>
         <html lang="fr">
@@ -1702,7 +1852,6 @@ function genererRapportExpulsion(customData) {
     
     return finalHTML;
 }
-
 
 /**
  * Fonction principale appelée après validation pour générer et afficher le rapport.
@@ -1948,6 +2097,7 @@ async function init() {
 
     // 5. Setup des chips d'expulsion après chargement des codes
     setupRefereeSystemChips();
+	setupScoreValidation();
 	setupExpulsionChips(); 
 	 
 	
@@ -2586,7 +2736,7 @@ function createExpulsionTabs(nbExpulsions) {
             panel.classList.add("tab-content");
             expulsionsContainer.appendChild(panel);
 
-            // Contenu du bloc d'expulsion
+            // Contenu du bloc d'expulsion (ID ajouté à l'input numéro)
             panel.innerHTML = `
                 <div class="expulsion-block">
                     <div class="exp-row">
@@ -2598,7 +2748,8 @@ function createExpulsionTabs(nbExpulsions) {
                         </div>
                         <div class="exp-numero">
                             <label>Numéro</label>
-                            <input type="number" name="expulsion${i}-numero" min="0" required tabindex="${20 + i + maxExpulsions}">
+                           <input id="expulsion${i}-numero-input" type="text" maxlength="2" inputmode="numeric" pattern="[0-9]*" name="expulsion${i}-numero" 
+						   required tabindex="${20 + i + maxExpulsions}" placeholder="0">
                         </div>
                         <div class="exp-nom">
                             <label>Nom de la personne fautive</label>
@@ -2616,6 +2767,17 @@ function createExpulsionTabs(nbExpulsions) {
 
             // 🧩 Création initiale des chips avec les listeners
             createCodeChips(i, jsonCodes, panel);
+            
+            // ⭐ NOUVEAU CODE : Ajout de l'écouteur de validation numérique ⭐
+            const numeroInput = document.getElementById(`expulsion${i}-numero-input`);
+            if (numeroInput) {
+                numeroInput.addEventListener('input', function() {
+                    // Supprime tout caractère qui n'est PAS un chiffre (0-9)
+                    this.value = this.value.replace(/[^0-9]/g, ''); 
+                });
+            }
+            // FIN DU NOUVEAU CODE
+
         } else {
             // Mise à jour des options d'équipe
             const selectEquipe = panel.querySelector('select[name^="expulsion"][name$="-equipe"]');
@@ -2624,6 +2786,16 @@ function createExpulsionTabs(nbExpulsions) {
                 selectEquipe.innerHTML = equipeOptions;
                 selectEquipe.value = currentValue;
             }
+            
+            // Assurez-vous que l'écouteur est toujours là si le panneau est réutilisé
+            const numeroInput = panel.querySelector(`input[name="expulsion${i}-numero"]`);
+            if (numeroInput) {
+                // Pour les panneaux existants, l'écouteur est rattaché au cas où
+                numeroInput.addEventListener('input', function() {
+                    this.value = this.value.replace(/[^0-9]/g, ''); 
+                });
+            }
+
             createCodeChips(i, jsonCodes, panel);
         }
 
@@ -2657,7 +2829,7 @@ function createExpulsionTabs(nbExpulsions) {
             document.querySelectorAll("#expulsionsContainer .tab-content").forEach(p => p.classList.remove("active"));
             tabBtn.classList.add("active");
             panel.classList.add("active");
-            loadExpulsionData(i, panel);
+            loadExpulsionData(parseInt(panel.id.split('-')[1]), panel);
         });
 
         tabsContainer.appendChild(tabBtn);
@@ -2858,7 +3030,9 @@ function generateDebugJSON() {
     // Section équipes
     const equipes = {
         locale: document.getElementById("equipeLocale")?.value.trim() || "",
+		pointagelocal: document.getElementById("pointagelocal")?.value.trim() || "",
         visiteur: document.getElementById("equipeVisiteur")?.value.trim() || "",
+		pointagevisiteur: document.getElementById("pointagevisiteur")?.value.trim() || "",
         terrain: document.getElementById("terrain")?.value.trim() || ""
     };
 
@@ -3100,7 +3274,7 @@ document.getElementById('effacerBtn').addEventListener('click', function(e) {
         if (telephoneInput) {
             IMask(telephoneInput, {
                 mask: '(000) 000-0000',
-                lazy: false, 
+                lazy: true, 
             });
         }
 

@@ -72,17 +72,17 @@
 				"Junior AA" : {
 					"Equipes" : [
 						"Ducs de Longueuils",
-						"Jets de MontrÃ©al",
+						"Jets de Montréal",
 						"Cardinals de Lasalle",
 						"Patriotes des Laurentides",
-						"Seigneurs Ã©lites de Repentigny",
+						"Seigneurs élites de Repentigny",
 						"Guerriers de Richelieu-Yamaska",
 						"Cobras Capri Bar-Serie du Roussillon"
 					],
 					"EmailsSpecifiques" : [ "loleduc@videotron.ca" ],
 					"Terrains" : [
-						"Stade LÃ©o-Asselin",
-						"Parc Louis-ChoiniÃ¨re",
+						"Stade Léo-Asselin",
+						"Parc Louis-Choinière",
 						"Parc Leblanc",
 						"Parc Paul-Pratt"
 					],
@@ -102,11 +102,11 @@
 					"EmailsSpecifiques" : [ "loleduc@videotron.ca" ],
 					"Terrains" : [
 						"Stade Jacques-Desautels",
-						"Parc RabastalliÃ¨re",
+						"Parc Rabastallière",
 						"Parc Fontrouge",
-						"Parc CÃ©lanese",
+						"Parc Célanese",
 						"Parc Optimiste",
-						"Stade RenÃ© St-Germain",
+						"Stade René St-Germain",
 						"Parc de Sainte-Marie-de-Monnoir"
 					],
 					"GroupeArbitres" : "Majeur"
@@ -331,7 +331,7 @@
 			}
 		},
 		"BQ" : {
-			"DÃ©veloppement AAA" : {
+			"Développement AAA" : {
 				"18U AAA" : {
 					"EmailsSpecifiques" : [ "loleduc@videotron.ca" ]
 				},
@@ -349,9 +349,8 @@
 					"EmailsSpecifiques" : [ "loleduc@videotron.ca" ]
 				}
 			},
-			"RÃ©gionaux" : {
+			"Régionaux" : {
 				"9U A" : {
-					"EmailsSpecifiques" : [ "loleduc@videotron.ca" ],
 					"Régionaux 9U A Saint-Hilaire" : {
 						"EmailsSpecifiques" : [ "sthilaire@tournoi.ca" ]
 					}
@@ -384,7 +383,7 @@
 					"EmailsSpecifiques" : [ "loleduc@videotron.ca" ]
 				}
 			},
-			"Super RÃ©gionaux" : {
+			"Super Régionaux" : {
 				"9U A" : {
 					"EmailsSpecifiques" : [ "loleduc@videotron.ca" ]
 				},

@@ -72,16 +72,16 @@
 				"Junior AA" : {
 					"Equipes" : [
 						"Ducs de Longueuils",
-						"Jets de Montréal",
+						"Jets de Montreal",
 						"Cardinals de Lasalle",
 						"Patriotes des Laurentides",
-						"Seigneurs élites de Repentigny",
+						"Seigneurs elites de Repentigny",
 						"Guerriers de Richelieu-Yamaska",
 						"Cobras Capri Bar-Serie du Roussillon"
 					],
 					"EmailsSpecifiques" : [ "loleduc@videotron.ca" ],
 					"Terrains" : [
-						"Stade Léo-Asselin",
+						"Stade Leo-Asselin",
 						"Parc Louis-Choinière",
 						"Parc Leblanc",
 						"Parc Paul-Pratt"
@@ -102,11 +102,11 @@
 					"EmailsSpecifiques" : [ "loleduc@videotron.ca" ],
 					"Terrains" : [
 						"Stade Jacques-Desautels",
-						"Parc Rabastallière",
+						"Parc Rabastalliere",
 						"Parc Fontrouge",
-						"Parc Célanese",
+						"Parc Celanese",
 						"Parc Optimiste",
-						"Stade René St-Germain",
+						"Stade Rene St-Germain",
 						"Parc de Sainte-Marie-de-Monnoir"
 					],
 					"GroupeArbitres" : "Majeur"
@@ -331,7 +331,7 @@
 			}
 		},
 		"BQ" : {
-			"Développement AAA" : {
+			"Developpement AAA" : {
 				"18U AAA" : {
 					"EmailsSpecifiques" : [ "loleduc@videotron.ca" ]
 				},
@@ -349,9 +349,9 @@
 					"EmailsSpecifiques" : [ "loleduc@videotron.ca" ]
 				}
 			},
-			"Régionaux" : {
+			"Regionaux" : {
 				"9U A" : {
-					"Régionaux 9U A Saint-Hilaire" : {
+					"Regionaux 9U A Saint-Hilaire" : {
 						"EmailsSpecifiques" : [ "sthilaire@tournoi.ca" ]
 					}
 				},
@@ -383,7 +383,7 @@
 					"EmailsSpecifiques" : [ "loleduc@videotron.ca" ]
 				}
 			},
-			"Super Régionaux" : {
+			"Super Regionaux" : {
 				"9U A" : {
 					"EmailsSpecifiques" : [ "loleduc@videotron.ca" ]
 				},
@@ -409,7 +409,7 @@
 					"EmailsSpecifiques" : [ "loleduc@videotron.ca" ]
 				},
 				"18U A" : {
-					"Super Régionaux 18U A de St-Basile" : {
+					"Super Regionaux 18U A de St-Basile" : {
 						"EmailsSpecifiques" : [ "18UAStbasile@tournoi.ca" ]
 					}
 				},
@@ -422,7 +422,7 @@
 					"EmailsSpecifiques" : [ "loleduc@videotron.ca" ]
 				},
 				"13U AA" : {
-					"13U AA de Trois-Rivières" : {
+					"13U AA de Trois-Rivieres" : {
 						"EmailsSpecifiques" : [ "11UAATR@provinciauxi.ca" ]
 					}
 				},

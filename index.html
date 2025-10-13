@@ -683,6 +683,14 @@ input[type="number"] {
     max-width: 60px;
 }
 
+label:has(+ input[required])::after,
+label:has(+ select[required])::after,
+h2:has(+ textarea[required])::after { /* 💡 Le sélecteur :has() est utilisé ici. */
+    content: " *"; /* Ajoute un astérisque et un espace */
+    color: red;
+    font-weight: bold;
+}
+
 </style>
 </head>
 

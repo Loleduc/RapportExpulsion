@@ -1586,7 +1586,7 @@ function genererRapportExpulsion(customData) {
                 // On vérifie que la date existe (index 3) pour grouper l'affichage
                 if (!customData[2] || !customData[3]) break; 
                 
-                const displayDate = (customData[3].reponse || "N/A").replace('T', ' ');
+                const displayDate = (customData[2].reponse || "N/A").replace('T', ' ');
                 
                message += `
 					<tr>
@@ -1607,7 +1607,7 @@ function genererRapportExpulsion(customData) {
 					<td style="${styleLabel25}">Date & Heure :</td> 
 					<td style="${styleValue25}">${displayDate}</td> 
 					<td style="${styleLabel25}">Région :</td>
-					<td style="${styleValue25}">${customData[2].reponse}</td>
+					<td style="${styleValue25}">${customData[3].reponse}</td>
 					</tr>`;
                 
                 // On saute l'index 1 (Match #), 2 (Région), 3 (Date) et on passe à l'index 4 (Ligue)

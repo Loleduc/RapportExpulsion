@@ -19,8 +19,8 @@
     "terrain": "Parc Leblanc"
   },
   "officiels": {
-    "marbre": "rere",
-    "buts1": "re",
+    "marbre": "Denis Labonté",
+    "buts1": "Louis-Olivier Leduc",
     "marqueur": "d",
     "rapport": "re",
     "courriel": "d@2.com",
@@ -31,7 +31,7 @@
       "numero": 1,
       "equipe": "Ducs de Longueuils",
       "chandail": "2",
-      "joueur": "gfg;jgf",
+      "joueur": "Joe Bleau",
       "codes": [
         "55.1 - SUSPENSION AUTOMATIQUE"
       ]

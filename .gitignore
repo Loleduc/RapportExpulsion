@@ -1,0 +1,7 @@
+# Fichiers de configuration locaux sensibles
+config.local.js
+
+# Autres fichiers et dossiers communs à ignorer
+.DS_Store
+*.log
+node_modules/

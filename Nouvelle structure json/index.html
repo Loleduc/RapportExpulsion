@@ -6,7 +6,7 @@
 <script>
     // 1. Définition de la variable de version globalement (accessible partout)
     window.CONFIG = {
-        VERSION: '0.20251012.23:25' // Mettez à jour ce numéro manuellement pour chaque version
+        VERSION: '0.20251013.10:10' // Mettez à jour ce numéro manuellement pour chaque version
     };
 
     // 2. Modification immédiate du titre (Option 2)
@@ -938,12 +938,13 @@ Une fois le terrain quitté par le participant, a-t-il quitté les environs du t
 <script src="https://cdn.jsdelivr.net/npm/flatpickr/dist/l10n/fr.js"></script> 
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 <script>
-/*const regionUrl = "https://script.google.com/macros/s/AKfycby5mjKpMvPhV4jQdNPuO7H8NIcaRh_P3SRoqQSJLu8IzrMn7s5ytmZxbYXody-nqVKS-A/exec";
-const codesUrl = "https://script.google.com/macros/s/AKfycbxTNlQ5JFpIDIBSTWARTT3v1ztYXexP9zMuVwwAdWC43acGQGA1cPibQYqSyCabhzEd/exec"; 
-*/
+
+
 //const regionUrl = "https://raw.githubusercontent.com/Loleduc/RapportExpulsion/refs/heads/main/Sans%20structure%20arbitres/adressesmultiples.json"; // à mettre si on utilise la liste d'arbitres
 //const regionUrl = "https://raw.githubusercontent.com/Loleduc/RapportExpulsion/refs/heads/main/Nouvelle%20architecture/BETA%20adressesmultiples.json"; // à mettre si un utilise pas la liste d'arbitres probablement à enlever
-const regionUrl = "https://raw.githubusercontent.com/Loleduc/RapportExpulsion/refs/heads/main/Sans%20structure%20arbitres/adressesmultiplestournois.json";
+//const regionUrl = "https://raw.githubusercontent.com/Loleduc/RapportExpulsion/refs/heads/main/Sans%20structure%20arbitres/adressesmultiplestournois.json";
+  const regionUrl = "https://raw.githubusercontent.com/Loleduc/RapportExpulsion/refs/heads/main/Nouvelle%20structure%20json/regions.json";
+  let cheminfichier = "https://raw.githubusercontent.com/Loleduc/RapportExpulsion/refs/heads/main/Nouvelle%20structure%20json/";
 
 const codesUrl = "https://raw.githubusercontent.com/Loleduc/RapportExpulsion/refs/heads/main/Sans%20structure%20arbitres/Codes.json";
 
@@ -1362,6 +1363,18 @@ async function chargerDonneesRegions(url) {
         return null; 
     }
 }
+
+async function chargerDonneeschemin(url) {
+    try {
+        const reponse = await fetch(url, { method: 'GET' });
+        if (!reponse.ok) throw new Error(`Erreur HTTP: ${reponse.status}`);
+        return await reponse.json(); 
+    } catch (erreur) {
+        console.error("Erreur lors du chargement des données depuis GitHub:", erreur);
+        return null; 
+    }
+}
+
 
 /**
  * Retourne le Data URI Base64 de l'image demandée selon son identifiant.
@@ -2106,28 +2119,12 @@ async function init() {
     
     setupValidation();
     
-    // 1. Démarrer les deux requêtes en parallèle SANS AWAIT
-    // Chaque requête est enveloppée dans une promesse pour gérer son propre parsing JSON et ses erreurs.
-  /*  const regionsPromise = fetch(regionUrl)
-        .then(res => res.ok ? res.json() : Promise.reject(new Error(`HTTP Régions ${res.status}`)))
-        .catch(err => {
-            console.warn("Impossible de récupérer les régions:", err);
-            return {}; // Retourne un objet vide pour ne pas bloquer Promise.all
-        });
-	*/
+
     const regionsPromise = await chargerDonneesRegions(regionUrl);
 	
 	const codesPromise = await chargerDonneesCodes(codesUrl);
 	
-   /* const codesPromise = fetch(codesUrl)
-        .then(resCodes => resCodes.ok ? resCodes.json() : Promise.reject(new Error(`HTTP Codes ${resCodes.status}`)))
-        // Extraction de la clé 'Codes' et gestion de l'échec de parsing/fetch
-        .then(codeData => codeData.Codes || {})
-        .catch(err => {
-            console.error("ÉCHEC TOTAL du fetch des codes:", err);
-            return {}; // Retourne un objet vide pour ne pas bloquer Promise.all
-        });
-*/
+
     // 2. Attendre que les deux promesses soient complétées (la durée sera celle du fetch le plus lent)
     const [regionsResult, codesResult] = await Promise.all([regionsPromise, codesPromise]);
 
@@ -2156,75 +2153,92 @@ async function init() {
     
     
 // ---------------- Gestion sélections dynamiques ----------------
-document.getElementById("regionSelect").addEventListener("change", e => {
-    const ligueSelect = document.getElementById("ligueSelect");
-    const catSelect = document.getElementById("categorieSelect");
-    const classeSelect = document.getElementById("classeSelect");
-    ligueSelect.innerHTML = "<option value=''>-- Sélectionner une ligue --</option>";
-    catSelect.innerHTML = "<option value=''>-- Sélectionner une catégorie --</option>";
-    classeSelect.innerHTML = "<option value=''>-- Sélectionner une classe --</option>";
-    destinatairesDiv.textContent = "";
-	
-	// Réinitialisation des champs Équipe et Terrain et leurs datalists
-    document.getElementById('equipeLocale').value = '';
-    document.getElementById('equipeVisiteur').value = '';
-    document.getElementById('terrain').value = '';
-	//document.getElementById('arbitreMarbre').value = '';
-    //document.getElementById('arbitreButs').value = '';
-	document.getElementById('pointagelocal').value = '';
-    document.getElementById('pointagevisiteur').value = '';
-	
-   
-   
+document.getElementById("regionSelect").addEventListener("change", async e => { 
+    const ligueSelect = document.getElementById("ligueSelect"); 
+    const catSelect = document.getElementById("categorieSelect"); 
+    const classeSelect = document.getElementById("classeSelect"); 
+    const destinatairesDiv = document.getElementById("destinataires");
+    const tournoiSelect = document.getElementById("TournoiSelect");
     
-    // Optionnel, mais recommandé : effacer les messages d'erreur et les options de la datalist
-  //  document.querySelector('#equipeLocale + .error').textContent = '';
-  //  document.querySelector('#equipeVisiteur + .error').textContent = '';
-    clearErrorAfter('#equipeLocale');
-    clearErrorAfter('#equipeVisiteur');
-  
-    populateEquipesDatalist([]); // Vide la datalist des équipes
-    populateTerrainsDatalist([]); // Vide la datalist des terrains
+    // --- Réinitialisation des sélecteurs et variables globales ---
+    ligueSelect.innerHTML = "<option value=''>-- Sélectionner une ligue --</option>"; 
+    catSelect.innerHTML = "<option value=''>-- Sélectionner une catégorie --</option>"; 
+    classeSelect.innerHTML = "<option value=''>-- Sélectionner une classe --</option>"; 
+    destinatairesDiv.textContent = ""; 
+    currentRegionData = {}; 
+    currentLigueData = {}; 
+
+    // --- Réinitialisation des champs de formulaire ---
+    document.getElementById('equipeLocale').value = ''; 
+    document.getElementById('equipeVisiteur').value = ''; 
+    document.getElementById('terrain').value = ''; 
+    document.getElementById('pointagelocal').value = ''; 
+    document.getElementById('pointagevisiteur').value = ''; 
+	document.getElementById('pointagelocal').required = false;
+    document.getElementById('pointagevisiteur').required = false;
     
-	
-    const region = e.target.value;
+    // Correction du bug de persistance du champ Tournoi
+    const tournoiContainer = tournoiSelect.parentElement;
+    if (tournoiContainer) {
+        tournoiContainer.style.display = 'none';
+        tournoiContainer.required = false;
+        tournoiSelect.innerHTML = "<option value=''>-- Sélectionner un tournoi --</option>";
+    }
     
+    clearErrorAfter('#equipeLocale'); 
+    clearErrorAfter('#equipeVisiteur'); 
+    populateEquipesDatalist([]); 
+    populateTerrainsDatalist([]); 
+    
+    const region = e.target.value; 
     if(!region) return;
-    if(!jsonRegions[region]) return;
-	 baseEmails = jsonRegions[region]._BaseEmails || [];
     
-    // FILTRAGE: On filtre les clés qui commencent par '_' (i.e., _BaseEmails)
-    Object.keys(jsonRegions[region]).forEach(key=>{
-        if (key.charAt(0) !== '_') {
-            let opt = document.createElement("option"); 
-            opt.value=key; 
-            opt.textContent=key;
-            ligueSelect.appendChild(opt);
-        }
-    });
+    const regionConfig = jsonRegions.Regions ? jsonRegions.Regions[region] : jsonRegions[region];
+    if(!regionConfig) return;
+    
+    baseEmails = regionConfig._BaseEmails || []; 
+
+    // --- Chargement ASYNCHRONE du fichier JSON (via chargerDonneeschemin) ---
+    const fileName = regionConfig.fichier;
+    if (!fileName) return;
+    const fullUrl = cheminfichier + fileName;
+    const fetchedData = await chargerDonneeschemin(fullUrl);
+    
+    if (fetchedData === null) return;
+    
+    currentRegionData = fetchedData; 
+
+    // --- Remplissage du select des ligues ---
+    Object.keys(currentRegionData).forEach(key=>{ 
+        if (key.charAt(0) !== '_') { 
+            let opt = document.createElement("option");  
+            opt.value=key;  
+            opt.textContent=key; 
+            ligueSelect.appendChild(opt); 
+        } 
+    }); 
 });
 
+
 document.getElementById("ligueSelect").addEventListener("change", e => {
-    const region = document.getElementById("regionSelect").value;
     const ligue = e.target.value;
     const catSelect = document.getElementById("categorieSelect");
     const classeSelect = document.getElementById("classeSelect");
     const tournoiSelect = document.getElementById("TournoiSelect");
-    
-    // Réinitialisation de tous les champs de sélection et champs d'entrée
+    const destinatairesDiv = document.getElementById("destinataires"); // Déclaration obligatoire
+
+    // Réinitialisation
     catSelect.innerHTML = "<option value=''>-- Sélectionner une catégorie --</option>";
     classeSelect.innerHTML = "<option value=''>-- Sélectionner une classe --</option>";
     tournoiSelect.innerHTML = "<option value=''>-- Sélectionner un tournoi --</option>";
     destinatairesDiv.textContent = "";
     document.getElementById('equipeLocale').value = '';
-    document.getElementById('equipeVisiteur').value = '';
+    document.getElementById('equipeVisiteur').value = ''; 
     document.getElementById('terrain').value = '';
-   // document.getElementById('arbitreMarbre').value = '';
-   // document.getElementById('arbitreButs').value = '';
-	document.getElementById('pointagelocal').value = '';
+    document.getElementById('pointagelocal').value = '';
     document.getElementById('pointagevisiteur').value = '';
-
-
+    document.getElementById('pointagelocal').required = false;
+    document.getElementById('pointagevisiteur').required = false;
 
     clearErrorAfter('#equipeLocale');
     clearErrorAfter('#equipeVisiteur');
@@ -2233,32 +2247,17 @@ document.getElementById("ligueSelect").addEventListener("change", e => {
     
     if(!ligue) return;
     
-    currentLigueData = jsonRegions[region][ligue] || {};
+    currentLigueData = currentRegionData[ligue] || {}; 
     const categories = {};
     
-    // On itère sur toutes les clés de la ligue
+    // Logique de peuplement des catégories (inchangée)
     Object.keys(currentLigueData).forEach(key => {
         if (key.charAt(0) === '_') return;
-
-        // Si la ligue est "Tournois", on doit d'abord vérifier si la sous-clé est un objet contenant d'autres clés,
-        // ce qui indique des tournois spécifiques (ex: "Tournoi 9U A de Beloeil")
-        if (ligue === "Tournois" || ligue === "Regionaux" || ligue === "Super Regionaux" || ligue === "Provinciaux") {
-            // Si la clé contient des espaces, c'est une combinaison 'catégorie classe' (ex: "9U A")
-            if (key.includes(" ")) {
-                const parts = key.split(" ");
-                const cat = parts[0];
-                const cls = parts.slice(1).join(" ");
-                if(!categories[cat]) categories[cat] = [];
-                if(!categories[cat].includes(cls)) categories[cat].push(cls);
-            }
-        } else {
-            // Logique existante pour les ligues régulières
-            const parts = key.split(" ");
-            const cat = parts[0];
-            const cls = parts.slice(1).join(" ");
-            if(!categories[cat]) categories[cat] = [];
-            if(!categories[cat].includes(cls)) categories[cat].push(cls);
-        }
+        const parts = key.split(" ");
+        const cat = parts[0];
+        const cls = parts.slice(1).join(" ");
+        if(!categories[cat]) categories[cat] = [];
+        if(!categories[cat].includes(cls)) categories[cat].push(cls);
     });
 
     // Peuple le sélecteur de catégorie
@@ -2270,40 +2269,35 @@ document.getElementById("ligueSelect").addEventListener("change", e => {
     });
     catSelect.dataset.classes = JSON.stringify(categories);
     
-    // Autofill si une seule catégorie est disponible
+    // Autofill de la catégorie et cascade vers la classe si la catégorie est unique
     if(Object.keys(categories).length === 1){
         const onlyCat = Object.keys(categories)[0];
         catSelect.value = onlyCat;
         if (typeof clearFieldError === 'function') clearFieldError(catSelect);
-        catSelect.dispatchEvent(new Event("change"));
+        catSelect.dispatchEvent(new Event("change")); // Déclenche l'écouteur categorieSelect
     }
 
     // Gère la visibilité des conteneurs
     const tournoiContainer = tournoiSelect.parentElement;
     const classeContainer = classeSelect.parentElement;
-    if (ligue === "Tournois" || ligue === "Regionaux" || ligue === "Super Regionaux" || ligue === "Provinciaux") {
-        if (tournoiContainer) 
-		    { 
-			  tournoiContainer.style.display = 'none';
-			  tournoiContainer.required = false;	 
-			 }
-        if (classeContainer) classeContainer.style.display = 'block';
-    } else {
-        if (tournoiContainer) {
-		tournoiContainer.style.display = 'none';
-		tournoiContainer.required = false;	
-		}
-        if (classeContainer) classeContainer.style.display = 'block';
+    
+    // Seul le conteneur de classe est assuré d'être visible ici
+    if (classeContainer) classeContainer.style.display = 'block';
+    
+    // On s'assure que le conteneur de tournoi est masqué (redondant mais sécuritaire)
+    if (tournoiContainer) {
+        tournoiContainer.style.display = 'none';
+        tournoiContainer.required = false; 
     }
-	
-	
 });
 
 document.getElementById("categorieSelect").addEventListener("change", e => {
     const classes = JSON.parse(e.target.dataset.classes || "{}");
     const classeSelect = document.getElementById("classeSelect");
     const tournoiSelect = document.getElementById("TournoiSelect");
+    const destinatairesDiv = document.getElementById("destinataires"); // <--- CORRIGÉ
     const tournoiContainer = tournoiSelect.parentElement;
+    const ligue = document.getElementById("ligueSelect").value; // Ajouté pour la logique de visibilité
     
     // Réinitialisation des select et champs dépendants
     classeSelect.innerHTML = "<option value=''>-- Sélectionner une classe --</option>";
@@ -2312,11 +2306,10 @@ document.getElementById("categorieSelect").addEventListener("change", e => {
     document.getElementById('equipeLocale').value = '';
     document.getElementById('equipeVisiteur').value = '';
     document.getElementById('terrain').value = '';
-   // document.getElementById('arbitreMarbre').value = '';
-   // document.getElementById('arbitreButs').value = '';
-	document.getElementById('pointagelocal').value = '';
+    document.getElementById('pointagelocal').value = '';
     document.getElementById('pointagevisiteur').value = '';
-
+    document.getElementById('pointagelocal').required = false;
+    document.getElementById('pointagevisiteur').required = false;
 
     clearErrorAfter('#equipeLocale');
     clearErrorAfter('#equipeVisiteur');
@@ -2324,7 +2317,14 @@ document.getElementById("categorieSelect").addEventListener("change", e => {
     populateTerrainsDatalist([]);
     
     const cat = e.target.value;
-    if(!cat) return;
+    if(!cat) {
+        // En cas de réinitialisation de la catégorie, masquer le conteneur de tournoi
+        if (tournoiContainer) {
+            tournoiContainer.style.display = 'none';
+            tournoiContainer.required = false;
+        }
+        return;
+    }
 
     const classesForCat = classes[cat] || [];
 
@@ -2334,36 +2334,39 @@ document.getElementById("categorieSelect").addEventListener("change", e => {
         classeSelect.appendChild(opt);
     });
     
-    if (tournoiContainer) 
-	   {
-	    tournoiContainer.style.display = 'none';
-	    tournoiContainer.required = false;	
-	}	
+    // Masque le conteneur de tournoi si une catégorie est choisie mais pas encore la classe.
+    if (tournoiContainer) {
+        tournoiContainer.style.display = 'none';
+        tournoiContainer.required = false;
+    }
 
-    // Autofill si une seule classe est disponible
+    // Autofill si une seule classe est disponible (Déclenche la cascade vers classeSelect)
     if(classesForCat.length === 1){
         const onlyClasse = classesForCat[0];
         classeSelect.value = onlyClasse;
         if (typeof clearFieldError === 'function') clearFieldError(classeSelect);
-        classeSelect.dispatchEvent(new Event("change"));
+        classeSelect.dispatchEvent(new Event("change")); // Déclenche l'écouteur classeSelect
     }
 });
 
 
 document.getElementById("classeSelect").addEventListener("change", e => {
-    const region = document.getElementById("regionSelect").value;
     const ligue = document.getElementById("ligueSelect").value;
     const cat = document.getElementById("categorieSelect").value;
     const cls = e.target.value;
     const tournoiSelect = document.getElementById("TournoiSelect");
     const tournoiContainer = tournoiSelect.parentElement;
+    const destinatairesDiv = document.getElementById("destinataires"); // Déclaration obligatoire
 
     // Réinitialisation des champs et datalists
     document.getElementById('equipeLocale').value = '';
     document.getElementById('equipeVisiteur').value = '';
     document.getElementById('terrain').value = '';
-  //  document.getElementById('arbitreMarbre').value = '';
-  //  document.getElementById('arbitreButs').value = '';
+    document.getElementById('pointagelocal').value = '';
+    document.getElementById('pointagevisiteur').value = '';    
+    document.getElementById('pointagelocal').required = false;
+    document.getElementById('pointagevisiteur').required = false;
+
     clearErrorAfter('#equipeLocale');
     clearErrorAfter('#equipeVisiteur');
     populateEquipesDatalist([]);
@@ -2373,20 +2376,23 @@ document.getElementById("classeSelect").addEventListener("change", e => {
     if (!cls) return;
 
     const selectedLevelKey = `${cat} ${cls}`;
-    const selectedLevelData = currentLigueData[selectedLevelKey];
+    const selectedLevelData = currentLigueData[selectedLevelKey]; 
     
-    // NOUVEAU: Si la ligue est "Tournois", on gère l'affichage du sélecteur de tournoi
+    // Logique Tournois : si c'est une ligue de tournoi, affiche le sélecteur de tournoi
     if (ligue === "Tournois" || ligue === "Regionaux" || ligue === "Super Regionaux" || ligue === "Provinciaux") {
+        
         if (tournoiContainer) {
-            tournoiContainer.style.display = 'block';
-			tournoiContainer.required = true;
+            tournoiContainer.style.display = 'block'; // Affiche le champ Tournoi
+            tournoiContainer.required = true;
             tournoiSelect.innerHTML = "<option value=''>-- Sélectionner un tournoi --</option>";
         }
 
         const availableTournois = selectedLevelData || {};
+        // L'exclusion des clés commençant par '_' est déjà assurée ici 
+        // par la condition 'if (typeof availableTournois[tournoiName] === 'object' ...)'
+        // et le fait que seules les clés d'objets sont utilisées pour les options.
         Object.keys(availableTournois).forEach(tournoiName => {
-            // Assurez-vous d'ignorer les clés comme "EmailsSpecifiques"
-            if (typeof availableTournois[tournoiName] === 'object' && availableTournois[tournoiName] !== null) {
+            if (tournoiName.charAt(0) !== '_' && typeof availableTournois[tournoiName] === 'object' && availableTournois[tournoiName] !== null) { // <-- MODIFIÉ
                 let opt = document.createElement("option");
                 opt.value = tournoiName;
                 opt.textContent = tournoiName.trim();
@@ -2394,22 +2400,23 @@ document.getElementById("classeSelect").addEventListener("change", e => {
             }
         });
         
-        // Gère le cas où il n'y a qu'un seul tournoi disponible, et l'autofill
-        const tournoiKeys = Object.keys(availableTournois).filter(key => typeof availableTournois[key] === 'object');
+        const tournoiKeys = Object.keys(availableTournois).filter(key => key.charAt(0) !== '_' && typeof availableTournois[key] === 'object'); // <-- MODIFIÉ
         if (tournoiKeys.length === 1) {
             const onlyTournoi = tournoiKeys[0];
             tournoiSelect.value = onlyTournoi;
             if (typeof clearFieldError === 'function') clearFieldError(tournoiSelect);
             tournoiSelect.dispatchEvent(new Event("change"));
         }
-        return; // Sortir pour ne pas exécuter le reste de la logique
+        return; 
     }
     
-    // Logique existante pour les ligues régulières (qui sera toujours exécutée si ligue n'est pas "Tournois")
-    const specificEmails = (selectedLevelData && selectedLevelData.EmailsSpecifiques) || [];
+    // Logique ligues régulières (seulement si ce n'est PAS un tournoi)
+    // CLÉ MODIFICATION : Changement de la clé recherchée de 'EmailsSpecifiques' à '_EmailsSpecifiques'
+    const specificEmails = (selectedLevelData && selectedLevelData._EmailsSpecifiques) || []; 
     const availableTeams = (selectedLevelData && selectedLevelData.Equipes) || [];
     const availableTerrains = (selectedLevelData && selectedLevelData.Terrains) || [];
-    const baseEmails = jsonRegions[region]._BaseEmails || [];
+    
+    const baseEmails = currentRegionData._BaseEmails || [];
     const allEmails = [...baseEmails, ...specificEmails];
     
     populateEquipesDatalist(availableTeams);
@@ -2417,24 +2424,26 @@ document.getElementById("classeSelect").addEventListener("change", e => {
     destinatairesDiv.textContent = allEmails.join(", ");
 });
 
+
+// ---------------------------------------------------------------------------------------------------
+
 document.getElementById("TournoiSelect").addEventListener("change", e => {
-    const region = document.getElementById("regionSelect").value;
+    // La variable `region` n'est plus strictement nécessaire ici, mais on la garde par prudence
     const ligue = document.getElementById("ligueSelect").value;
-    const catClass = document.getElementById("categorieSelect").value;
+    const cat = document.getElementById("categorieSelect").value;
     const cls = document.getElementById("classeSelect").value;
     const tournoiName = e.target.value;
+    const destinatairesDiv = document.getElementById("destinataires");
     
     // Réinitialisation des emails et des champs dépendants
     destinatairesDiv.textContent = "";
     document.getElementById('equipeLocale').value = '';
     document.getElementById('equipeVisiteur').value = '';
     document.getElementById('terrain').value = '';
- //   document.getElementById('arbitreMarbre').value = '';
- //   document.getElementById('arbitreButs').value = '';
-	document.getElementById('pointagelocal').value = '';
-    document.getElementById('pointagevisiteur').value = '';
-
-
+    document.getElementById('pointagelocal').value = '';
+    document.getElementById('pointagevisiteur').value = '';    
+    document.getElementById('pointagelocal').required = false;
+    document.getElementById('pointagevisiteur').required = false;
 
     clearErrorAfter('#equipeLocale');
     clearErrorAfter('#equipeVisiteur');
@@ -2443,16 +2452,21 @@ document.getElementById("TournoiSelect").addEventListener("change", e => {
 
     if (!tournoiName) return;
     
-    // Le chemin est maintenant: jsonRegions[region].Tournois[catégorie][classe][nom du tournoi]
-    const tournoiData = jsonRegions[region][ligue][`${catClass} ${cls}`][tournoiName];
+    const selectedLevelKey = `${cat} ${cls}`;
     
-    const baseEmails = jsonRegions[region]._BaseEmails || [];
-    const specificEmails = (tournoiData && tournoiData.EmailsSpecifiques) || [];
+    // Chemin: currentRegionData[Ligue][Catégorie Classe][Nom du Tournoi]
+    const tournoiData = currentRegionData[ligue][selectedLevelKey][tournoiName];
+    
+    // Utilise currentRegionData pour les _BaseEmails
+    const baseEmails = currentRegionData._BaseEmails || [];
+    
+    // CLÉ MODIFICATION : Changement de la clé recherchée de 'EmailsSpecifiques' à '_EmailsSpecifiques'
+    const specificEmails = (tournoiData && tournoiData._EmailsSpecifiques) || [];
     
     const allEmails = [...baseEmails, ...specificEmails];
     destinatairesDiv.textContent = allEmails.join(", ");
     
-    // S'il y a des équipes ou terrains spécifiques au tournoi (peu probable mais utile)
+    // S'il y a des équipes ou terrains spécifiques au tournoi
     const availableTeams = (tournoiData && tournoiData.Equipes) || [];
     const availableTerrains = (tournoiData && tournoiData.Terrains) || [];
     populateEquipesDatalist(availableTeams);

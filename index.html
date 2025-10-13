@@ -6,7 +6,7 @@
 <script>
     // 1. Définition de la variable de version globalement (accessible partout)
     window.CONFIG = {
-        VERSION: '0.20251010.18:15' // Mettez à jour ce numéro manuellement pour chaque version
+        VERSION: '0.20251012.23:25' // Mettez à jour ce numéro manuellement pour chaque version
     };
 
     // 2. Modification immédiate du titre (Option 2)
@@ -729,8 +729,11 @@ Version développement pour voir la partie courriel inscrire votre courriel dans
     <div><label>Région</label><select id="regionSelect" tabindex="3" required><option value="">-- Sélectionner une région --</option></select><div class="error"></div></div>
     <div><label>Ligue</label><select id="ligueSelect" tabindex="4" required><option value="">-- Sélectionner une ligue --</option></select><div class="error"></div></div>
     <div><label>Catégorie</label><select id="categorieSelect" tabindex="5" required><option value="">-- Sélectionner une catégorie --</option></select><div class="error"></div></div>
-    <div><label>Classe</label><select id="classeSelect" tabindex="6" required><option value="">-- Sélectionner une classe --</option></select><div class="error"></div></div>
+    <div id="classeContainer"><label>Classe</label><select id="classeSelect" tabindex="6" required><option value="">-- Sélectionner une classe --</option></select><div class="error"></div></div>
+	
   </div>
+   <div class="select-row" id="tournoiContainer" style="display: none;"><label>Nom de l'événement</label><select id="TournoiSelect" tabindex="7"><option value="">-- Sélectionner un événement --</option></select>    <div class="error"></div>
+   </div>
    
 </div>
 
@@ -938,8 +941,9 @@ Une fois le terrain quitté par le participant, a-t-il quitté les environs du t
 /*const regionUrl = "https://script.google.com/macros/s/AKfycby5mjKpMvPhV4jQdNPuO7H8NIcaRh_P3SRoqQSJLu8IzrMn7s5ytmZxbYXody-nqVKS-A/exec";
 const codesUrl = "https://script.google.com/macros/s/AKfycbxTNlQ5JFpIDIBSTWARTT3v1ztYXexP9zMuVwwAdWC43acGQGA1cPibQYqSyCabhzEd/exec"; 
 */
-const regionUrl = "https://raw.githubusercontent.com/Loleduc/RapportExpulsion/refs/heads/main/Sans%20structure%20arbitres/adressesmultiples.json"; // à mettre si on utilise la liste d'arbitres
+//const regionUrl = "https://raw.githubusercontent.com/Loleduc/RapportExpulsion/refs/heads/main/Sans%20structure%20arbitres/adressesmultiples.json"; // à mettre si on utilise la liste d'arbitres
 //const regionUrl = "https://raw.githubusercontent.com/Loleduc/RapportExpulsion/refs/heads/main/Nouvelle%20architecture/BETA%20adressesmultiples.json"; // à mettre si un utilise pas la liste d'arbitres probablement à enlever
+const regionUrl = "https://raw.githubusercontent.com/Loleduc/RapportExpulsion/refs/heads/main/Sans%20structure%20arbitres/adressesmultiplestournois.json";
 
 const codesUrl = "https://raw.githubusercontent.com/Loleduc/RapportExpulsion/refs/heads/main/Sans%20structure%20arbitres/Codes.json";
 
@@ -1121,7 +1125,7 @@ function resetExpulsionData() {
 // Attache les écouteurs d'événements 'change' aux sélecteurs (Région, Ligue, Catégorie, Classe).
 document.addEventListener('DOMContentLoaded', () => {
     // Les IDs des sélecteurs déclencheurs sont : regionSelect, ligueSelect, categorieSelect, classeSelect
-    const selectorsToWatch = ['regionSelect', 'ligueSelect', 'categorieSelect', 'classeSelect'];
+    const selectorsToWatch = ['regionSelect', 'ligueSelect', 'categorieSelect', 'classeSelect','TournoiSelect'];
 
     selectorsToWatch.forEach(id => {
         const selectElement = document.getElementById(id);
@@ -1407,24 +1411,24 @@ function transformDebugJSONToCustomData() {
     // Générer le JSON de données complet
     const debugData = generateDebugJSON();
     const data = [];
-
-    // --- PARTIE FIXE (Index 0 à 14 pour la logique switch) ---
-    data.push({ question: 'Match # :', reponse: debugData.match.numero }); // 0
-    data.push({ question: 'Date et Heure du match :', reponse: debugData.match.date }); // 1
-    data.push({ question: 'Région du Match :', reponse: debugData.match.region }); // 2
-    data.push({ question: 'Ligue :', reponse: debugData.match.ligue }); // 3
-    data.push({ question: 'Catégorie :', reponse: debugData.match.categorie }); // 4
-    data.push({ question: 'Classe :', reponse: debugData.match.classe }); // 5
-    data.push({ question: 'Équipe locale :', reponse: debugData.equipes.locale }); // 6
-    data.push({ question: 'Pointage locale :', reponse: debugData.equipes.pointagelocal }); // 7  
-    data.push({ question: 'Équipe visiteur :', reponse: debugData.equipes.visiteur }); // 8
-    data.push({ question: 'Pointage visiteur :', reponse: debugData.equipes.pointagevisiteur }); // 9
-	data.push({ question: 'Terrain :', reponse: debugData.equipes.terrain }); // 10
+   
+	data.push({ question: 'Événement :', reponse: debugData.match.evenement }); // 0
+	data.push({ question: 'Match # :', reponse: debugData.match.numero }); // 1
+    data.push({ question: 'Date et Heure du match :', reponse: debugData.match.date }); // 2
+    data.push({ question: 'Région du Match :', reponse: debugData.match.region }); // 3
+    data.push({ question: 'Ligue :', reponse: debugData.match.ligue }); // 4
+    data.push({ question: 'Catégorie :', reponse: debugData.match.categorie }); // 5
+    data.push({ question: 'Classe :', reponse: debugData.match.classe }); // 6
+    data.push({ question: 'Équipe locale :', reponse: debugData.equipes.locale }); // 7
+    data.push({ question: 'Pointage locale :', reponse: debugData.equipes.pointagelocal }); // 8  
+    data.push({ question: 'Équipe visiteur :', reponse: debugData.equipes.visiteur }); // 9
+    data.push({ question: 'Pointage visiteur :', reponse: debugData.equipes.pointagevisiteur }); // 10
+	data.push({ question: 'Terrain :', reponse: debugData.equipes.terrain }); // 11
     
     // --- Arbitres standards ---
-    data.push({ question: 'Arbitre au marbre :', reponse: debugData.officiels.marbre }); // 11
+    data.push({ question: 'Arbitre au marbre :', reponse: debugData.officiels.marbre }); // 12
     // Vous devez déterminer si c'est 'Arbitre sur les buts' ou 'Arbitre 1er but'
-    data.push({ question: 'Arbitre 1er but :', reponse: debugData.officiels.buts1 }); // 12
+    data.push({ question: 'Arbitre 1er but :', reponse: debugData.officiels.buts1 }); // 13
 
     // --- Arbitres conditionnels (buts2 et buts3) ---
     
@@ -1443,12 +1447,12 @@ function transformDebugJSONToCustomData() {
             }
         }
         
-        data.push({ question: label + ':', reponse: debugData.officiels.buts2 }); // 11 (ou autre index)
+        data.push({ question: label + ':', reponse: debugData.officiels.buts2 }); // 14 (ou autre index)
     }
 
     // Vérification de la présence de la propriété buts3 (Arbitre 3ième but)
     if (debugData.officiels.hasOwnProperty('buts3')) {
-        data.push({ question: 'Arbitre 3ième but :', reponse: debugData.officiels.buts3 }); // 12 (ou autre index)
+        data.push({ question: 'Arbitre 3ième but :', reponse: debugData.officiels.buts3 }); // 15 (ou autre index)
     }
     
     // L'index 11 et 12 (ou suivants) sont maintenant dynamiques
@@ -1477,6 +1481,21 @@ function transformDebugJSONToCustomData() {
 
 
 	
+/**
+ * Génère le contenu HTML complet d'un rapport d'expulsion à partir des données structurées.
+ * * @param {Array<Object>} customData - Les données d'entrée du formulaire (question et réponse).
+ * @returns {string} Le code HTML complet du rapport.
+ */
+/**
+ * Génère le contenu HTML complet d'un rapport d'expulsion à partir des données structurées.
+ * @param {Array<Object>} customData - Les données d'entrée du formulaire (question et réponse).
+ * @returns {string} Le code HTML complet du rapport.
+ */
+/**
+ * Génère le contenu HTML complet d'un rapport d'expulsion à partir des données structurées.
+ * @param {Array<Object>} customData - Les données d'entrée du formulaire (question et réponse).
+ * @returns {string} Le code HTML complet du rapport.
+ */
 function genererRapportExpulsion(customData) {
     let message = "";
     
@@ -1496,13 +1515,15 @@ function genererRapportExpulsion(customData) {
     const styleCellFull = `padding: ${cellPadding}; border: 1px solid #ddd; width: 100%; background-color: white; -webkit-print-color-adjust: exact;`;
     const styleCell3Cols = `padding: ${cellPadding}; border: 1px solid #ddd; width: 75%; background-color: white; -webkit-print-color-adjust: exact;`;
 
-    // Récupération des données clés (inchangé)
+    // Récupération des données clés (CORRIGÉ : customData[0] est maintenant l'événement, customData[1] est le numéro de match)
+    const evenementGlobal = (customData[0] && customData[0].reponse) ? customData[0].reponse : ""; // L'événement est à l'index 0
+    const numeroMatch = (customData[1] && customData[1].reponse) ? customData[1].reponse : "N/A"; // Le numéro de match est à l'index 1
     const region = (customData[2] && customData[2].reponse) ? customData[2].reponse.toUpperCase() : "RÉGION INDÉTERMINÉE";
-    const numeroMatch = (customData[0] && customData[0].reponse) ? customData[0].reponse : "N/A";
     const logoGauche = typeof LOGO_GAUCHE !== 'undefined' ? LOGO_GAUCHE : '';
     const logoDroite = typeof LOGO_DROITE !== 'undefined' ? LOGO_DROITE : '';
     const journee = typeof getCurrentDateTime === 'function' ? getCurrentDateTime() : new Date().toISOString().replace('T', ' ').substring(0, 16);
-    const delaisheure = typeof delaiEntreDates === 'function' && customData[1] ? delaiEntreDates(customData[1].reponse, journee) : '';
+    // On utilise customData[3] (Date) pour le calcul du délai
+    const delaisheure = typeof delaiEntreDates === 'function' && customData[3] ? delaiEntreDates(customData[3].reponse, journee) : ''; 
 
     if (delaisheure) {
         message += `
@@ -1516,7 +1537,7 @@ function genererRapportExpulsion(customData) {
     message += `<div style="font-family: 'Segoe UI', sans-serif; font-size: 15px;">`;
     message += `<table style="${styleTable}">`; 
 
-    // BANDEAU DE TITRE (inchangé)
+    // BANDEAU DE TITRE (Utilise numeroMatch de l'index 1)
     message += `
         <tr>
             <td style="width: 25%; text-align: center; padding: 20px 10px; ${styleMainHeaderBG}">
@@ -1541,44 +1562,69 @@ function genererRapportExpulsion(customData) {
         let answer = customData[i].reponse;
         
         switch (i) {
-            case 0: break;
-            case 1: 
-                // Index 1 (Date) & 2 (Région) (inchangé)
-                if (!customData[2]) break;
-                const displayDate = (answer || "N/A").replace('T', ' ');
+            case 0: // Événement - DÉJÀ RÉCUPÉRÉ MAIS TRAITÉ ICI POUR LA STRUCTURE DE LA TABLE
+                // On regroupe les champs importants du match: Événement (0), Région (2), Date (3)
                 
-                message += `
-                    <tr>
-                    <td colspan="4" style="${styleSectionHeaderTD}"><h3 style="${styleSectionHeaderTH}; margin: 0; padding: 0;">INFORMATIONS SUR LE MATCH</h3></td>
-                    </tr>
-                    <tr>
-                    <td style="${styleLabel25}">Date & Heure :</td> 
-                    <td style="${styleValue25}">${displayDate}</td> 
-                    <td style="${styleLabel25}">Région :</td>
-                    <td style="${styleValue25}">${customData[2].reponse}</td>
-                    </tr>`;
+                // On vérifie que la date existe (index 3) pour grouper l'affichage
+                if (!customData[2] || !customData[3]) break; 
+                
+                const displayDate = (customData[3].reponse || "N/A").replace('T', ' ');
+                
+               message += `
+					<tr>
+					<td colspan="4" style="${styleSectionHeaderTD}"><h3 style="${styleSectionHeaderTH}; margin: 0; padding: 0;">INFORMATIONS SUR LE MATCH</h3></td>
+					</tr>`;
+
+				// VÉRIFICATION ICI : Ajout de la ligne "Nom de l'événement" SEULEMENT s'il y a une valeur
+				if (evenementGlobal && evenementGlobal !== "") {
+					message += `
+						<tr>
+						<td style="${styleLabel25}">Nom de l'événement :</td>
+						<td colspan="3" style="${styleCell3Cols}"><strong style="font-size: 1.1em;">${evenementGlobal}</strong></td>
+						</tr>`;
+				}
+
+				message += `
+					<tr>
+					<td style="${styleLabel25}">Date & Heure :</td> 
+					<td style="${styleValue25}">${displayDate}</td> 
+					<td style="${styleLabel25}">Région :</td>
+					<td style="${styleValue25}">${customData[2].reponse}</td>
+					</tr>`;
+                
+                // On saute l'index 1 (Match #), 2 (Région), 3 (Date) et on passe à l'index 4 (Ligue)
+                i = 3; 
                 break;
-            case 3:
-                // Index 3 (Ligue) & 4 (Catégorie) / 5 (Classe) (inchangé)
-                if (!customData[4] || !customData[5]) break;
+                
+            case 1: // Numéro de match - Traité uniquement dans l'entête, on l'ignore dans la boucle.
+                break;
+            case 2: // Région - Traité dans le case 0, on l'ignore.
+                break;
+            case 3: // Date - Traité dans le case 0, on l'ignore.
+                break;
+
+            case 4: // Ligue (index 4)
+                // Index 4 (Ligue) & 5 (Catégorie) / 6 (Classe)
+                if (!customData[5] || !customData[6]) break;
                 message += `
                     <tr>
                     <td style="${styleLabel25}">Ligue :</td>
-                    <td style="${styleValue25}">${customData[3].reponse}</td>
+                    <td style="${styleValue25}">${customData[4].reponse}</td>
                     <td style="${styleLabel25}">Catégorie/Classe :</td>
-                    <td style="${styleValue25}">${customData[4].reponse} / ${customData[5].reponse}</td>
+                    <td style="${styleValue25}">${customData[5].reponse} / ${customData[6].reponse}</td>
                     </tr>`;
-                i += 2;
+                i += 2; // On passe à l'index 7 (Équipe locale)
                 break;
-            case 6:
-                // ⭐ NOUVEAU: Gère l'équipe locale (index 6) et son pointage (index 7)
-                if (!customData[7] || !customData[8] || !customData[9]) break;
+
+            case 7: // Équipe locale (index 7)
+                // Gère l'équipe locale (index 7) et son pointage (index 8)
+                if (!customData[8] || !customData[9] || !customData[10]) break;
                 
                 // Récupération des données pour plus de clarté
-                const equipeLocale = customData[6];
-                const pointageLocale = customData[7];
-                const equipeVisiteur = customData[8];
-                const pointageVisiteur = customData[9];
+                const equipeLocale = customData[7];
+                const pointageLocale = customData[8];
+                const equipeVisiteur = customData[9];
+                const pointageVisiteur = customData[10];
                 
                 message += `
                     <tr>
@@ -1601,16 +1647,21 @@ function genererRapportExpulsion(customData) {
                     </td>
                     </tr>
                     `;
-                // Nous sautons les index 7, 8 et 9 car nous venons de les traiter
+                // Nous sautons les index 8, 9 et 10 car nous venons de les traiter
                 i += 3; 
                 break;
-            case 10:
-                // Index 10 (Terrain)
+                
+            case 11: // Terrain (index 11)
+                // Index 11 (Terrain)
                 message += `
                     <tr>
                     <td style="${styleLabel25}">Terrain :</td>
                     <td colspan="3" style="${styleCell3Cols}">${answer}</td>
                     </tr>`;
+                break;
+                
+            default:
+                // Pour les autres index non traités spécifiquement (incluant les champs de détails)
                 break;
         }
     }
@@ -2118,9 +2169,12 @@ document.getElementById("regionSelect").addEventListener("change", e => {
     document.getElementById('equipeLocale').value = '';
     document.getElementById('equipeVisiteur').value = '';
     document.getElementById('terrain').value = '';
-	document.getElementById('arbitreMarbre').value = '';
-    document.getElementById('arbitreButs').value = '';
+	//document.getElementById('arbitreMarbre').value = '';
+    //document.getElementById('arbitreButs').value = '';
+	document.getElementById('pointagelocal').value = '';
+    document.getElementById('pointagevisiteur').value = '';
 	
+   
    
     
     // Optionnel, mais recommandé : effacer les messages d'erreur et les options de la datalist
@@ -2155,43 +2209,59 @@ document.getElementById("ligueSelect").addEventListener("change", e => {
     const ligue = e.target.value;
     const catSelect = document.getElementById("categorieSelect");
     const classeSelect = document.getElementById("classeSelect");
+    const tournoiSelect = document.getElementById("TournoiSelect");
+    
+    // Réinitialisation de tous les champs de sélection et champs d'entrée
     catSelect.innerHTML = "<option value=''>-- Sélectionner une catégorie --</option>";
     classeSelect.innerHTML = "<option value=''>-- Sélectionner une classe --</option>";
+    tournoiSelect.innerHTML = "<option value=''>-- Sélectionner un tournoi --</option>";
     destinatairesDiv.textContent = "";
-	
-	// Réinitialisation des champs Équipe et Terrain et leurs datalists
     document.getElementById('equipeLocale').value = '';
     document.getElementById('equipeVisiteur').value = '';
     document.getElementById('terrain').value = '';
-	document.getElementById('arbitreMarbre').value = '';
-    document.getElementById('arbitreButs').value = '';
-    
-    // Optionnel, mais recommandé : effacer les messages d'erreur et les options de la datalist
-   // document.querySelector('#equipeLocale + .error').textContent = '';
-   // document.querySelector('#equipeVisiteur + .error').textContent = '';
+   // document.getElementById('arbitreMarbre').value = '';
+   // document.getElementById('arbitreButs').value = '';
+	document.getElementById('pointagelocal').value = '';
+    document.getElementById('pointagevisiteur').value = '';
+
+
+
     clearErrorAfter('#equipeLocale');
     clearErrorAfter('#equipeVisiteur');
-    populateEquipesDatalist([]); // Vide la datalist des équipes
-    populateTerrainsDatalist([]); // Vide la datalist des terrains
-
-	
+    populateEquipesDatalist([]);
+    populateTerrainsDatalist([]);
+    
     if(!ligue) return;
     
-    // currentLigueData contient les catégories/classes (ex: 9U A, Senior BB)
     currentLigueData = jsonRegions[region][ligue] || {};
-    
     const categories = {};
-    // S'assurer que les clés comme _BaseEmails ne sont pas traitées comme des catégories
+    
+    // On itère sur toutes les clés de la ligue
     Object.keys(currentLigueData).forEach(key => {
         if (key.charAt(0) === '_') return;
-        
-        const parts = key.split(" ");
-        const cat = parts[0];
-        const cls = parts.slice(1).join(" ");
-        if(!categories[cat]) categories[cat] = [];
-        if(!categories[cat].includes(cls)) categories[cat].push(cls);
+
+        // Si la ligue est "Tournois", on doit d'abord vérifier si la sous-clé est un objet contenant d'autres clés,
+        // ce qui indique des tournois spécifiques (ex: "Tournoi 9U A de Beloeil")
+        if (ligue === "Tournois" || ligue === "Regionaux" || ligue === "Super Regionaux" || ligue === "Provinciaux") {
+            // Si la clé contient des espaces, c'est une combinaison 'catégorie classe' (ex: "9U A")
+            if (key.includes(" ")) {
+                const parts = key.split(" ");
+                const cat = parts[0];
+                const cls = parts.slice(1).join(" ");
+                if(!categories[cat]) categories[cat] = [];
+                if(!categories[cat].includes(cls)) categories[cat].push(cls);
+            }
+        } else {
+            // Logique existante pour les ligues régulières
+            const parts = key.split(" ");
+            const cat = parts[0];
+            const cls = parts.slice(1).join(" ");
+            if(!categories[cat]) categories[cat] = [];
+            if(!categories[cat].includes(cls)) categories[cat].push(cls);
+        }
     });
-    
+
+    // Peuple le sélecteur de catégorie
     Object.keys(categories).forEach(cat => {
         let opt = document.createElement("option");
         opt.value = cat;
@@ -2199,107 +2269,196 @@ document.getElementById("ligueSelect").addEventListener("change", e => {
         catSelect.appendChild(opt);
     });
     catSelect.dataset.classes = JSON.stringify(categories);
-    // LOGIQUE CORRIGÉE POUR L'AUTOFULL
-    if(Object.keys(categories).length === 1){ 
+    
+    // Autofill si une seule catégorie est disponible
+    if(Object.keys(categories).length === 1){
         const onlyCat = Object.keys(categories)[0];
         catSelect.value = onlyCat;
-        clearFieldError(catSelect);
+        if (typeof clearFieldError === 'function') clearFieldError(catSelect);
         catSelect.dispatchEvent(new Event("change"));
-        const classesForCat = categories[onlyCat];
-        if(classesForCat.length === 1){
-            const onlyClasse = classesForCat[0];
-            classeSelect.value = onlyClasse;
-            clearFieldError(classeSelect);
-            classeSelect.dispatchEvent(new Event("change"));
-        }
     }
+
+    // Gère la visibilité des conteneurs
+    const tournoiContainer = tournoiSelect.parentElement;
+    const classeContainer = classeSelect.parentElement;
+    if (ligue === "Tournois" || ligue === "Regionaux" || ligue === "Super Regionaux" || ligue === "Provinciaux") {
+        if (tournoiContainer) 
+		    { 
+			  tournoiContainer.style.display = 'none';
+			  tournoiContainer.required = false;	 
+			 }
+        if (classeContainer) classeContainer.style.display = 'block';
+    } else {
+        if (tournoiContainer) {
+		tournoiContainer.style.display = 'none';
+		tournoiContainer.required = false;	
+		}
+        if (classeContainer) classeContainer.style.display = 'block';
+    }
+	
+	
 });
 
-document.getElementById("categorieSelect").addEventListener("change", e=>{
+document.getElementById("categorieSelect").addEventListener("change", e => {
     const classes = JSON.parse(e.target.dataset.classes || "{}");
     const classeSelect = document.getElementById("classeSelect");
-    classeSelect.innerHTML = "<option value=''>-- Sélectionner une classe --</option>";
-    const cat = e.target.value;
+    const tournoiSelect = document.getElementById("TournoiSelect");
+    const tournoiContainer = tournoiSelect.parentElement;
     
-    // Réinitialisation des champs Équipe et Terrain et leurs datalists (ajout recommandé)
+    // Réinitialisation des select et champs dépendants
+    classeSelect.innerHTML = "<option value=''>-- Sélectionner une classe --</option>";
+    tournoiSelect.innerHTML = "<option value=''>-- Sélectionner un tournoi --</option>";
+    destinatairesDiv.textContent = "";
     document.getElementById('equipeLocale').value = '';
     document.getElementById('equipeVisiteur').value = '';
     document.getElementById('terrain').value = '';
-	 document.getElementById('arbitreMarbre').value = '';
-    document.getElementById('arbitreButs').value = '';
-	
+   // document.getElementById('arbitreMarbre').value = '';
+   // document.getElementById('arbitreButs').value = '';
+	document.getElementById('pointagelocal').value = '';
+    document.getElementById('pointagevisiteur').value = '';
+
+
     clearErrorAfter('#equipeLocale');
     clearErrorAfter('#equipeVisiteur');
-    populateEquipesDatalist([]); 
+    populateEquipesDatalist([]);
     populateTerrainsDatalist([]);
-    destinatairesDiv.textContent = "";
-  
-     
+    
+    const cat = e.target.value;
     if(!cat) return;
 
-    const classesForCat = classes[cat];
+    const classesForCat = classes[cat] || [];
 
-    classesForCat.forEach(cls=>{
+    // Peuple le sélecteur de classe
+    classesForCat.forEach(cls => {
         let opt = document.createElement("option"); opt.value=cls; opt.textContent=cls;
         classeSelect.appendChild(opt);
     });
+    
+    if (tournoiContainer) 
+	   {
+	    tournoiContainer.style.display = 'none';
+	    tournoiContainer.required = false;	
+	}	
 
-    // 🌟 NOUVELLE LOGIQUE D'AUTOFULL DE LA CLASSE 🌟
+    // Autofill si une seule classe est disponible
     if(classesForCat.length === 1){
         const onlyClasse = classesForCat[0];
         classeSelect.value = onlyClasse;
-        // Si clearFieldError existe et est nécessaire pour retirer une éventuelle bordure rouge
-        if (typeof clearFieldError === 'function') { 
-             clearFieldError(classeSelect);
-        }
-        // Déclenche l'événement "change" pour exécuter toute logique dépendante de la classe (ex: chargement des équipes/terrains)
+        if (typeof clearFieldError === 'function') clearFieldError(classeSelect);
         classeSelect.dispatchEvent(new Event("change"));
     }
 });
 
-document.getElementById("classeSelect").addEventListener("change", e=>{
-    // ... (votre code existant pour les emails) ...
-    const region = document.getElementById("regionSelect").value; 
+
+document.getElementById("classeSelect").addEventListener("change", e => {
+    const region = document.getElementById("regionSelect").value;
+    const ligue = document.getElementById("ligueSelect").value;
     const cat = document.getElementById("categorieSelect").value;
     const cls = e.target.value;
-    
-	 // ---------------- NOUVEAU : Réinitialisation des champs Équipe ----------------
+    const tournoiSelect = document.getElementById("TournoiSelect");
+    const tournoiContainer = tournoiSelect.parentElement;
+
+    // Réinitialisation des champs et datalists
     document.getElementById('equipeLocale').value = '';
     document.getElementById('equipeVisiteur').value = '';
-	
-    
-    // Nettoyer les messages d'erreur au cas où une erreur d'équipe dupliquée était affichée
-   // document.querySelector('#equipeLocale + .error').textContent = '';
-   // document.querySelector('#equipeVisiteur + .error').textContent = '';
+    document.getElementById('terrain').value = '';
+  //  document.getElementById('arbitreMarbre').value = '';
+  //  document.getElementById('arbitreButs').value = '';
     clearErrorAfter('#equipeLocale');
     clearErrorAfter('#equipeVisiteur');
-    // ---------------- FIN NOUVEAU ----------------
-    // ... (code pour emails de base et spécifiques) ...
+    populateEquipesDatalist([]);
+    populateTerrainsDatalist([]);
+    destinatairesDiv.textContent = "";
 
-    const selectedLevelData = currentLigueData[`${cat} ${cls}`];
-    const specificEmails = (selectedLevelData && selectedLevelData.EmailsSpecifiques) || [];
+    if (!cls) return;
+
+    const selectedLevelKey = `${cat} ${cls}`;
+    const selectedLevelData = currentLigueData[selectedLevelKey];
     
-    // ⬇️ NOUVELLE LOGIQUE POUR LES ÉQUIPES ⬇️
-    const availableTeams = (selectedLevelData && selectedLevelData.Equipes) || [];
-    populateEquipesDatalist(availableTeams);
-	
-	   // ⬇️ NOUVELLE LOGIQUE POUR LES TERRAINS ⬇️
-    const availableTerrains = (selectedLevelData && selectedLevelData.Terrains) || [];
-    // Appel de la nouvelle fonction !
-    populateTerrainsDatalist(availableTerrains);
-	
-	
-    // 2. Concaténer les deux listes d'emails
-	
+    // NOUVEAU: Si la ligue est "Tournois", on gère l'affichage du sélecteur de tournoi
+    if (ligue === "Tournois" || ligue === "Regionaux" || ligue === "Super Regionaux" || ligue === "Provinciaux") {
+        if (tournoiContainer) {
+            tournoiContainer.style.display = 'block';
+			tournoiContainer.required = true;
+            tournoiSelect.innerHTML = "<option value=''>-- Sélectionner un tournoi --</option>";
+        }
 
+        const availableTournois = selectedLevelData || {};
+        Object.keys(availableTournois).forEach(tournoiName => {
+            // Assurez-vous d'ignorer les clés comme "EmailsSpecifiques"
+            if (typeof availableTournois[tournoiName] === 'object' && availableTournois[tournoiName] !== null) {
+                let opt = document.createElement("option");
+                opt.value = tournoiName;
+                opt.textContent = tournoiName.trim();
+                tournoiSelect.appendChild(opt);
+            }
+        });
+        
+        // Gère le cas où il n'y a qu'un seul tournoi disponible, et l'autofill
+        const tournoiKeys = Object.keys(availableTournois).filter(key => typeof availableTournois[key] === 'object');
+        if (tournoiKeys.length === 1) {
+            const onlyTournoi = tournoiKeys[0];
+            tournoiSelect.value = onlyTournoi;
+            if (typeof clearFieldError === 'function') clearFieldError(tournoiSelect);
+            tournoiSelect.dispatchEvent(new Event("change"));
+        }
+        return; // Sortir pour ne pas exécuter le reste de la logique
+    }
+    
+    // Logique existante pour les ligues régulières (qui sera toujours exécutée si ligue n'est pas "Tournois")
+    const specificEmails = (selectedLevelData && selectedLevelData.EmailsSpecifiques) || [];
+    const availableTeams = (selectedLevelData && selectedLevelData.Equipes) || [];
+    const availableTerrains = (selectedLevelData && selectedLevelData.Terrains) || [];
+    const baseEmails = jsonRegions[region]._BaseEmails || [];
     const allEmails = [...baseEmails, ...specificEmails];
-    adressecourriel = allEmails.join(", ");
-    // 3. Mise à jour de destinatairesDiv avec la liste complète
-    destinatairesDiv.textContent = adressecourriel;
-	
-	
+    
+    populateEquipesDatalist(availableTeams);
+    populateTerrainsDatalist(availableTerrains);
+    destinatairesDiv.textContent = allEmails.join(", ");
 });
-	
+
+document.getElementById("TournoiSelect").addEventListener("change", e => {
+    const region = document.getElementById("regionSelect").value;
+    const ligue = document.getElementById("ligueSelect").value;
+    const catClass = document.getElementById("categorieSelect").value;
+    const cls = document.getElementById("classeSelect").value;
+    const tournoiName = e.target.value;
+    
+    // Réinitialisation des emails et des champs dépendants
+    destinatairesDiv.textContent = "";
+    document.getElementById('equipeLocale').value = '';
+    document.getElementById('equipeVisiteur').value = '';
+    document.getElementById('terrain').value = '';
+ //   document.getElementById('arbitreMarbre').value = '';
+ //   document.getElementById('arbitreButs').value = '';
+	document.getElementById('pointagelocal').value = '';
+    document.getElementById('pointagevisiteur').value = '';
+
+
+
+    clearErrorAfter('#equipeLocale');
+    clearErrorAfter('#equipeVisiteur');
+    populateEquipesDatalist([]);
+    populateTerrainsDatalist([]);
+
+    if (!tournoiName) return;
+    
+    // Le chemin est maintenant: jsonRegions[region].Tournois[catégorie][classe][nom du tournoi]
+    const tournoiData = jsonRegions[region][ligue][`${catClass} ${cls}`][tournoiName];
+    
+    const baseEmails = jsonRegions[region]._BaseEmails || [];
+    const specificEmails = (tournoiData && tournoiData.EmailsSpecifiques) || [];
+    
+    const allEmails = [...baseEmails, ...specificEmails];
+    destinatairesDiv.textContent = allEmails.join(", ");
+    
+    // S'il y a des équipes ou terrains spécifiques au tournoi (peu probable mais utile)
+    const availableTeams = (tournoiData && tournoiData.Equipes) || [];
+    const availableTerrains = (tournoiData && tournoiData.Terrains) || [];
+    populateEquipesDatalist(availableTeams);
+    populateTerrainsDatalist(availableTerrains);
+});
+
 // ---------------- Gestion Arbitre Rapport (inchangé) ----------------
 function updateArbitreRapport() {
     // Récupération des valeurs des deux champs toujours visibles
@@ -3002,8 +3161,10 @@ function generateDebugJSON() {
     // 🛑 Sauvegarder l’état courant de l’expulsion active
     serializeCurrentExpulsion();
 
+    
     // Récupération des valeurs "match"
     const match = {
+        evenement : document.getElementById('TournoiSelect')?.value.trim() || "",  
         numero: document.getElementById("matchNumero")?.value.trim() || "",
        // 🛑 LIGNE MODIFIÉE: Remplace l'espace entre la date et l'heure par 'T'
         date: document.getElementById("matchDate")?.value.trim().replace('T', ' ') || "", 

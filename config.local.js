@@ -9,7 +9,7 @@
 // --- 1. Remplacez les valeurs ci-dessous ---
 const config = {
     // Le Jeton d'Accès Personnel (PAT) que vous avez généré sur GitHub
-    PAT: 'votre_vrai_pat_ici', 
+    PAT: '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', 
     
     // Votre nom d'utilisateur GitHub (Owner du dépôt)
     OWNER: 'Loleduc',

@@ -6,7 +6,7 @@
 <script>
     // 1. Définition de la variable de version globalement (accessible partout)
     window.CONFIG = {
-        VERSION: '0.20251013.10:10' // Mettez à jour ce numéro manuellement pour chaque version
+        VERSION: '0.20251013.10:45' // Mettez à jour ce numéro manuellement pour chaque version
     };
 
     // 2. Modification immédiate du titre (Option 2)
@@ -47,7 +47,7 @@
     --couleur-bouton-hover: #0056b3;
 
     /* Couleurs des Panels */
-    --couleur-panel-fond: #d0d3d4;   /* Gris clair des panels 3D */
+    --couleur-panel-fond: #d0d3d4;    /* Gris clair des panels 3D */
 
     /* Couleurs du Texte */
     --couleur-texte-principal: #333; /* Noir/Gris foncé */
@@ -67,7 +67,7 @@
 .theme-blanc {
     /* Couleurs du Dégradé de Fond (body) */
     --couleur-fond-haut: #fff;    /*Blanc */
-    --couleur-fond-bas: #fff;     /* blanc */
+    --couleur-fond-bas: #fff;      /* blanc */
 
     /* Couleurs d'Accentuation (Bleu maintenu pour les clics/chips) */
     --couleur-accent: #0072ce;
@@ -76,7 +76,7 @@
     --couleur-bouton-hover: #0056b3;
 
     /* Couleurs des Panels */
-    --couleur-panel-fond: #d0d3d4;   /* Gris BQ */
+    --couleur-panel-fond: #d0d3d4;    /* Gris BQ */
 
     /* Couleurs du Texte */
     --couleur-texte-principal: #041e42; /* bleu BQ */
@@ -88,7 +88,7 @@
 
     /* Couleurs Diverses */
     --couleur-bordure-grise: #666;
-    --couleur-erreur: #ff6347;        /* Rouge-orangé pour les erreurs */
+    --couleur-erreur: #ff6347;     /* Rouge-orangé pour les erreurs */
     --couleur-avertissement: #ffc107;
 }
 
@@ -105,7 +105,7 @@
     --couleur-bouton-hover: #0056b3;
 
     /* Couleurs des Panels */
-    --couleur-panel-fond: #d0d3d4;   /* Gris clair des panels 3D */
+    --couleur-panel-fond: #d0d3d4;    /* Gris clair des panels 3D */
 
     /* Couleurs du Texte */
     --couleur-texte-principal: #333; /* Noir/Gris foncé */
@@ -121,22 +121,19 @@
     --couleur-avertissement: #ffc107;
 }
 
-
-
 /* -----------------------------------------------------------------------------------
- * CSS GÉNÉRAL (MODIFICATION DE LA RÈGLE H1)
+ * CSS GÉNÉRAL
  * ----------------------------------------------------------------------------------- */
- body { 
+body { 
     font-family: Arial, sans-serif; 
     padding: 20px; 
-    /* Utilisation des variables pour le dégradé */
-	background: linear-gradient(to bottom, var(--couleur-fond-haut) 00%,  var(--couleur-fond-bas) 100%);
+    /* 🚀 CORRECTION/AJUSTEMENT : Dégradé de haut en bas, couvre 100% de la fenêtre */
+    background: linear-gradient(to bottom, var(--couleur-fond-haut) 0%, var(--couleur-fond-bas) 100%);
     min-height: 100vh;
 }
 h1 { 
     font-size: 72px;
     text-align: center; 
-    /* 🚀 CORRECTION : Utilise la nouvelle variable indépendante pour le H1 */
     color: var(--couleur-h1-titre); 
     margin-bottom: 25px; 
     text-shadow: 
@@ -155,27 +152,56 @@ h2 {
         6px 6px 5px rgba(0, 0, 0, 0.1); 
 }
 
+
 label { 
     display: block; 
     margin: 8px 0 4px; 
     font-weight: bold; 
-    /* La couleur du texte principal est utilisée ici, définie par le thème */
     color: var(--couleur-texte-principal);
 }
+
 input, select, textarea { 
     padding: 8px; 
     margin-bottom: 6px; 
     border-radius: 6px; 
     border: 1px solid var(--couleur-bordure-grise); 
     font-size: 14px; 
-    /* 🛑 CLÉ : Assure que le padding et la bordure sont inclus dans la largeur */
     box-sizing: border-box; 
-    /* La couleur du texte principal est utilisée ici, définie par le thème */
     color: var(--couleur-texte-principal);
-    
-    /* 🛑 AJOUTEZ/VÉRIFIEZ CECI : Empêche le débordement horizontal */
     max-width: 100%;
 }
+
+/* 💡 CORRECTION DU STYLE DES LABELS DANS LES BLOCS D'ÉQUIPE/TERRAIN */
+/* 💡 CORRECTION DU STYLE DES LABELS DANS LES BLOCS D'ÉQUIPE/TERRAIN */
+.code-chip.tooltip-champ label {
+    font-weight: bold;
+    color: var(--couleur-texte-principal);
+    /* 🚀 CORRECTION CLÉ : Fixe la taille de la police pour qu'elle corresponde aux autres labels */
+    font-size: 16px; 
+    margin: 8px 0 4px; 
+}
+
+/* Assure que les labels de pointage sont également corrigés */
+.code-chip.tooltip-champ div label {
+    font-weight: bold;
+    color: var(--couleur-texte-principal);
+    /* 🚀 CORRECTION CLÉ : Fixe la taille de la police pour qu'elle corresponde aux autres labels */
+    font-size: 16px; 
+    margin: 4px 0 2px;
+}
+
+/* -----------------------------------------------------------------------------------
+ * ASTÉRISQUE REQUIS (CORRIGÉ ET ÉTENDU)
+ * ----------------------------------------------------------------------------------- */
+label:has(+ input[required])::after,
+label:has(+ select[required])::after,
+h2:has(+ textarea[required])::after { /* Cible le H2 avant le TEXTAREA requis */
+    content: " *";
+    color: red;
+    font-weight: bold;
+}
+
+/* Autres règles (inchangées ou déjà corrigées dans le code fourni) */
 
 #matchNumero { width: 140px; }
 #matchDate { width: 220px; }
@@ -214,16 +240,12 @@ input, select, textarea {
     cursor: pointer; 
     font-size: 14px; 
     color: var(--couleur-accent); 
-    /* Cette couleur définit le fond des chips */
     background: var(--couleur-texte-clair); 
     text-align: center; 
-	 /* Empêche la sélection du texte par l'utilisateur */
     user-select: none;
-    
-    /* Ajoutez des préfixes pour une compatibilité maximale avec les navigateurs */
-    -webkit-user-select: none; /* Safari et Chrome */
-    -ms-user-select: none; /* Internet Explorer/Edge */
-    -moz-user-select: none; /* Firefox */
+    -webkit-user-select: none;
+    -ms-user-select: none;
+    -moz-user-select: none; 
 }
 .chip.selected { 
     background: var(--couleur-accent); 
@@ -266,12 +288,8 @@ input, select, textarea {
     background: none !important;
     cursor: default !important;
     
-    /* Maintient les propriétés essentielles pour le positionnement du tooltip */
     position: relative; 
-    display: block; /* S'assure que le conteneur prend la bonne place */
-    
-    /* ❌ J'AI SUPPRIMÉ : visibility: hidden !important; et opacity: 0 !important; 
-       Ces règles masquaient tout le champ de formulaire, pas seulement le tooltip. */
+    display: block;
 }
 
 .code-chip.tooltip-champ .tooltip {
@@ -303,7 +321,7 @@ input, select, textarea {
 .code-chip:hover .tooltip {
    visibility: visible !important;
    opacity: 1 !important;
-}   
+}    
 
 /* -----------------------------------------------------------------------------------
  * ERREURS ET BOUTONS
@@ -376,51 +394,39 @@ button:hover {
 
 /* 1. Cas 2 arbitres : Centré et plus "collé" */
 .arbitres-row.arbitres-2-cols {
-    /* Ajoute une largeur maximale pour que les champs ne s'étendent pas sur tout le panel */
     max-width: 550px; 
-    /* Force le centrage du conteneur lui-même si le panel est plus large que 550px */
     margin-left: auto;
     margin-right: auto;
 }
 .arbitres-row.arbitres-2-cols .champ {
-    /* Empêche les champs de s'étendre (enlève le flex-grow: 1 par défaut) */
     flex-grow: 0 !important;
-    /* Laisse le champ s'ajuster à sa taille minimale/maximale définie */
     flex-basis: auto !important;
 }
 
 /* 2. Cas 3 arbitres : 1/3, 1/3, 1/3 */
 .arbitres-row.arbitres-3-cols {
-    max-width: 100%; /* Assure que le conteneur prend toute la largeur */
+    max-width: 100%; 
 }
 .arbitres-row.arbitres-3-cols .champ {
-    /* flex-basis: calc(33.33% - 10px) 
-       33.33% est la base pour un tiers. On soustrait un peu (10px) 
-       pour compenser les 15px de gap et éviter que les champs ne "wrappe".
-    */
     flex-grow: 1;
     flex-basis: calc(33.33% - 10px) !important; 
-    min-width: 150px; /* Permet un meilleur ajustement sur des petits écrans */
+    min-width: 150px; 
 }
 
 /* 3. Cas 4 arbitres : 1/4, 1/4, 1/4, 1/4 */
 .arbitres-row.arbitres-4-cols {
-    max-width: 100%; /* Assure que le conteneur prend toute la largeur */
+    max-width: 100%; 
 }
 .arbitres-row.arbitres-4-cols .champ {
-    /* flex-basis: calc(25% - 11.25px)
-       On soustrait plus précisément 11.25px pour compenser les gaps (3*15px / 4 champs)
-    */
     flex-grow: 1;
     flex-basis: calc(25% - 11.25px) !important; 
     min-width: 150px;
 }
 
 /* Règle de secours : Si aucune classe arbitres-*-cols n'est présente 
-   (ce qui arrive juste après le chargement du HTML et AVANT l'exécution du JS), 
-   on force la mise en page "2 arbitres" par défaut. */
+    (ce qui arrive juste après le chargement du HTML et AVANT l'exécution du JS), 
+    on force la mise en page "2 arbitres" par défaut. */
 #arbitres-champs-row:not(.arbitres-2-cols):not(.arbitres-3-cols):not(.arbitres-4-cols) {
-    /* Applique la largeur maximale et le centrage UNIQUEMENT à la rangée des arbitres */
     max-width: 550px; 
     margin-left: auto;
     margin-right: auto;
@@ -587,7 +593,7 @@ button:hover {
 #details,
 #infos_complementaires {
     width: 100%;
-	height: 150px;
+    height: 150px;
 }
 
     
@@ -637,9 +643,9 @@ button:hover {
     background-color: var(--couleur-panel-fond);
     
     /* Vous pouvez aussi ajouter d'autres styles pour la boîte */
-  /*  border: 3px solid #ffcc00;
+ /* border: 3px solid #ffcc00;
     border-radius: 15px; */
-	box-shadow: 
+    box-shadow: 
         0 4px 8px rgba(0, 0, 0, 0.2), /* Ombre standard */
         0 10px 20px rgba(0, 0, 0, 0.15); /* Ombre plus large pour la profondeur */
 }
@@ -682,15 +688,6 @@ input[type="number"] {
     width: 60px; 
     max-width: 60px;
 }
-
-label:has(+ input[required])::after,
-label:has(+ select[required])::after,
-h2:has(+ textarea[required])::after { /* 💡 Le sélecteur :has() est utilisé ici. */
-    content: " *"; /* Ajoute un astérisque et un espace */
-    color: red;
-    font-weight: bold;
-}
-
 </style>
 </head>
 
@@ -704,12 +701,12 @@ h2:has(+ textarea[required])::after { /* 💡 Le sélecteur :has() est utilisé 
 <h1>
     RAPPORT D'EXPULSION
     <span id="version-affichage" style="font-size: 0.5em; margin-left: 20px;">
-        </span>
+    </span>
 </h1>
 
 <h3 style="color: white;">
 <center><u><strong>
-Version développement pour voir la partie courriel inscrire votre courriel dans le champ adresse courriel
+Version développement. Si vous voulez voir à quoi ressemble la partie courriel, inscrire votre courriel dans le champ courriel.
 </u></strong>
 </center>
 </h3>
@@ -730,7 +727,7 @@ Version développement pour voir la partie courriel inscrire votre courriel dans
  <h2>Informations sur le match</h2>
   <div class="match-row">
     <div><label># Match</label><input type="text" id="matchNumero" name="numero" maxlength="12" tabindex="1" required><div class="error"></div></div>
-    <div><label>Date et Heure du match</label><input type="text" id="matchDate" name="date" tabindex="2" required ><div class="error"></div></div>
+    <div><label>Date et Heure</label><input type="text" id="matchDate" name="date" tabindex="2" required ><div class="error"></div></div>
   </div>
 
   <div class="select-row">
@@ -738,7 +735,7 @@ Version développement pour voir la partie courriel inscrire votre courriel dans
     <div><label>Ligue</label><select id="ligueSelect" tabindex="4" required><option value="">-- Sélectionner une ligue --</option></select><div class="error"></div></div>
     <div><label>Catégorie</label><select id="categorieSelect" tabindex="5" required><option value="">-- Sélectionner une catégorie --</option></select><div class="error"></div></div>
     <div id="classeContainer"><label>Classe</label><select id="classeSelect" tabindex="6" required><option value="">-- Sélectionner une classe --</option></select><div class="error"></div></div>
-	
+    
   </div>
    <div class="select-row" id="tournoiContainer" style="display: none;"><label>Nom de l'événement</label><select id="TournoiSelect" tabindex="7"><option value="">-- Sélectionner un événement --</option></select>    <div class="error"></div>
    </div>
@@ -748,41 +745,41 @@ Version développement pour voir la partie courriel inscrire votre courriel dans
 <div class="panel-3d panel-step">
     <h2>Équipes et terrain</h2>
     <div class="match-equipes-row">
-				
-		 <div class="code-chip tooltip-champ"> 
-			<label>Équipe locale</label>
-			<input type="text" id="equipeLocale" list="equipesDataList" placeholder="Sélectionner ou saisir une équipe" tabindex="8" required>
-			
-			<div class="error"></div>
-			
-			<div>
-				<label>Pointage</label>
-				<input type="text" id="pointagelocal" maxlength="2" inputmode="numeric" pattern="[0-9]*" placeholder="0" tabindex="11">
-			</div>
-			
-			<span class="tooltip">Si un nom d'équipe n'apparait pas dans la liste,<br> vous pouvez simplement inscrire le nom de l'équipe dans le champ.</span> 
-		</div>
+                    
+           <div class="code-chip tooltip-champ"> 
+             <label>Équipe locale</label>
+             <input type="text" id="equipeLocale" list="equipesDataList" placeholder="Sélectionner ou saisir une équipe" tabindex="8" required>
+             
+             <div class="error"></div>
+             
+             <div>
+                 <label>Pointage</label>
+                 <input type="text" id="pointagelocal" maxlength="2" inputmode="numeric" pattern="[0-9]*" placeholder="0" tabindex="11">
+             </div>
+             
+             <span class="tooltip">Si un nom d'équipe n'apparait pas dans la liste,<br> vous pouvez simplement inscrire le nom de l'équipe dans le champ.</span> 
+         </div>
 
-		<div class="code-chip tooltip-champ">
-			<label>Équipe visiteur</label>
-			<input type="text" id="equipeVisiteur" list="equipesDataList" placeholder="Sélectionner ou saisir une équipe" tabindex="9" required>
-			
-			<div class="error"></div>
-			
-			<div> 
-				<label>Pointage</label>
-				<input type="text" id="pointagevisiteur" maxlength="2" inputmode="numeric" pattern="[0-9]*" placeholder="0" tabindex="12">
-			</div>
+         <div class="code-chip tooltip-champ">
+             <label>Équipe visiteur</label>
+             <input type="text" id="equipeVisiteur" list="equipesDataList" placeholder="Sélectionner ou saisir une équipe" tabindex="9" required>
+             
+             <div class="error"></div>
+             
+             <div> 
+                 <label>Pointage</label>
+                 <input type="text" id="pointagevisiteur" maxlength="2" inputmode="numeric" pattern="[0-9]*" placeholder="0" tabindex="12">
+             </div>
 
-			<span class="tooltip">Si un nom d'équipe n'apparait pas dans la liste,<br> vous pouvez simplement inscrire le nom de l'équipe dans le champ.</span>
-		</div>
-        
-        <div class="code-chip tooltip-champ">
-            <label>Terrain</label>
-            <input type="text" id="terrain" list="terrainsDataList" placeholder="Sélectionner ou saisir un terrain" tabindex="10" required>
-            <span class="tooltip">Si un nom d'un terrain n'apparait pas dans la liste,<br> vous pouvez simplement inscrire le nom du parc dans le champ.</span>
-            <div class="error"></div>
-        </div>
+             <span class="tooltip">Si un nom d'équipe n'apparait pas dans la liste,<br> vous pouvez simplement inscrire le nom de l'équipe dans le champ.</span>
+         </div>
+         
+         <div class="code-chip tooltip-champ">
+             <label>Terrain</label>
+             <input type="text" id="terrain" list="terrainsDataList" placeholder="Sélectionner ou saisir un terrain" tabindex="10" required>
+             <span class="tooltip">Si un nom d'un terrain n'apparait pas dans la liste,<br> vous pouvez simplement inscrire le nom du parc dans le champ.</span>
+             <div class="error"></div>
+         </div>
     </div>
 
     <datalist id="equipesDataList"></datalist>
@@ -798,7 +795,7 @@ Version développement pour voir la partie courriel inscrire votre courriel dans
         <label class="form-label d-block" style="margin-right: 15px; margin-bottom: 0; font-size: 20px; position: relative; top: -5px;">Système d'arbitres</label>
         
         <div class="chips-container" id="arbitre-system-chips">
-                     
+                         
             <div class="chip selected" data-value="2">2 arbitres</div>
             
             <div class="chip" data-value="3">3 arbitres</div>
@@ -851,22 +848,22 @@ Version développement pour voir la partie courriel inscrire votre courriel dans
             </select>
             <div class="error"></div>
         </div>
-			
-			<div class="champ">
-				<label for="courriel">Adresse courriel</label>
-				<input type="email" id="courriel" tabindex="19" required>
-    
-				<div style="text-align: center; margin-top: 5px;"> <input type="checkbox" id="courrielConfirme" name="courrielConfirme" checked>
-				<label for="courrielConfirme" style="font-size: 0.9em;">Avoir une copie du rapport d'expulsion</label>
-			</div>
+            
+        <div class="champ">
+            <label for="courriel">Adresse courriel</label>
+            <input type="email" id="courriel" tabindex="19" required>
+   
+            <div style="text-align: center; margin-top: 5px;"> <input type="checkbox" id="courrielConfirme" name="courrielConfirme" checked>
+            <label for="courrielConfirme" style="font-size: 0.9em;">Avoir une copie du rapport d'expulsion</label>
+        </div>
 
-			<div class="error"></div>
-		</div>
+        <div class="error"></div>
+        </div>
 
                 
         <div class="champ">
             <label for="telephone">Téléphone</label>
-            <input type="tel" id="telephone" required tabindex="20" placeholder="(000) 000-0000"> 
+            <input type="tel" id="telephone" tabindex="20" placeholder="(000) 000-0000"> 
             <div class="error"></div>
         </div>
     </div>
@@ -879,12 +876,12 @@ Version développement pour voir la partie courriel inscrire votre courriel dans
     </div>
     <div class="chips-container" id="chipsNbExp"></div> 
     
-	<div class="tabs" id="expTabs"></div>
+    <div class="tabs" id="expTabs"></div>
     <div id="expulsionsContainer"></div>
 </div>
-   
+    
 
-	
+    
 <div class="panel-3d-detail panel-step" >
   <h2>Détails concernant les expulsions</h2>
   <textarea name="details" id="details" required></textarea>
@@ -906,7 +903,7 @@ Une fois le terrain quitté par le participant, a-t-il quitté les environs du t
     <button type="submit">Envoyer le rapport</button>
     <button type="reset" id="effacerBtn">Effacer le rapport</button>
 </div>
-	
+    
 </form>
 
  <div id="destinatairesContainer" style="color: white; display: none;">
@@ -914,29 +911,29 @@ Une fois le terrain quitté par le participant, a-t-il quitté les environs du t
     <label>Destinataires</label>
     <div id="destinataires" style="font-style: italic; color: white;"></div>
   </div>
-	
-	
+    
+    
 <div id="debugContainer" style="color: white; display: none;">
   <div style="font-size: 1.5em; font-weight: bold; margin-top: 10px; margin-bottom: 25px;">
-     Debug JSON
-  </div>   <pre id="debugOutput" style="color: white;"></pre>
+      Debug JSON
+  </div>    <pre id="debugOutput" style="color: white;"></pre>
 </div>
-</div>	
+</div>    
 
 <div id="htmlContainer" style="color: white; display: none;">
   <div style="font-size: 1.5em; font-weight: bold; margin-top: 10px; margin-bottom: 25px;">
-     Debug HTML
-  </div>   <pre id="htmlOutput" style="color: white;"></pre>
+      Debug HTML
+  </div>    <pre id="htmlOutput" style="color: white;"></pre>
 </div>
 
 <div id="champsContainer" style="color: white; display: none;">
   <div style="font-size: 1.5em; font-weight: bold; margin-top: 10px; margin-bottom: 25px;">
-     Champs Requis
-  </div>   <pre id="champsOutput" style="color: white;"></pre>
+      Champs Requis
+  </div>    <pre id="champsOutput" style="color: white;"></pre>
 </div>
 
-</div>	
-	
+</div>    
+    
 	
 	
 	

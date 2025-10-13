@@ -1,145 +1,145 @@
 {
 	"LBJEQ" : {
 		"Junior Elite" : {
-			"EmailsSpecifiques" : [ "loleduc@videotron.ca" ]
+			"_EmailsSpecifiques" : [ "loleduc@videotron.ca" ]
 		}
 	},
 	"Developpement AAA" : {
 		"18U AAA" : {
-			"EmailsSpecifiques" : [ "loleduc@videotron.ca" ]
+			"_EmailsSpecifiques" : [ "loleduc@videotron.ca" ]
 		},
 		"15U AAA" : {
-			"EmailsSpecifiques" : [ "loleduc@videotron.ca" ]
+			"_EmailsSpecifiques" : [ "loleduc@videotron.ca" ]
 		}
 	},
 	"LBMQ" : {
 		"Senior Majeur" : {
-			"EmailsSpecifiques" : [ "loleduc@videotron.ca" ]
+			"_EmailsSpecifiques" : [ "loleduc@videotron.ca" ]
 		}
 	},
 	"Regionaux" : {
 		"9U A" : {
 			"Nom du Regional 9UA" : {
-				"EmailsSpecifiques" : [ "adresseregional9uA@bq.com" ]
+				"_EmailsSpecifiques" : [ "adresseregional9uA@bq.com" ]
 			}
 		},
 		"9U B" : {
 			"Nom du Regional 9UB" : {
-				"EmailsSpecifiques" : [ "adresseregional9uB@bq.com" ]
+				"_EmailsSpecifiques" : [ "adresseregional9uB@bq.com" ]
 			}
 		},
 		"11U A" : {
 			"Nom du Regional 11UA" : {
-				"EmailsSpecifiques" : [ "adresseregional11uA@bq.com" ]
+				"_EmailsSpecifiques" : [ "adresseregional11uA@bq.com" ]
 			}
 		},
 		"11U B" : {
 			"Nom du Regional 11UB" : {
-				"EmailsSpecifiques" : [ "adresseregional11uB@bq.com" ]
+				"_EmailsSpecifiques" : [ "adresseregional11uB@bq.com" ]
 			}
 		},
 		"13U A" : {
 			"Nom du Regional 13UA" : {
-				"EmailsSpecifiques" : [ "adresseregional13uA@bq.com" ]
+				"_EmailsSpecifiques" : [ "adresseregional13uA@bq.com" ]
 			}
 		},
 		"13U B" : {
 			"Nom du Regional 13UB" : {
-				"EmailsSpecifiques" : [ "adresseregional13uB@bq.com" ]
+				"_EmailsSpecifiques" : [ "adresseregional13uB@bq.com" ]
 			}
 		},
 		"15U A" : {
 			"Nom du Regional 15UA" : {
-				"EmailsSpecifiques" : [ "adresseregional15uA@bq.com" ]
+				"_EmailsSpecifiques" : [ "adresseregional15uA@bq.com" ]
 			}
 		},
 		"15U B" : {
 			"Nom du Regional 15UB" : {
-				"EmailsSpecifiques" : [ "adresseregional15uB@bq.com" ]
+				"_EmailsSpecifiques" : [ "adresseregional15uB@bq.com" ]
 			}
 		},
 		"18U A" : {
 			"Nom du Regional 18UA" : {
-				"EmailsSpecifiques" : [ "adresseregional18uA@bq.com" ]
+				"_EmailsSpecifiques" : [ "adresseregional18uA@bq.com" ]
 			}
 		},
 		"18U B" : {
 			"Nom du Regional 18Ub" : {
-				"EmailsSpecifiques" : [ "adresseregional18uB@bq.com" ]
+				"_EmailsSpecifiques" : [ "adresseregional18uB@bq.com" ]
 			}
 		}
 	},
 	"Super Regionaux" : {
 		"9U A" : {
 			"Nom du Super Regional 9U A" : {
-				"EmailsSpecifiques" : [ "adressesuperregional9UA@bq.com" ]
+				"_EmailsSpecifiques" : [ "adressesuperregional9UA@bq.com" ]
 			}
 		},
 		"9U B" : {
 			"Nom du Super Regional 9U B" : {
-				"EmailsSpecifiques" : [ "adressesuperregional9UB@bq.com" ]
+				"_EmailsSpecifiques" : [ "adressesuperregional9UB@bq.com" ]
 			}
 		},
 		"11U A" : {
 			"Nom du Super Regional 11U A" : {
-				"EmailsSpecifiques" : [ "adressesuperregional11UA@bq.com" ]
+				"_EmailsSpecifiques" : [ "adressesuperregional11UA@bq.com" ]
 			}
 		},
 		"11U B" : {
 			"Nom du Super Regional 11U B" : {
-				"EmailsSpecifiques" : [ "adressesuperregional11UB@bq.com" ]
+				"_EmailsSpecifiques" : [ "adressesuperregional11UB@bq.com" ]
 			}
 		},
 		"13U A" : {
 			"Nom du Super Regional 13U A" : {
-				"EmailsSpecifiques" : [ "adressesuperregional13UA@bq.com" ]
+				"_EmailsSpecifiques" : [ "adressesuperregional13UA@bq.com" ]
 			}
 		},
 		"13U B" : {
 			"Nom du Super Regional 15U B" : {
-				"EmailsSpecifiques" : [ "adressesuperregional15UB@bq.com" ]
+				"_EmailsSpecifiques" : [ "adressesuperregional15UB@bq.com" ]
 			}
 		},
 		"15U A" : {
 			"Nom du Super Regional 15U A" : {
-				"EmailsSpecifiques" : [ "adressesuperregional15UA@bq.com" ]
+				"_EmailsSpecifiques" : [ "adressesuperregional15UA@bq.com" ]
 			}
 		},
 		"15U B" : {
 			"Nom du Super Regional 15U B" : {
-				"EmailsSpecifiques" : [ "adressesuperregional15UB@bq.com" ]
+				"_EmailsSpecifiques" : [ "adressesuperregional15UB@bq.com" ]
 			}
 		},
 		"18U A" : {
 			"Nom du Super Regional 18U A" : {
-				"EmailsSpecifiques" : [ "adressesuperregional18UA@bq.com" ]
+				"_EmailsSpecifiques" : [ "adressesuperregional18UA@bq.com" ]
 			}
 		},
 		"18U B" : {
 			"Nom du Super Regional 18U B" : {
-				"EmailsSpecifiques" : [ "adressesuperregional18UB@bq.com" ]
+				"_EmailsSpecifiques" : [ "adressesuperregional18UB@bq.com" ]
 			}
 		}
 	},
 	"Provinciaux" : {
 		"11U AA" : {
 			"Nom du provincial 11U AA" : {
-				"EmailsSpecifiques" : [ "adresse11UAA@bq.com" ]
+				"_EmailsSpecifiques" : [ "adresse11UAA@bq.com" ]
 			}
 		},
 		"13U AA" : {
 			"Nom du Provincial 13U AA" : {
-				"EmailsSpecifiques" : [ "adresse13UAA@bq.com" ]
+				"_EmailsSpecifiques" : [ "adresse13UAA@bq.com" ]
 			}
 		},
 		"15U AA" : {
 			"Nom du Provincial 15U AA" : {
-				"EmailsSpecifiques" : [ "adresse15UAA@bq.com" ]
+				"_EmailsSpecifiques" : [ "adresse15UAA@bq.com" ]
 			}
 		},
 		"18U AA" : {
 			"Nom du Provincial 18U AA" : {
-				"EmailsSpecifiques" : [ "adresse18UAA@bq.com" ]
+				"_EmailsSpecifiques" : [ "adresse18UAA@bq.com" ]
 			}
 		}
 	}

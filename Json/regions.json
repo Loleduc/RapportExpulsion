@@ -1,0 +1,16 @@
+{
+	"Regions" : {
+		"RIVE-SUD" : {
+			"_BaseEmails" : [ "rapportdexpulsionrsry@gmail.com", "ump_77@videotron.ca" ],
+			"fichier" : "rivesud.json"
+		},
+		"RICHELIEU-YAMASKA" : {
+			"_BaseEmails" : [ "rapportdexpulsionrsry@gmail.com", "ump_77@hotmail.com" ],
+			"fichier" : "richelieuyamaska.json"
+		},
+		"Baseball Quebec" : {
+			"_BaseEmails" : [ "rapportdexpulsionrsry@gmail.com", "ump_77@hotmail.com" ],
+			"fichier" : "baseballquebec.json"
+		}
+	}
+}

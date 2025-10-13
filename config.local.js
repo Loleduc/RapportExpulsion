@@ -8,14 +8,14 @@
 
 // --- 1. Remplacez les valeurs ci-dessous ---
 const config = {
-    // Le Jeton d'Accès Personnel (PAT) que vous avez généré sur GitHub
+    // Le Jeton d'Accès Personnel (PAT) que vous avez généré sur GitHub (VÉRIFIEZ SA VALIDITÉ !)
     PAT: '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', 
     
     // Votre nom d'utilisateur GitHub (Owner du dépôt)
     OWNER: 'Loleduc',
     
-    // Le nom exact du dépôt où vous voulez téléverser les fichiers
-    REPO: 'https://loleduc.github.io/RapportExpulsion/', 
+    // 🟢 CORRIGÉ : Seul le nom du dépôt est nécessaire.
+    REPO: 'RapportExpulsion', 
     
     // Le nom du dossier dans ce dépôt (ex: 'json')
     FOLDER: 'json' 
@@ -29,4 +29,3 @@ window.__github_repo = config.REPO;
 window.__github_folder = config.FOLDER;
 
 console.log('Configuration locale chargée avec succès.');
-

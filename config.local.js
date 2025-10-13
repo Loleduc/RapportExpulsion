@@ -9,7 +9,7 @@
 // --- 1. Remplacez les valeurs ci-dessous ---
 const config = {
     // Le Jeton d'Accès Personnel (PAT) que vous avez généré sur GitHub (VÉRIFIEZ SA VALIDITÉ !)
-    PAT: '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', 
+    PAT: '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', 
     
     // Votre nom d'utilisateur GitHub (Owner du dépôt)
     OWNER: 'Loleduc',
@@ -29,3 +29,4 @@ window.__github_repo = config.REPO;
 window.__github_folder = config.FOLDER;
 
 console.log('Configuration locale chargée avec succès.');
+

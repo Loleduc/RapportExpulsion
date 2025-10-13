@@ -15,7 +15,7 @@ const config = {
     OWNER: 'Loleduc',
     
     // Le nom exact du dépôt où vous voulez téléverser les fichiers
-    REPO: 'RapportExpulsion', 
+    REPO: 'https://loleduc.github.io/RapportExpulsion/', 
     
     // Le nom du dossier dans ce dépôt (ex: 'json')
     FOLDER: 'json' 
@@ -29,3 +29,4 @@ window.__github_repo = config.REPO;
 window.__github_folder = config.FOLDER;
 
 console.log('Configuration locale chargée avec succès.');
+

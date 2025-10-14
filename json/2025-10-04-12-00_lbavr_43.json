@@ -1,0 +1,50 @@
+{
+  "match": {
+    "evenement": "",
+    "numero": "43",
+    "date": "2025-10-04 12:00",
+    "region": "RIVE-SUD",
+    "ligue": "LBAVR",
+    "categorie": "11U",
+    "classe": "AA",
+    "details_expulsions": "sddsds",
+    "infos_complementaires": "Le participant a-t-il reçu un avertissement avant d’être expulsé ?\n\nLa situation était-elle d’une longue durée ?\n\nUne fois le terrain quitté par le participant, a-t-il quitté les environs du terrain et est-il resté invisible ?",
+    "id": "2025-10-04-12-00_lbavr_43"
+  },
+  "equipes": {
+    "locale": "er",
+    "pointagelocal": "",
+    "visiteur": "rere",
+    "pointagevisiteur": "",
+    "terrain": "rere"
+  },
+  "officiels": {
+    "marbre": "ree",
+    "buts1": "tgt",
+    "marqueur": "gfgf",
+    "rapport": "ree",
+    "courriel": "g@2.com",
+    "telephone": "(444) 444-4444"
+  },
+  "expulsions": [
+    {
+      "numero": 1,
+      "equipe": "er",
+      "chandail": "2",
+      "joueur": "dssd",
+      "codes": [
+        "55.1 - SUSPENSION AUTOMATIQUE"
+      ]
+    }
+  ],
+  "parametres": {
+    "Approbateur": [
+      "ump_77@videotron.ca"
+    ],
+    "Destinataires": [
+      "destinataire1@lbavr.com",
+      "destinataires2@lbavr.com",
+      "lbavr11uAA@domaine.com"
+    ]
+  }
+}

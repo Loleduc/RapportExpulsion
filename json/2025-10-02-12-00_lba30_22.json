@@ -39,11 +39,9 @@
       ]
     }
   ],
-  "parametres": {
-    "destinataires": [
+  "parametres": [
       "emaildecopie@domaine.com",
       "RR_RiveSud@domaine.com",
       "LBA30@domaine.com"
     ]
   }
-}

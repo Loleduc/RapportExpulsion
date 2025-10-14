@@ -1,0 +1,45 @@
+{
+  "match": {
+    "evenement": "",
+    "numero": "45",
+    "date": "2025-10-01 12:00",
+    "region": "RIVE-SUD",
+    "ligue": "LBJAAQ",
+    "categorie": "Junior",
+    "classe": "AA",
+    "details_expulsions": "gffggf",
+    "infos_complementaires": "Le participant a-t-il reçu un avertissement avant d’être expulsé ?\n\nLa situation était-elle d’une longue durée ?\n\nUne fois le terrain quitté par le participant, a-t-il quitté les environs du terrain et est-il resté invisible ?",
+    "id": "2025-10-01-12-00_lbjaaq_45"
+  },
+  "equipes": {
+    "locale": "Ducs de Longueuils",
+    "pointagelocal": "",
+    "visiteur": "Cardinals de Lasalle",
+    "pointagevisiteur": "",
+    "terrain": "Parc Leblanc"
+  },
+  "officiels": {
+    "marbre": "rre",
+    "buts1": "rerer",
+    "marqueur": "rere",
+    "rapport": "rerer",
+    "courriel": "2@2.com",
+    "telephone": "(444) 444-4444"
+  },
+  "expulsions": [
+    {
+      "numero": 1,
+      "equipe": "Ducs de Longueuils",
+      "chandail": "2",
+      "joueur": "fggflgf",
+      "codes": [
+        "55.1 - SUSPENSION AUTOMATIQUE"
+      ]
+    }
+  ],
+  "parametre": [
+    "emaildecopie@domaine.com",
+    "RR_RiveSud@domaine.com",
+    "LBJAQQ@domaine.com"
+  ]
+}

@@ -1,20 +1,20 @@
 {
 	"LBJEQ" : {
 		"Junior Elite" : {
-			"_EmailsSpecifiques" : [ "loleduc@videotron.ca" ]
+			"_EmailsSpecifiques" : [ "adresselbjeq@domaine.com" ]
 		}
 	},
 	"Developpement AAA" : {
 		"18U AAA" : {
-			"_EmailsSpecifiques" : [ "loleduc@videotron.ca" ]
+			"_EmailsSpecifiques" : [ "adresse18uAAA@domaine.com" ]
 		},
 		"15U AAA" : {
-			"_EmailsSpecifiques" : [ "loleduc@videotron.ca" ]
+			"_EmailsSpecifiques" : [ "adresse15uAAA@domaine.com" ]
 		}
 	},
 	"LBMQ" : {
 		"Senior Majeur" : {
-			"_EmailsSpecifiques" : [ "loleduc@videotron.ca" ]
+			"_EmailsSpecifiques" : [ "adresselbmq@domaine.com" ]
 		}
 	},
 	"Regionaux" : {

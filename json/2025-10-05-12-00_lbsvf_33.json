@@ -1,0 +1,46 @@
+{
+  "match": {
+    "evenement": "",
+    "numero": "33",
+    "date": "2025-10-05 12:00",
+    "region": "RIVE-SUD",
+    "ligue": "LBSVF",
+    "categorie": "Senior",
+    "classe": "BB",
+    "details_expulsions": "fdfdfdfd",
+    "infos_complementaires": "Le participant a-t-il reçu un avertissement avant d’être expulsé ?\n\nLa situation était-elle d’une longue durée ?\n\nUne fois le terrain quitté par le participant, a-t-il quitté les environs du terrain et est-il resté invisible ?",
+    "id": "2025-10-05-12-00_lbsvf_33"
+  },
+  "equipes": {
+    "locale": "Brewers Drummondville",
+    "pointagelocal": "2",
+    "visiteur": "Marlins Sorel-Tracy",
+    "pointagevisiteur": "4",
+    "terrain": "Parc Fontrouge"
+  },
+  "officiels": {
+    "marbre": "Louis",
+    "buts1": "Denis",
+    "buts3": "Chris",
+    "marqueur": "elodie",
+    "rapport": "Chris",
+    "courriel": "c@c.com",
+    "telephone": "(444) 444-4444"
+  },
+  "expulsions": [
+    {
+      "numero": 1,
+      "equipe": "Brewers Drummondville",
+      "chandail": "21",
+      "joueur": "dsffdfd",
+      "codes": [
+        "55.1 - SUSPENSION AUTOMATIQUE"
+      ]
+    }
+  ],
+  "parametre": [
+    "emaildecopie@domaine.com",
+    "RR_RiveSud@domaine.com",
+    "LBSVF@domaine.com"
+  ]
+}

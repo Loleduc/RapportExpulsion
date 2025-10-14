@@ -1,5 +1,8 @@
 {
 	"LBAVR" : {
+		"_destinataires" : [
+			[ "destinataire1@lbavr.com", "destinataires2@lbavr.com" ]
+		],
 		"9U A" : {
 			"_EmailsSpecifiques" : [ "lbavr9ua@domaine.com" ]
 		},
@@ -99,6 +102,9 @@
 		}
 	},
 	"LBFQ" : {
+		"_destinataires" : [
+			[ "destinataire1@lbfq.com", "destinataires2@lbfq.com" ]
+		],
 		"9U B" : {
 			"_EmailsSpecifiques" : [ "lbfq9uB@domaine.com" ]
 		},

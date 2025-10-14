@@ -1,0 +1,50 @@
+{
+  "match": {
+    "evenement": "",
+    "numero": "45",
+    "date": "2025-10-01 12:00",
+    "region": "RICHELIEU-YAMASKA",
+    "ligue": "LBAVR",
+    "categorie": "11U",
+    "classe": "A",
+    "details_expulsions": "fdfdfdfd",
+    "infos_complementaires": "Le participant a-t-il reçu un avertissement avant d’être expulsé ?\n\nLa situation était-elle d’une longue durée ?\n\nUne fois le terrain quitté par le participant, a-t-il quitté les environs du terrain et est-il resté invisible ?",
+    "id": "2025-10-01-12-00_lbavr_45"
+  },
+  "equipes": {
+    "locale": "fddff",
+    "pointagelocal": "",
+    "visiteur": "dfdgfg",
+    "pointagevisiteur": "",
+    "terrain": "gfgffg"
+  },
+  "officiels": {
+    "marbre": "gfgf",
+    "buts1": "gfgfgf",
+    "marqueur": "gffggf",
+    "rapport": "gfgf",
+    "courriel": "f@f.com",
+    "telephone": "(444) 444-4444"
+  },
+  "expulsions": [
+    {
+      "numero": 1,
+      "equipe": "fddff",
+      "chandail": "3",
+      "joueur": "fdfdfd",
+      "codes": [
+        "55.1 - SUSPENSION AUTOMATIQUE"
+      ]
+    }
+  ],
+  "parametres": {
+    "Approbateur": [
+      "ump_77@hotmail.com"
+    ],
+    "Destinataires": [
+      "destinataire1@lbavr.com",
+      "destinataires2@lbavr.com",
+      "adresselbavr11uA@domaine.com"
+    ]
+  }
+}

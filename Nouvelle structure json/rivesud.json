@@ -1,68 +1,52 @@
 {
 	"LBAVR" : {
 		"9U A" : {
-			"_EmailsSpecifiques" : [ "loleduc@videotron.ca" ],
-			"GroupeArbitres" : "Mineur"
+			"_EmailsSpecifiques" : [ "lbavr9ua@domaine.com" ]
 		},
 		"9U B" : {
-			"_EmailsSpecifiques" : [ "loleduc@videotron.ca" ],
-			"GroupeArbitres" : "Mineur"
+			"_EmailsSpecifiques" : [ "lbavr9ub@@domaine.com" ]
 		},
 		"11U AA" : {
-			"_EmailsSpecifiques" : [ "loleduc@videotron.ca" ],
-			"GroupeArbitres" : "Mineur"
+			"_EmailsSpecifiques" : [ "lbavr11uAA@domaine.com" ]
 		},
 		"11U A" : {
-			"_EmailsSpecifiques" : [ "loleduc@videotron.ca" ],
-			"GroupeArbitres" : "Mineur"
+			"_EmailsSpecifiques" : [ "lbavr11uA@domaine.com" ]
 		},
 		"11U B" : {
-			"_EmailsSpecifiques" : [ "loleduc@videotron.ca" ],
-			"GroupeArbitres" : "Mineur"
+			"_EmailsSpecifiques" : [ "lbavr11uB@domaine.com" ]
 		},
 		"13U AA" : {
-			"_EmailsSpecifiques" : [ "loleduc@videotron.ca" ],
-			"GroupeArbitres" : "Mineur"
+			"_EmailsSpecifiques" : [ "lbavr13uAA@domaine.com" ]
 		},
 		"13U A" : {
-			"_EmailsSpecifiques" : [ "loleduc@videotron.ca" ],
-			"GroupeArbitres" : "Mineur"
+			"_EmailsSpecifiques" : [ "lbavr13uA@domaine.com" ]
 		},
 		"13U B" : {
-			"_EmailsSpecifiques" : [ "loleduc@videotron.ca" ],
-			"GroupeArbitres" : "Mineur"
+			"_EmailsSpecifiques" : [ "lbavr13uB@domaine.com" ]
 		},
 		"15U AA" : {
-			"_EmailsSpecifiques" : [ "loleduc@videotron.ca" ],
-			"GroupeArbitres" : "Mineur"
+			"_EmailsSpecifiques" : [ "lbavr15uAA@domaine.com" ]
 		},
 		"15U A" : {
-			"_EmailsSpecifiques" : [ "loleduc@videotron.ca" ],
-			"GroupeArbitres" : "Mineur"
+			"_EmailsSpecifiques" : [ "lbavr15uA@domaine.com" ]
 		},
 		"15U B" : {
-			"_EmailsSpecifiques" : [ "loleduc@videotron.ca" ],
-			"GroupeArbitres" : "Mineur"
+			"_EmailsSpecifiques" : [ "lbavr15uB@domaine.com" ]
 		},
 		"18U AA" : {
-			"_EmailsSpecifiques" : [ "loleduc@videotron.ca" ],
-			"GroupeArbitres" : "Majeur"
+			"_EmailsSpecifiques" : [ "lbavr18uAA@domaine.com" ]
 		},
 		"18U A" : {
-			"_EmailsSpecifiques" : [ "loleduc@videotron.ca" ],
-			"GroupeArbitres" : "Mineur"
+			"_EmailsSpecifiques" : [ "lbavr18uA@domaine.com" ]
 		},
 		"18U B" : {
-			"_EmailsSpecifiques" : [ "loleduc@videotron.ca" ],
-			"GroupeArbitres" : "Mineur"
+			"_EmailsSpecifiques" : [ "lbavr18uB@domaine.com" ]
 		},
 		"Junior BB" : {
-			"_EmailsSpecifiques" : [ "loleduc@videotron.ca" ],
-			"GroupeArbitres" : "Majeur"
+			"_EmailsSpecifiques" : [ "lbavr21uBB@domaine.com" ]
 		},
 		"Junior A" : {
-			"_EmailsSpecifiques" : [ "loleduc@videotron.ca" ],
-			"GroupeArbitres" : "Majeur"
+			"_EmailsSpecifiques" : [ "lbavr21uA@domaine.com" ]
 		}
 	},
 	"LBJAAQ" : {
@@ -76,14 +60,13 @@
 				"Guerriers de Richelieu-Yamaska",
 				"Cobras Capri Bar-Serie du Roussillon"
 			],
-			"_EmailsSpecifiques" : [ "loleduc@videotron.ca" ],
+			"_EmailsSpecifiques" : [ "LBJAQQ@domaine.com" ],
 			"Terrains" : [
 				"Stade Leo-Asselin",
 				"Parc Louis-Choiniere",
 				"Parc Leblanc",
 				"Parc Paul-Pratt"
-			],
-			"GroupeArbitres" : "Majeur"
+			]
 		}
 	},
 	"LBSVF" : {
@@ -96,7 +79,7 @@
 				"Pirates St-Bruno",
 				"Rays du Haut-Richelieu"
 			],
-			"_EmailsSpecifiques" : [ "loleduc@videotron.ca" ],
+			"_EmailsSpecifiques" : [ "LBSVF@domaine.com" ],
 			"Terrains" : [
 				"Stade Jacques-Desautels",
 				"Parc Rabastalliere",
@@ -105,58 +88,46 @@
 				"Parc Optimiste",
 				"Stade Rene St-Germain",
 				"Parc de Sainte-Marie-de-Monnoir"
-			],
-			"GroupeArbitres" : "Majeur"
+			]
 		}
 	},
 	"LBA30" : {
 		"Senior A" : {
 			"Equipes" : [ "As", "Giants", "Mariners", "Red Sox", "Royals" ],
-			"_EmailsSpecifiques" : [ "loleduc@videotron.ca" ],
-			"Terrains" : [ "Parc Harvey", "Parc Pierre-Boucher" ],
-			"GroupeArbitres" : "Majeur"
+			"_EmailsSpecifiques" : [ "LBA30@domaine.com" ],
+			"Terrains" : [ "Parc Harvey", "Parc Pierre-Boucher" ]
 		}
 	},
 	"LBFQ" : {
 		"9U B" : {
-			"_EmailsSpecifiques" : [ "loleduc@videotron.ca" ],
-			"GroupeArbitres" : "Mineur"
+			"_EmailsSpecifiques" : [ "lbfq9uB@domaine.com" ]
 		},
 		"9U A" : {
-			"_EmailsSpecifiques" : [ "loleduc@videotron.ca" ],
-			"GroupeArbitres" : "Mineur"
+			"_EmailsSpecifiques" : [ "lbfq9uA@domaine.com" ]
 		},
 		"11U B" : {
-			"_EmailsSpecifiques" : [ "loleduc@videotron.ca" ],
-			"GroupeArbitres" : "Mineur"
+			"_EmailsSpecifiques" : [ "lbfq11uB@domaine.com" ]
 		},
 		"11U A" : {
-			"_EmailsSpecifiques" : [ "loleduc@videotron.ca" ],
-			"GroupeArbitres" : "Mineur"
+			"_EmailsSpecifiques" : [ "lbfq11uA@domaine.com" ]
 		},
 		"13U B" : {
-			"_EmailsSpecifiques" : [ "loleduc@videotron.ca" ],
-			"GroupeArbitres" : "Mineur"
+			"_EmailsSpecifiques" : [ "lbfq13uB@domaine.com" ]
 		},
 		"13U A" : {
-			"_EmailsSpecifiques" : [ "loleduc@videotron.ca" ],
-			"GroupeArbitres" : "Mineur"
+			"_EmailsSpecifiques" : [ "lbfq13uA@domaine.com" ]
 		},
 		"15U B" : {
-			"_EmailsSpecifiques" : [ "loleduc@videotron.ca" ],
-			"GroupeArbitres" : "Mineur"
+			"_EmailsSpecifiques" : [ "lbfq15uB@domaine.com" ]
 		},
 		"15U A" : {
-			"_EmailsSpecifiques" : [ "loleduc@videotron.ca" ],
-			"GroupeArbitres" : "Mineur"
+			"_EmailsSpecifiques" : [ "lbfq15uA@domaine.com" ]
 		},
 		"21U A" : {
-			"_EmailsSpecifiques" : [ "loleduc@videotron.ca" ],
-			"GroupeArbitres" : "Majeur"
+			"_EmailsSpecifiques" : [ "lbfq21uA@domaine.com" ]
 		},
 		"21U B" : {
-			"_EmailsSpecifiques" : [ "loleduc@videotron.ca" ],
-			"GroupeArbitres" : "Majeur"
+			"_EmailsSpecifiques" : [ "lbfq21uB@domaine.com" ]
 		}
 	},
 	"Tournois" : {

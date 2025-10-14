@@ -24,7 +24,9 @@
     "marqueur": "Elodie",
     "rapport": "Denis",
     "courriel": "d@d.com",
-    "telephone": "(444) 444-4444"
+    "telephone": "(444) 444-4444",
+    "buts2": "",
+    "buts3": ""
   },
   "expulsions": [
     {
@@ -43,7 +45,7 @@
       "RR_RiveSud@domaine.com",
       "LBA30@domaine.com"
     ],
-    "modification": "false",
+    "modification": "true",
     "statut": "en traitement"
   }
 }

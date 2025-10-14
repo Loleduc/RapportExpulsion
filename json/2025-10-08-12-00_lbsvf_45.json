@@ -13,7 +13,7 @@
   },
   "equipes": {
     "locale": "Brewers Drummondville",
-    "pointagelocal": "2",
+    "pointagelocal": "10",
     "visiteur": "Marlins Sorel-Tracy",
     "pointagevisiteur": "4",
     "terrain": "Parc Fontrouge"
@@ -21,8 +21,8 @@
   "officiels": {
     "marbre": "Louis",
     "buts1": "Denis",
-    "buts2": "Chris",
-    "buts3": "Sebastien",
+    "buts2": "Jean-François",
+    "buts3": "Christian",
     "marqueur": "elodie",
     "rapport": "Sebastien",
     "courriel": "c@c.com",

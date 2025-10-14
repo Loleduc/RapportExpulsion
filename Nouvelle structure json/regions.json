@@ -1,15 +1,15 @@
 {
 	"Regions" : {
 		"RIVE-SUD" : {
-			"_BaseEmails" : [ "emaildecopie@domaine.com", "RR_RiveSud@domaine.com" ],
+			"_BaseEmailsRegion" : [ "emaildecopie@domaine.com", "RR_RiveSud@domaine.com" ],
 			"fichier" : "rivesud.json"
 		},
 		"RICHELIEU-YAMASKA" : {
-			"_BaseEmails" : [ "emaildecopie@domaine.com", "RR_RichelieuYamaska@domaine.com" ],
+			"_BaseEmailsRegion" : [ "emaildecopie@domaine.com", "RR_RichelieuYamaska@domaine.com" ],
 			"fichier" : "richelieuyamaska.json"
 		},
 		"Baseball Quebec" : {
-			"_BaseEmails" : [ "emaildecopie@domaine.com", "ResposableArbitre@domaine.com" ],
+			"_BaseEmailsRegion" : [ "emaildecopie@domaine.com", "ResposableArbitre@domaine.com" ],
 			"fichier" : "baseballquebec.json"
 		}
 	}

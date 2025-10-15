@@ -1,0 +1,48 @@
+{
+  "match": {
+    "evenement": "",
+    "numero": "75",
+    "date": "2025-10-07 12:00",
+    "region": "RIVE-SUD",
+    "ligue": "LBA30",
+    "categorie": "Senior",
+    "classe": "A",
+    "details_expulsions": "dfggfdgfd",
+    "infos_complementaires": "Le participant a-t-il re?u un avertissement avant d??tre expuls???\n\nLa situation ?tait-elle d?une longue dur?e??\n\nUne fois le terrain quitt? par le participant, a-t-il quitt? les environs du terrain et est-il rest? invisible ?",
+    "id": "2025-10-07-12-00_lba30_75"
+  },
+  "equipes": {
+    "locale": "Mariners",
+    "pointagelocal": "",
+    "visiteur": "Red Sox",
+    "pointagevisiteur": "",
+    "terrain": "Parc Harvey"
+  },
+  "officiels": {
+    "marbre": "Denis Labont?",
+    "buts1": "?l?ve",
+    "marqueur": "rdgfg",
+    "rapport": "Denis Labont?",
+    "courriel": "w@s.com",
+    "telephone": "(444) 444-4444"
+  },
+  "expulsions": [
+    {
+      "numero": 1,
+      "equipe": "Mariners",
+      "chandail": "3",
+      "joueur": "fdgddf",
+      "codes": [
+        "55.1 - SUSPENSION AUTOMATIQUE"
+      ]
+    }
+  ],
+  "parametres": {
+    "Approbateur": [
+      "ump_77@videotron.ca"
+    ],
+    "Destinataires": [
+      "LBA30@domaine.com"
+    ]
+  }
+}

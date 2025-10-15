@@ -677,7 +677,7 @@ function showMessage(text, type) {
             const response = await fetch(url);
             
             if (!response.ok) {
-                throw new Error('Fichier non trouvé');
+                throw new Error('Le fichier ' + filename 'n''existe plus ou à été approuvé ');
             }
             
             currentData = await response.json();

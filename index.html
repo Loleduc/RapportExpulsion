@@ -6,7 +6,7 @@
 <script>
     // 1. Définition de la variable de version globalement (accessible partout)
     window.CONFIG = {
-        VERSION: '0.20251013.10:45' // Mettez à jour ce numéro manuellement pour chaque version
+        VERSION: '0.20251014.22:00' // Mettez à jour ce numéro manuellement pour chaque version
     };
 
     // 2. Modification immédiate du titre (Option 2)
@@ -942,6 +942,8 @@ Une fois le terrain quitté par le participant, a-t-il quitté les environs du t
 <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
 <script src="https://cdn.jsdelivr.net/npm/flatpickr/dist/l10n/fr.js"></script> 
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script src="config.local.js"></script>
+
 <script>
 
 
@@ -968,12 +970,27 @@ let expulsionsData = {}; // 🛑 Objet pour stocker les données de chaque expul
 let ObjetCourriel ="";
 let jsonArbitres = {};
 let adressecourriel ="";
+let nomfichier = "";
+let lienEdition = "";
 
 const destinatairesContainer = document.getElementById("destinatairesContainer");
 const destinatairesDiv = document.getElementById("destinataires");
 
 // 🛑 SÉPARATEUR UNIQUE ET SÛR pour la persistance
 const CODE_SEPARATOR = '||';
+
+    window.reportToUpload = null; 
+    
+    // ATTENTION SÉCURITÉ : Remplissez ces champs avec des valeurs réelles 
+    // AVANT d'utiliser cette fonction en mode invisible.
+    // NOTE IMPORTANTE: 'repo' doit être le nom du dépôt (ex: 'RapportExpulsion'), PAS l'URL complète.
+    window.githubConfig = {
+            pat: typeof __github_pat !== 'undefined' ? __github_pat : '',
+            owner: typeof __github_owner !== 'undefined' ? __github_owner : '',
+            repo: typeof __github_repo !== 'undefined' ? __github_repo : '',
+            folder: typeof __github_folder !== 'undefined' ? __github_folder : 'json'
+        };
+
 
 
 document.addEventListener('DOMContentLoaded', function() {
@@ -1922,54 +1939,134 @@ function genererRapportExpulsion(customData) {
     return finalHTML;
 }
 
+  function stockerFichierTemporairement(content, filename, contentType) {
+        window.reportToUpload = {
+            content: content,
+            filename: filename,
+            contentType: contentType
+        };
+        console.log(`Rapport JSON stocké en mémoire : ${filename}`);
+    }
+
+
+
+ /**
+     * Tente de téléverser le fichier JSON stocké sur GitHub en utilisant l'API.
+     * Le PAT doit être configuré dans window.githubConfig.
+     */
+    async function uploadToGitHub() {
+        if (!window.reportToUpload) {
+            console.error('Erreur: Aucun rapport n\'est prêt à être téléversé.');
+            return;
+        }
+
+        const { pat, owner, repo, folder } = window.githubConfig;
+		
+	    // 🛑 AJOUT DU CONSOLE.LOG POUR LE DÉBOGAGE 🛑
+    console.log("--- DÉBOGAGE CONFIGURATION GITHUB ---");
+    console.log(`PAT (Truncated): ${pat ? pat.substring(0, 8) + '...' : 'MISSING'}`);
+    console.log(`Owner: ${owner}`);
+    console.log(`Repo: ${repo}`);
+    console.log(`Folder: ${folder}`);
+    console.log("-------------------------------------");
+    // 🛑 FIN DU CONSOLE.LOG 🛑
+	
+        const { content, filename } = window.reportToUpload;
+        nomfichier = filename;
+        // Le contenu doit être encodé en Base64 pour l'API GitHub
+        const contentBase64 = btoa(unescape(encodeURIComponent(content)));
+        const filePath = `${folder}/${filename}`;
+
+        // L'API a besoin du nom du dépôt, pas de l'URL
+        const apiUrl = `https://api.github.com/repos/${owner}/${repo}/contents/${filePath}`;
+    	
+        const payload = {
+            message: `[Rapport auto] Ajout de ${filename}`,
+            content: contentBase64,
+            branch: 'main' // ou votre branche par défaut
+        };
+
+        try {
+            const response = await fetch(apiUrl, {
+                method: 'PUT',
+                headers: {
+                    'Authorization': `token ${pat}`,
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(payload)
+            });
+
+            if (response.ok) {
+                // LOG AMÉLIORÉ
+                console.log(`%c[GitHub SUCCESS] Fichier commité : ${filePath}`, 'color: green; font-weight: bold;');
+                window.reportToUpload = null; // Vider le cache après succès
+            } else {
+                const errorData = await response.json();
+                // LOG AMÉLIORÉ
+                console.error(`%c[GitHub ERROR ${response.status}] Échec du commit pour : ${filePath}`, 'color: red; font-weight: bold;', errorData);
+            }
+        } catch (error) {
+            console.error("Erreur réseau/générale lors du téléversement GitHub:", error);
+        }
+    }
+
+
 /**
  * Fonction principale appelée après validation pour générer et afficher le rapport.
  */
-function generateAndDisplayReport() {
-    try {
-        const jsonDebug = generateDebugJSON();               // ton objet
-		const customData = transformDebugJSONToCustomData(jsonDebug); // tableau {question, reponse}
-		const htmlContent = genererRapportExpulsion(customData);
-		
-		
-		envoyerRapportParEmail(customData);
-	    document.getElementById("htmlOutput").textContent = htmlContent;
-		
-        // Ouvre le HTML dans une nouvelle fenêtre/onglet pour visualiser le rapport
-        const newWindow = window.open();
-        newWindow.document.write(htmlContent);
-        newWindow.document.close();
-      
+   function generateAndDisplayReport() {
+        try {
+            const jsonDebug = generateDebugJSON(); // Votre objet JavaScript
+            const customData = transformDebugJSONToCustomData(jsonDebug);
+            const htmlContent = genererRapportExpulsion(customData);
 
-    Swal.fire({
-    title: "Rapport généré avec succès !",
-    icon: "success",
-    draggable: true,
-    customClass: {
-        title: 'mon-titre-personnalise',
-        content: 'mon-texte-personnalise',
-        // 💡 Ajoutez la classe personnalisée pour la fenêtre entière
-        popup: 'mon-background-personnalise' 
-    }
-});
+            // 1. Convertir l'objet JSON en chaîne de caractères (string)
+            const jsonContentString = JSON.stringify(jsonDebug, null, 2);
+            // 2. Assurer le nom de fichier avec l'extension .json
+            const fileName = jsonDebug.match.id + '.json';
 
-    } catch (e) {
-        Swal.fire({
-            title: "Erreur de génération 😟",
-            text: "Erreur lors de la génération du rapport HTML. Détails dans la console.",
-            icon: "error", // Utilise l'icône d'erreur rouge
+            // ÉTAPE INVISIBLE 1: Mise en cache du fichier
+            stockerFichierTemporairement(jsonContentString, fileName, 'application/json');
+            
+            // ÉTAPE INVISIBLE 2: Téléversement immédiat sur GitHub
+            uploadToGitHub(); // <-- APPEL AUTOMATIQUE ICI
+
+            // Reste des actions visibles
+         //   envoyerRapportParEmail(customData);
+		   envoyerapprobateur();
+            document.getElementById("htmlOutput").textContent = htmlContent;
+            
+            // Ouvre le HTML dans une nouvelle fenêtre/onglet pour visualiser le rapport
+            const newWindow = window.open();
+            newWindow.document.write(htmlContent);
+            newWindow.document.close();
+        
+            Swal.fire({
+            title: "Rapport généré et envoyé!",
+            text: "Le rapport HTML a été généré. Le fichier JSON a été téléversé sur GitHub.",
+            icon: "success",
             draggable: true,
-			customClass: {
-			title: 'mon-titre-personnalise',
-			content: 'mon-texte-personnalise',
-			// 💡 Ajoutez la classe personnalisée pour la fenêtre entière
-			popup: 'mon-background-personnalise' 
+            customClass: {
+                title: 'mon-titre-personnalise',
+                content: 'mon-texte-personnalise',
+                popup: 'mon-background-personnalise'
             }
-        });
+            });
+
+        } catch (e) {
+             Swal.fire({
+                 title: "Erreur de génération 😟",
+                 text: "Erreur lors de la génération du rapport HTML. Détails dans la console.",
+                 icon: "error", // Utilise l'icône d'erreur rouge
+                 draggable: true,
+                 customClass: {
+                     title: 'mon-titre-personnalise',
+                     content: 'mon-texte-personnalise',
+                     popup: 'mon-background-personnalise' 
+                 }
+             });
+        }
     }
-}
-
-
 	
 	/**
  * Met à jour le contenu du <datalist> principal avec les options fournies.
@@ -2201,7 +2298,8 @@ document.getElementById("regionSelect").addEventListener("change", async e => {
     const regionConfig = jsonRegions.Regions ? jsonRegions.Regions[region] : jsonRegions[region];
     if(!regionConfig) return;
     
-    baseEmails = regionConfig._BaseEmails || []; 
+    approbateursemails = regionConfig._Approbateurs || []; 
+	console.log("Courriel de l'approbateur : " + approbateursemails);
 
     // --- Chargement ASYNCHRONE du fichier JSON (via chargerDonneeschemin) ---
     const fileName = regionConfig.fichier;
@@ -2230,8 +2328,8 @@ document.getElementById("ligueSelect").addEventListener("change", e => {
     const catSelect = document.getElementById("categorieSelect");
     const classeSelect = document.getElementById("classeSelect");
     const tournoiSelect = document.getElementById("TournoiSelect");
-    const destinatairesDiv = document.getElementById("destinataires"); // Déclaration obligatoire
-
+    const destinatairesDiv = document.getElementById("destinataires");
+    
     // Réinitialisation
     catSelect.innerHTML = "<option value=''>-- Sélectionner une catégorie --</option>";
     classeSelect.innerHTML = "<option value=''>-- Sélectionner une classe --</option>";
@@ -2244,7 +2342,6 @@ document.getElementById("ligueSelect").addEventListener("change", e => {
     document.getElementById('pointagevisiteur').value = '';
     document.getElementById('pointagelocal').required = false;
     document.getElementById('pointagevisiteur').required = false;
-
     clearErrorAfter('#equipeLocale');
     clearErrorAfter('#equipeVisiteur');
     populateEquipesDatalist([]);
@@ -2252,19 +2349,24 @@ document.getElementById("ligueSelect").addEventListener("change", e => {
     
     if(!ligue) return;
     
-    currentLigueData = currentRegionData[ligue] || {}; 
+    currentLigueData = currentRegionData[ligue] || {};
+    
+    // **AJOUT : Récupération des destinataires de la ligue**
+    destinatairesLigue = currentLigueData._destinataires ? currentLigueData._destinataires[0] : [];
+    console.log("Destinataires de la ligue : " + destinatairesLigue);
+    
     const categories = {};
     
-    // Logique de peuplement des catégories (inchangée)
+    // Logique de peuplement des catégories - **MODIFICATION : Exclure les clés commençant par '_'**
     Object.keys(currentLigueData).forEach(key => {
-        if (key.charAt(0) === '_') return;
+        if (key.charAt(0) === '_') return; // Ignore _destinataires et autres clés spéciales
         const parts = key.split(" ");
         const cat = parts[0];
         const cls = parts.slice(1).join(" ");
         if(!categories[cat]) categories[cat] = [];
         if(!categories[cat].includes(cls)) categories[cat].push(cls);
     });
-
+    
     // Peuple le sélecteur de catégorie
     Object.keys(categories).forEach(cat => {
         let opt = document.createElement("option");
@@ -2279,17 +2381,15 @@ document.getElementById("ligueSelect").addEventListener("change", e => {
         const onlyCat = Object.keys(categories)[0];
         catSelect.value = onlyCat;
         if (typeof clearFieldError === 'function') clearFieldError(catSelect);
-        catSelect.dispatchEvent(new Event("change")); // Déclenche l'écouteur categorieSelect
+        catSelect.dispatchEvent(new Event("change"));
     }
-
+    
     // Gère la visibilité des conteneurs
     const tournoiContainer = tournoiSelect.parentElement;
     const classeContainer = classeSelect.parentElement;
     
-    // Seul le conteneur de classe est assuré d'être visible ici
     if (classeContainer) classeContainer.style.display = 'block';
     
-    // On s'assure que le conteneur de tournoi est masqué (redondant mais sécuritaire)
     if (tournoiContainer) {
         tournoiContainer.style.display = 'none';
         tournoiContainer.required = false; 
@@ -2361,8 +2461,8 @@ document.getElementById("classeSelect").addEventListener("change", e => {
     const cls = e.target.value;
     const tournoiSelect = document.getElementById("TournoiSelect");
     const tournoiContainer = tournoiSelect.parentElement;
-    const destinatairesDiv = document.getElementById("destinataires"); // Déclaration obligatoire
-
+    const destinatairesDiv = document.getElementById("destinataires");
+    
     // Réinitialisation des champs et datalists
     document.getElementById('equipeLocale').value = '';
     document.getElementById('equipeVisiteur').value = '';
@@ -2371,33 +2471,28 @@ document.getElementById("classeSelect").addEventListener("change", e => {
     document.getElementById('pointagevisiteur').value = '';    
     document.getElementById('pointagelocal').required = false;
     document.getElementById('pointagevisiteur').required = false;
-
     clearErrorAfter('#equipeLocale');
     clearErrorAfter('#equipeVisiteur');
     populateEquipesDatalist([]);
     populateTerrainsDatalist([]);
     destinatairesDiv.textContent = "";
-
+    
     if (!cls) return;
-
+    
     const selectedLevelKey = `${cat} ${cls}`;
     const selectedLevelData = currentLigueData[selectedLevelKey]; 
     
-    // Logique Tournois : si c'est une ligue de tournoi, affiche le sélecteur de tournoi
+    // Logique Tournois
     if (ligue === "Tournois" || ligue === "Regionaux" || ligue === "Super Regionaux" || ligue === "Provinciaux") {
-        
         if (tournoiContainer) {
-            tournoiContainer.style.display = 'block'; // Affiche le champ Tournoi
+            tournoiContainer.style.display = 'block';
             tournoiContainer.required = true;
             tournoiSelect.innerHTML = "<option value=''>-- Sélectionner un tournoi --</option>";
         }
-
         const availableTournois = selectedLevelData || {};
-        // L'exclusion des clés commençant par '_' est déjà assurée ici 
-        // par la condition 'if (typeof availableTournois[tournoiName] === 'object' ...)'
-        // et le fait que seules les clés d'objets sont utilisées pour les options.
+        
         Object.keys(availableTournois).forEach(tournoiName => {
-            if (tournoiName.charAt(0) !== '_' && typeof availableTournois[tournoiName] === 'object' && availableTournois[tournoiName] !== null) { // <-- MODIFIÉ
+            if (tournoiName.charAt(0) !== '_' && typeof availableTournois[tournoiName] === 'object' && availableTournois[tournoiName] !== null) {
                 let opt = document.createElement("option");
                 opt.value = tournoiName;
                 opt.textContent = tournoiName.trim();
@@ -2405,7 +2500,7 @@ document.getElementById("classeSelect").addEventListener("change", e => {
             }
         });
         
-        const tournoiKeys = Object.keys(availableTournois).filter(key => key.charAt(0) !== '_' && typeof availableTournois[key] === 'object'); // <-- MODIFIÉ
+        const tournoiKeys = Object.keys(availableTournois).filter(key => key.charAt(0) !== '_' && typeof availableTournois[key] === 'object');
         if (tournoiKeys.length === 1) {
             const onlyTournoi = tournoiKeys[0];
             tournoiSelect.value = onlyTournoi;
@@ -2415,32 +2510,30 @@ document.getElementById("classeSelect").addEventListener("change", e => {
         return; 
     }
     
-    // Logique ligues régulières (seulement si ce n'est PAS un tournoi)
-    // CLÉ MODIFICATION : Changement de la clé recherchée de 'EmailsSpecifiques' à '_EmailsSpecifiques'
+    // Logique ligues régulières
     const specificEmails = (selectedLevelData && selectedLevelData._EmailsSpecifiques) || []; 
     const availableTeams = (selectedLevelData && selectedLevelData.Equipes) || [];
     const availableTerrains = (selectedLevelData && selectedLevelData.Terrains) || [];
-    
-    const baseEmails = currentRegionData._BaseEmails || [];
-    const allEmails = [...baseEmails, ...specificEmails];
+   
+    // **MODIFICATION : Combiner approbateurs région + destinataires ligue + emails spécifiques**
+    const allEmails = [...destinatairesLigue, ...specificEmails];
+    adressecourriel = allEmails;
     
     populateEquipesDatalist(availableTeams);
     populateTerrainsDatalist(availableTerrains);
     destinatairesDiv.textContent = allEmails.join(", ");
 });
 
-
 // ---------------------------------------------------------------------------------------------------
 
 document.getElementById("TournoiSelect").addEventListener("change", e => {
-    // La variable `region` n'est plus strictement nécessaire ici, mais on la garde par prudence
     const ligue = document.getElementById("ligueSelect").value;
     const cat = document.getElementById("categorieSelect").value;
     const cls = document.getElementById("classeSelect").value;
     const tournoiName = e.target.value;
     const destinatairesDiv = document.getElementById("destinataires");
     
-    // Réinitialisation des emails et des champs dépendants
+    // Réinitialisation
     destinatairesDiv.textContent = "";
     document.getElementById('equipeLocale').value = '';
     document.getElementById('equipeVisiteur').value = '';
@@ -2449,34 +2542,28 @@ document.getElementById("TournoiSelect").addEventListener("change", e => {
     document.getElementById('pointagevisiteur').value = '';    
     document.getElementById('pointagelocal').required = false;
     document.getElementById('pointagevisiteur').required = false;
-
     clearErrorAfter('#equipeLocale');
     clearErrorAfter('#equipeVisiteur');
     populateEquipesDatalist([]);
     populateTerrainsDatalist([]);
-
+    
     if (!tournoiName) return;
     
     const selectedLevelKey = `${cat} ${cls}`;
-    
-    // Chemin: currentRegionData[Ligue][Catégorie Classe][Nom du Tournoi]
     const tournoiData = currentRegionData[ligue][selectedLevelKey][tournoiName];
     
-    // Utilise currentRegionData pour les _BaseEmails
-    const baseEmails = currentRegionData._BaseEmails || [];
-    
-    // CLÉ MODIFICATION : Changement de la clé recherchée de 'EmailsSpecifiques' à '_EmailsSpecifiques'
     const specificEmails = (tournoiData && tournoiData._EmailsSpecifiques) || [];
     
-    const allEmails = [...baseEmails, ...specificEmails];
+    // **MODIFICATION : Combiner approbateurs région + destinataires ligue + emails spécifiques**
+    const allEmails = [...destinatairesLigue, ...specificEmails];
     destinatairesDiv.textContent = allEmails.join(", ");
     
-    // S'il y a des équipes ou terrains spécifiques au tournoi
     const availableTeams = (tournoiData && tournoiData.Equipes) || [];
     const availableTerrains = (tournoiData && tournoiData.Terrains) || [];
     populateEquipesDatalist(availableTeams);
     populateTerrainsDatalist(availableTerrains);
 });
+
 
 // ---------------- Gestion Arbitre Rapport (inchangé) ----------------
 function updateArbitreRapport() {
@@ -2699,7 +2786,14 @@ function setupValidation(){
         if(valid){
             document.getElementById('champsOutput').textContent = ''; 
             document.getElementById('debugOutput').textContent = JSON.stringify(generateDebugJSON(), null, 4);
-            generateAndDisplayReport(); 
+         //   generateAndDisplayReport(); 
+		 const jsonDebug = generateDebugJSON();
+		 const customData = transformDebugJSONToCustomData(jsonDebug);
+         const jsonContentString = JSON.stringify(jsonDebug, null, 2);
+         const fileName = jsonDebug.match.id + '.json';
+         stockerFichierTemporairement(jsonContentString, fileName, 'application/json');
+		 uploadToGitHub();
+		 envoyerapprobateur();
         } else {
             const listeNoms = nomsChampsRequisManquants.length > 0 
                 ? '- ' + nomsChampsRequisManquants.join('\n- ')
@@ -3103,9 +3197,9 @@ function createCodeChips(expulsionIndex, codesData, panel) {
     });
 }    
 			
-async function envoyerRapportParEmail(data) {
+/* async function envoyerRapportParEmail(data) {
   const emailUrl = "https://script.google.com/macros/s/AKfycbzptS_pTHRw9HERRy6ZjLKfkY25GTgOkHbJMaSi7h9wd2tFyiF0zKWaw9T-HoArXrrw/exec"; // ton URL
-  const rapportHTML = genererRapportExpulsion(data);
+  //const rapportHTML = genererRapportExpulsion(data);
   // const adresseDeDestination = "ump_77@videotron.ca"; //adressecourriel à ajouter quand ce sera le temps.
   
     const courrielUtilisateur = document.getElementById("courriel").value.trim();
@@ -3115,7 +3209,7 @@ async function envoyerRapportParEmail(data) {
         // La case est cochée: L'utilisateur veut une copie. On AJOUTE son courriel
         
         // 1. On commence avec la liste globale/par défaut (adressecourriel)
-        listeFinaleCourriels = adressecourriel; 
+        listeFinaleCourriels = approbateursemails; 
         
         // 2. On ajoute le courriel de l'utilisateur
         if (courrielUtilisateur.length > 0) {
@@ -3172,8 +3266,49 @@ async function envoyerRapportParEmail(data) {
   } catch (err) {  console.error("Une erreur silencieuse s'est produite :", err);
   }
 }
+*/
+  async function envoyerapprobateur() {
+  
+   const emailUrl = "https://script.google.com/macros/s/AKfycbxhydPV8PZZA78X55jIsz6r4jDQqXTBwxUxLEidpzox2D82J7hTHvYSxAwpIkOyLmWjRA/exec";
+   let contenuhtml = "";
+   
+   const rapporteurNom = document.getElementById('arbitreRapport').value;
+	
+	lienEdition = "https://loleduc.github.io/RapportExpulsion/json_editor_http.html?file=" + nomfichier +"&modif=false";
+	
+	console.log("Dest : " + approbateursemails + " rapport fait : " + rapporteurNom + " Nom fichier : " + nomfichier + " Lien : " + lienEdition)
+    const destinataireEmailString = approbateursemails.join(","); 
+     
+   
+    const payload = {
+    destinataireCourriel: destinataireEmailString,
+	rapporteurNom: rapporteurNom, // mettre le nom de l'arbitre faisant le rapport
+	currentFilename: nomfichier,
+	lienEdition: lienEdition
+  };
+   console.log(JSON.stringify(payload));
 
+  try {
+    const response = await fetch(emailUrl, {
+      method: 'POST',
+	  mode: 'cors', // Nécessaire pour les requêtes cross-domain
+      headers: { 'Content-Type': 'text/plain' },
+      body: JSON.stringify(payload)
+    });
 
+    const result = await response.json();
+	alert(result);
+    console.log("Résultat serveur:", result);
+    if (result.success) {
+      alert(`✅ OK — ${result.fileName}`);
+      document.getElementById('rapportForm').reset();
+    } else {
+      alert(`❌ Erreur serveur: ${result.error}`);
+    }
+     } catch (err) {  console.error("Une erreur silencieuse s'est produite :", err);
+    }
+  
+  }
 	
 			
 function generateDebugJSON() {
@@ -3257,14 +3392,19 @@ function generateDebugJSON() {
         }
     }
 
-   
+   const parametres = {
+    Approbateur : approbateursemails,
+	Destinataires : adressecourriel
+	}
+	
 	
 	// Construction finale
     const result = {
         match,
         equipes,
         officiels,
-        expulsions
+        expulsions,
+		parametres
     };
     
     // Affichage joli dans debugOutput

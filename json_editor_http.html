@@ -670,6 +670,8 @@ function showMessage(text, type) {
         }
         
         const url = baseUrl + filename;
+		console.log("BaseUrl : " + baseUrl + " Filename : " + filename);
+		
         
         try {
             const response = await fetch(url);
@@ -680,6 +682,8 @@ function showMessage(text, type) {
             
             currentData = await response.json();
             
+			console.log("CurrenData : " + currentData;
+			
             // L'erreur est résolue ici car applyInitialParameters est maintenant définie
             applyInitialParameters(currentData, initialParams); 
             
@@ -1173,29 +1177,7 @@ async function fetchSha(filename) {
     }
 }
 
-/*function exportJSON() {
-        if (!currentData) {
-            showMessage('Aucune donnée à exporter', 'error');
-            return;
-        }
-        
-        updateCurrentData();
-        
-        const dataStr = JSON.stringify(currentData, null, 2);
-        const dataBlob = new Blob([dataStr], {type: 'application/json'});
-        const url = URL.createObjectURL(dataBlob);
-        const link = document.createElement('a');
-        link.href = url;
-        link.download = currentFilename || 'rapport.json';
-        link.click();
-        URL.revokeObjectURL(url);
-        
-        showMessage('Fichier JSON exporté!', 'success');
-    }
-	
-	// REMPLACEZ CECI PAR L'URL OBTENUE À L'ÉTAPE 1C
-const APPS_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbyw-YmSwF5L07xCfd1Z-5B15dJYKhzDegN_7wca3zxD_l4KvyepN2-Iqr0i00O_0DGG/exec"; 
-*/
+
 
 async function retournerRapport() {
     if (!currentFilename) {

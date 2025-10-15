@@ -6,7 +6,7 @@
 <script>
     // 1. Définition de la variable de version globalement (accessible partout)
     window.CONFIG = {
-        VERSION: '0.20251014.22:00' // Mettez à jour ce numéro manuellement pour chaque version
+        VERSION: '0.20251014.22:05' // Mettez à jour ce numéro manuellement pour chaque version
     };
 
     // 2. Modification immédiate du titre (Option 2)
@@ -942,7 +942,7 @@ Une fois le terrain quitté par le participant, a-t-il quitté les environs du t
 <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
 <script src="https://cdn.jsdelivr.net/npm/flatpickr/dist/l10n/fr.js"></script> 
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-<script src="config.local.js"></script>
+
 
 <script>
 
@@ -981,16 +981,14 @@ const CODE_SEPARATOR = '||';
 
     window.reportToUpload = null; 
     
-    // ATTENTION SÉCURITÉ : Remplissez ces champs avec des valeurs réelles 
-    // AVANT d'utiliser cette fonction en mode invisible.
-    // NOTE IMPORTANTE: 'repo' doit être le nom du dépôt (ex: 'RapportExpulsion'), PAS l'URL complète.
-    window.githubConfig = {
-            pat: typeof __github_pat !== 'undefined' ? __github_pat : '',
-            owner: typeof __github_owner !== 'undefined' ? __github_owner : '',
-            repo: typeof __github_repo !== 'undefined' ? __github_repo : '',
-            folder: typeof __github_folder !== 'undefined' ? __github_folder : 'json'
-        };
+ 
+const config = {
+    // ... vos valeurs ...
+    OWNER: 'Loleduc',
+    REPO: 'RapportExpulsion', 
+    FOLDER: 'json' 
 
+};
 
 
 document.addEventListener('DOMContentLoaded', function() {

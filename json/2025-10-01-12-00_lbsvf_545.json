@@ -1,0 +1,48 @@
+{
+  "match": {
+    "evenement": "",
+    "numero": "545",
+    "date": "2025-10-01 12:00",
+    "region": "RIVE-SUD",
+    "ligue": "LBSVF",
+    "categorie": "Senior",
+    "classe": "BB",
+    "details_expulsions": "fdfdfdfd",
+    "infos_complementaires": "Le participant a-t-il re?u un avertissement avant d??tre expuls???\n\nLa situation ?tait-elle d?une longue dur?e??\n\nUne fois le terrain quitt? par le participant, a-t-il quitt? les environs du terrain et est-il rest? invisible ?",
+    "id": "2025-10-01-12-00_lbsvf_545"
+  },
+  "equipes": {
+    "locale": "Brewers Drummondville",
+    "pointagelocal": "3",
+    "visiteur": "Marlins Sorel-Tracy",
+    "pointagevisiteur": "44",
+    "terrain": "Parc Celanese"
+  },
+  "officiels": {
+    "marbre": "rere",
+    "buts1": "rererre",
+    "marqueur": "rgfdgf",
+    "rapport": "rere",
+    "courriel": "d@d.com",
+    "telephone": "(444) 444-4444"
+  },
+  "expulsions": [
+    {
+      "numero": 1,
+      "equipe": "Brewers Drummondville",
+      "chandail": "2",
+      "joueur": "dffdfd",
+      "codes": [
+        "55.1 - SUSPENSION AUTOMATIQUE"
+      ]
+    }
+  ],
+  "parametres": {
+    "Approbateur": [
+      "ump_77@videotron.ca"
+    ],
+    "Destinataires": [
+      "LBSVF@domaine.com"
+    ]
+  }
+}

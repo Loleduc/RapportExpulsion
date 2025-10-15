@@ -7,7 +7,7 @@
     "ligue": "LBAVR",
     "categorie": "13U",
     "classe": "B",
-    "details_expulsions": "dffdfdfddf",
+    "details_expulsions": "bravo",
     "infos_complementaires": "Le participant a-t-il re?u un avertissement avant d??tre expuls???\n\nLa situation ?tait-elle d?une longue dur?e??\n\nUne fois le terrain quitt? par le participant, a-t-il quitt? les environs du terrain et est-il rest? invisible ?",
     "id": "2025-10-01-12-00_lbavr_779"
   },
@@ -24,7 +24,9 @@
     "marqueur": "vc",
     "rapport": "fddf",
     "courriel": "c@2.com",
-    "telephone": "(444) 444-4444"
+    "telephone": "(444) 444-4444",
+    "buts2": "",
+    "buts3": ""
   },
   "expulsions": [
     {

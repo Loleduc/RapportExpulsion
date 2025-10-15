@@ -693,7 +693,7 @@ function showMessage(text, type) {
             // Appliquer la logique de lecture seule après le chargement
             console.log(isModifiable);	
 			const modeText = isModifiable ? ' (Mode édition)' : ' (Mode visualisation)';
-            document.getElementById('reportTitle').textContent = `⚾ Éditeur de Rapports d'Expulsion .02 ${modeText}`;
+            document.getElementById('reportTitle').textContent = `⚾ Éditeur de Rapports d'Expulsion .03 ${modeText}`;
 			toggleReadOnly(!isModifiable);
             
         } catch (error) {
@@ -1103,7 +1103,8 @@ async function saveToGitHub() {
     updateCurrentData();
 
     const content = JSON.stringify(currentData, null, 2);
-
+    console.log (content);
+	
     const payload = {
         fileName: currentFilename,
         fileContent: content,

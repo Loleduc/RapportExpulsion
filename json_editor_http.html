@@ -693,7 +693,7 @@ function showMessage(text, type) {
             // Appliquer la logique de lecture seule après le chargement
             console.log(isModifiable);	
 			const modeText = isModifiable ? ' (Mode édition)' : ' (Mode visualisation)';
-            document.getElementById('reportTitle').textContent = `⚾ Éditeur de Rapports d'Expulsion 1.0 ${modeText}`;
+            document.getElementById('reportTitle').textContent = `⚾ Éditeur de Rapports d'Expulsion .01 ${modeText}`;
 			toggleReadOnly(!isModifiable);
             
         } catch (error) {
@@ -1094,50 +1094,56 @@ function showMessage(text, type) {
 }
 
 
-    async function saveToGitHub() {
-        if (!currentData || !currentFilename) {
-            showMessage('Aucune donnée à sauvegarder ou nom de fichier inconnu.', 'error');
-            return;
-        }
-
-        // 1. Mettre à jour l'objet avec les données du formulaire
-        updateCurrentData();
-
-        // 2. Préparer les données pour GitHub
-        const content = JSON.stringify(currentData, null, 2);
-        const base64Content = btoa(unescape(encodeURIComponent(content)));
-        
-        const saveData = {
-            message: `Mise à jour du rapport ${currentFilename}`,
-            content: base64Content,
-            sha: currentSha,
-            branch: 'main'
-        };
-
-        try {
-            const response = await fetch(apiUrl + currentFilename, {
-                method: 'PUT',
-                headers: {
-                    'Authorization': `Bearer ${config.PAT}`,
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify(saveData)
-            });
-            
-            if (!response.ok) {
-                const errorData = await response.json();
-                throw new Error(errorData.message || 'Erreur lors de la sauvegarde');
-            }
-            
-            const result = await response.json();
-            currentSha = result.content.sha; // Mettre à jour le SHA
-            
-            showMessage('✅ Fichier sauvegardé sur GitHub avec succès!', 'success');
-        } catch (error) {
-            showMessage('❌ Erreur lors de la sauvegarde sur GitHub: ' + error.message, 'error');
-            console.error('Erreur:', error);
-        }
+   async function saveToGitHub() {
+    if (!currentData || !currentFilename) {
+        showMessage('Aucune donnée à sauvegarder ou nom de fichier inconnu.', 'error');
+        return;
     }
+
+    // 1. Mettre à jour l'objet avec les données du formulaire
+    updateCurrentData();
+
+    // 2. Préparer le JSON à envoyer
+    const content = JSON.stringify(currentData, null, 2);
+
+    // 3. Préparer l'objet à envoyer à Apps Script
+    const payload = {
+        fileName: currentFilename,
+        fileContent: content
+    };
+
+    const scriptUrl = "https://script.google.com/macros/s/AKfycbzu6VQ3Cfx1RHia6pWM5F1hGMj9zsm8MMC6leTXFIwvcmfMgvUOoOy1nQce9F3NZQJy/exec"; // 🔑 à remplacer
+
+    try {
+        const response = await fetch(scriptUrl, {
+            method: "POST",
+            headers: {
+                "Content-Type": "text/plain"
+            },
+            body: JSON.stringify(payload)
+        });
+
+        const text = await response.text(); // lecture brute pour debug
+        let result;
+        try {
+            result = JSON.parse(text);
+        } catch {
+            throw new Error("Impossible de parser la réponse JSON du serveur");
+        }
+
+        if (result.success) {
+            showMessage('✅ Fichier sauvegardé sur GitHub via Apps Script !', 'success');
+            console.log("Lien :", result.url);
+        } else {
+            throw new Error(result.error || "Erreur inconnue côté serveur");
+        }
+    } catch (error) {
+        showMessage('❌ Erreur lors de la sauvegarde sur GitHub via Apps Script : ' + error.message, 'error');
+        console.error('Erreur:', error);
+    }
+}
+
+
     
     function exportJSON() {
         if (!currentData) {

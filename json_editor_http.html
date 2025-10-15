@@ -693,7 +693,7 @@ function showMessage(text, type) {
             // Appliquer la logique de lecture seule après le chargement
             console.log(isModifiable);	
 			const modeText = isModifiable ? ' (Mode édition)' : ' (Mode visualisation)';
-            document.getElementById('reportTitle').textContent = `⚾ Éditeur de Rapports d'Expulsion .03 ${modeText}`;
+            document.getElementById('reportTitle').textContent = `⚾ Éditeur de Rapports d'Expulsion .05 ${modeText}`;
 			toggleReadOnly(!isModifiable);
             
         } catch (error) {
@@ -780,27 +780,6 @@ function showMessage(text, type) {
     }
 }
     
-    
-    async function fetchSha(filename) {
-        if (!config.PAT) return;
-        
-        try {
-            const response = await fetch(apiUrl + filename, {
-                headers: {
-                    'Authorization': `Bearer ${config.PAT}`,
-                    'Accept': 'application/vnd.github.v3+json'
-                }
-            });
-            
-            if (response.ok) {
-                const data = await response.json();
-                currentSha = data.sha;
-                console.log('SHA récupéré:', currentSha);
-            }
-        } catch (error) {
-            console.error('Erreur lors de la récupération du SHA:', error);
-        }
-    }
     
     function populateForm(data) {
     // Match
@@ -1099,45 +1078,86 @@ async function saveToGitHub() {
         showMessage('Aucune donnée à sauvegarder.', 'error');
         return;
     }
-
+    
+    // Mettre à jour les données actuelles avant la sauvegarde
     updateCurrentData();
-
+    
+    console.log('=== DÉBUT SAUVEGARDE ===');
+    console.log('Nom du fichier:', currentFilename);
+    console.log('SHA actuel:', currentSha);
+    
     const content = JSON.stringify(currentData, null, 2);
-    console.log (content);
-	
     const payload = {
         fileName: currentFilename,
         fileContent: content,
-        sha: currentSha || null  // si présent, fera une mise à jour
+        sha: currentSha || null
     };
-
+    
+    console.log('Payload envoyé:', {
+        fileName: payload.fileName,
+        sha: payload.sha,
+        contentLength: payload.fileContent.length
+    });
+    
     const scriptUrl = "https://script.google.com/macros/s/AKfycbzu6VQ3Cfx1RHia6pWM5F1hGMj9zsm8MMC6leTXFIwvcmfMgvUOoOy1nQce9F3NZQJy/exec";
-
+    
+    // Afficher un message de chargement
+    showMessage('⏳ Sauvegarde en cours...', 'info');
+    
     try {
         const response = await fetch(scriptUrl, {
             method: "POST",
             headers: { "Content-Type": "text/plain" },
             body: JSON.stringify(payload)
         });
-
+        
+        console.log('Status HTTP:', response.status);
+        console.log('Response OK:', response.ok);
+        
+        if (!response.ok) {
+            throw new Error(`Erreur HTTP: ${response.status}`);
+        }
+        
         const result = await response.json();
-
+        console.log('Résultat Apps Script:', result);
+        
         if (result.success) {
-            currentSha = result.sha;  // 🔑 mettre à jour le SHA après update
+            currentSha = result.sha;  // 🔑 Mettre à jour le SHA pour les prochaines sauvegardes
+            console.log('✅ Nouveau SHA:', currentSha);
             showMessage('✅ Fichier sauvegardé sur GitHub !', 'success');
             console.log('Lien :', result.url);
         } else {
-            throw new Error(result.error);
+            throw new Error(result.error || 'Erreur inconnue');
         }
     } catch (err) {
-        showMessage('❌ Erreur : ' + err.message, 'error');
-        console.error(err);
+        console.error('❌ Erreur complète:', err);
+        showMessage('❌ Erreur de sauvegarde : ' + err.message, 'error');
+    }
+    
+    console.log('=== FIN SAUVEGARDE ===');
+}
+
+async function fetchSha(filename) {
+    const scriptUrl = "https://script.google.com/macros/s/AKfycbzu6VQ3Cfx1RHia6pWM5F1hGMj9zsm8MMC6leTXFIwvcmfMgvUOoOy1nQce9F3NZQJy/exec";
+    
+    try {
+        const response = await fetch(`${scriptUrl}?fileName=${filename}`);
+        
+        if (response.ok) {
+            const data = await response.json();
+            if (data.success && data.sha) {
+                currentSha = data.sha;
+                console.log('✅ SHA récupéré via Apps Script:', currentSha);
+            }
+        } else {
+            console.error('Erreur lors de la récupération du SHA:', response.status);
+        }
+    } catch (error) {
+        console.error('Erreur lors de la récupération du SHA:', error);
     }
 }
 
-
-    
-    function exportJSON() {
+/*function exportJSON() {
         if (!currentData) {
             showMessage('Aucune donnée à exporter', 'error');
             return;
@@ -1159,6 +1179,7 @@ async function saveToGitHub() {
 	
 	// REMPLACEZ CECI PAR L'URL OBTENUE À L'ÉTAPE 1C
 const APPS_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbyw-YmSwF5L07xCfd1Z-5B15dJYKhzDegN_7wca3zxD_l4KvyepN2-Iqr0i00O_0DGG/exec"; 
+*/
 
 async function retournerRapport() {
     if (!currentFilename) {

@@ -1105,7 +1105,7 @@ function showMessage(text, type) {
 
     // 2. Préparer le JSON à envoyer
     const content = JSON.stringify(currentData, null, 2);
-
+     console.log("currentFilename : " + currentFilename + " fileContent : " + content);
     // 3. Préparer l'objet à envoyer à Apps Script
     const payload = {
         fileName: currentFilename,

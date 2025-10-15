@@ -459,7 +459,7 @@
 			
         </div>
     </div>
-    <script src="config.local.js"></script>
+  <!-- <script src="config.local.js"></script> -->
 	
     <script>
     // Configuration GitHub
@@ -468,13 +468,28 @@
     // ATTENTION SÉCURITÉ : Remplissez ces champs avec des valeurs réelles 
     // AVANT d'utiliser cette fonction en mode invisible.
     // NOTE IMPORTANTE: 'repo' doit être le nom du dépôt (ex: 'RapportExpulsion'), PAS l'URL complète.
-    window.githubConfig = {
+   /* window.githubConfig = {
             pat: typeof __github_pat !== 'undefined' ? __github_pat : '',
             owner: typeof __github_owner !== 'undefined' ? __github_owner : '',
             repo: typeof __github_repo !== 'undefined' ? __github_repo : '',
             folder: typeof __github_folder !== 'undefined' ? __github_folder : 'json'
         };
+    */
+	const config = {
+    // Le Jeton d'Accès Personnel (PAT) que vous avez généré sur GitHub
+    PAT: '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', 
     
+    // Votre nom d'utilisateur GitHub (Owner du dépôt)
+    OWNER: 'Loleduc',
+    
+    // Le nom exact du dépôt où vous voulez téléverser les fichiers
+    REPO: 'RapportExpulsion', 
+    
+    // Le nom du dossier dans ce dépôt (ex: 'json')
+    FOLDER: 'json' 
+};
+
+ 
     const baseUrl = `https://raw.githubusercontent.com/${config.OWNER}/${config.REPO}/refs/heads/main/${config.FOLDER}/`;
     const apiUrl = `https://api.github.com/repos/${config.OWNER}/${config.REPO}/contents/${config.FOLDER}/`;
     const codesUrl = "https://raw.githubusercontent.com/Loleduc/RapportExpulsion/refs/heads/main/Nouvelle%20structure%20json/Codes.json";

@@ -6,7 +6,7 @@
 <script>
     // 1. Définition de la variable de version globalement (accessible partout)
     window.CONFIG = {
-        VERSION: '0.20251014.22:05' // Mettez à jour ce numéro manuellement pour chaque version
+        VERSION: '0.20251012.23:25' // Mettez à jour ce numéro manuellement pour chaque version
     };
 
     // 2. Modification immédiate du titre (Option 2)
@@ -47,7 +47,7 @@
     --couleur-bouton-hover: #0056b3;
 
     /* Couleurs des Panels */
-    --couleur-panel-fond: #d0d3d4;    /* Gris clair des panels 3D */
+    --couleur-panel-fond: #d0d3d4;   /* Gris clair des panels 3D */
 
     /* Couleurs du Texte */
     --couleur-texte-principal: #333; /* Noir/Gris foncé */
@@ -67,7 +67,7 @@
 .theme-blanc {
     /* Couleurs du Dégradé de Fond (body) */
     --couleur-fond-haut: #fff;    /*Blanc */
-    --couleur-fond-bas: #fff;      /* blanc */
+    --couleur-fond-bas: #fff;     /* blanc */
 
     /* Couleurs d'Accentuation (Bleu maintenu pour les clics/chips) */
     --couleur-accent: #0072ce;
@@ -76,7 +76,7 @@
     --couleur-bouton-hover: #0056b3;
 
     /* Couleurs des Panels */
-    --couleur-panel-fond: #d0d3d4;    /* Gris BQ */
+    --couleur-panel-fond: #d0d3d4;   /* Gris BQ */
 
     /* Couleurs du Texte */
     --couleur-texte-principal: #041e42; /* bleu BQ */
@@ -88,7 +88,7 @@
 
     /* Couleurs Diverses */
     --couleur-bordure-grise: #666;
-    --couleur-erreur: #ff6347;     /* Rouge-orangé pour les erreurs */
+    --couleur-erreur: #ff6347;        /* Rouge-orangé pour les erreurs */
     --couleur-avertissement: #ffc107;
 }
 
@@ -105,7 +105,7 @@
     --couleur-bouton-hover: #0056b3;
 
     /* Couleurs des Panels */
-    --couleur-panel-fond: #d0d3d4;    /* Gris clair des panels 3D */
+    --couleur-panel-fond: #d0d3d4;   /* Gris clair des panels 3D */
 
     /* Couleurs du Texte */
     --couleur-texte-principal: #333; /* Noir/Gris foncé */
@@ -121,19 +121,22 @@
     --couleur-avertissement: #ffc107;
 }
 
+
+
 /* -----------------------------------------------------------------------------------
- * CSS GÉNÉRAL
+ * CSS GÉNÉRAL (MODIFICATION DE LA RÈGLE H1)
  * ----------------------------------------------------------------------------------- */
-body { 
+ body { 
     font-family: Arial, sans-serif; 
     padding: 20px; 
-    /* 🚀 CORRECTION/AJUSTEMENT : Dégradé de haut en bas, couvre 100% de la fenêtre */
-    background: linear-gradient(to bottom, var(--couleur-fond-haut) 0%, var(--couleur-fond-bas) 100%);
+    /* Utilisation des variables pour le dégradé */
+	background: linear-gradient(to bottom, var(--couleur-fond-haut) 00%,  var(--couleur-fond-bas) 100%);
     min-height: 100vh;
 }
 h1 { 
     font-size: 72px;
     text-align: center; 
+    /* 🚀 CORRECTION : Utilise la nouvelle variable indépendante pour le H1 */
     color: var(--couleur-h1-titre); 
     margin-bottom: 25px; 
     text-shadow: 
@@ -152,56 +155,27 @@ h2 {
         6px 6px 5px rgba(0, 0, 0, 0.1); 
 }
 
-
 label { 
     display: block; 
     margin: 8px 0 4px; 
     font-weight: bold; 
+    /* La couleur du texte principal est utilisée ici, définie par le thème */
     color: var(--couleur-texte-principal);
 }
-
 input, select, textarea { 
     padding: 8px; 
     margin-bottom: 6px; 
     border-radius: 6px; 
     border: 1px solid var(--couleur-bordure-grise); 
     font-size: 14px; 
+    /* 🛑 CLÉ : Assure que le padding et la bordure sont inclus dans la largeur */
     box-sizing: border-box; 
+    /* La couleur du texte principal est utilisée ici, définie par le thème */
     color: var(--couleur-texte-principal);
+    
+    /* 🛑 AJOUTEZ/VÉRIFIEZ CECI : Empêche le débordement horizontal */
     max-width: 100%;
 }
-
-/* 💡 CORRECTION DU STYLE DES LABELS DANS LES BLOCS D'ÉQUIPE/TERRAIN */
-/* 💡 CORRECTION DU STYLE DES LABELS DANS LES BLOCS D'ÉQUIPE/TERRAIN */
-.code-chip.tooltip-champ label {
-    font-weight: bold;
-    color: var(--couleur-texte-principal);
-    /* 🚀 CORRECTION CLÉ : Fixe la taille de la police pour qu'elle corresponde aux autres labels */
-    font-size: 16px; 
-    margin: 8px 0 4px; 
-}
-
-/* Assure que les labels de pointage sont également corrigés */
-.code-chip.tooltip-champ div label {
-    font-weight: bold;
-    color: var(--couleur-texte-principal);
-    /* 🚀 CORRECTION CLÉ : Fixe la taille de la police pour qu'elle corresponde aux autres labels */
-    font-size: 16px; 
-    margin: 4px 0 2px;
-}
-
-/* -----------------------------------------------------------------------------------
- * ASTÉRISQUE REQUIS (CORRIGÉ ET ÉTENDU)
- * ----------------------------------------------------------------------------------- */
-label:has(+ input[required])::after,
-label:has(+ select[required])::after,
-h2:has(+ textarea[required])::after { /* Cible le H2 avant le TEXTAREA requis */
-    content: " *";
-    color: red;
-    font-weight: bold;
-}
-
-/* Autres règles (inchangées ou déjà corrigées dans le code fourni) */
 
 #matchNumero { width: 140px; }
 #matchDate { width: 220px; }
@@ -240,12 +214,16 @@ h2:has(+ textarea[required])::after { /* Cible le H2 avant le TEXTAREA requis */
     cursor: pointer; 
     font-size: 14px; 
     color: var(--couleur-accent); 
+    /* Cette couleur définit le fond des chips */
     background: var(--couleur-texte-clair); 
     text-align: center; 
+	 /* Empêche la sélection du texte par l'utilisateur */
     user-select: none;
-    -webkit-user-select: none;
-    -ms-user-select: none;
-    -moz-user-select: none; 
+    
+    /* Ajoutez des préfixes pour une compatibilité maximale avec les navigateurs */
+    -webkit-user-select: none; /* Safari et Chrome */
+    -ms-user-select: none; /* Internet Explorer/Edge */
+    -moz-user-select: none; /* Firefox */
 }
 .chip.selected { 
     background: var(--couleur-accent); 
@@ -288,8 +266,12 @@ h2:has(+ textarea[required])::after { /* Cible le H2 avant le TEXTAREA requis */
     background: none !important;
     cursor: default !important;
     
+    /* Maintient les propriétés essentielles pour le positionnement du tooltip */
     position: relative; 
-    display: block;
+    display: block; /* S'assure que le conteneur prend la bonne place */
+    
+    /* ❌ J'AI SUPPRIMÉ : visibility: hidden !important; et opacity: 0 !important; 
+       Ces règles masquaient tout le champ de formulaire, pas seulement le tooltip. */
 }
 
 .code-chip.tooltip-champ .tooltip {
@@ -321,7 +303,7 @@ h2:has(+ textarea[required])::after { /* Cible le H2 avant le TEXTAREA requis */
 .code-chip:hover .tooltip {
    visibility: visible !important;
    opacity: 1 !important;
-}    
+}   
 
 /* -----------------------------------------------------------------------------------
  * ERREURS ET BOUTONS
@@ -394,39 +376,51 @@ button:hover {
 
 /* 1. Cas 2 arbitres : Centré et plus "collé" */
 .arbitres-row.arbitres-2-cols {
+    /* Ajoute une largeur maximale pour que les champs ne s'étendent pas sur tout le panel */
     max-width: 550px; 
+    /* Force le centrage du conteneur lui-même si le panel est plus large que 550px */
     margin-left: auto;
     margin-right: auto;
 }
 .arbitres-row.arbitres-2-cols .champ {
+    /* Empêche les champs de s'étendre (enlève le flex-grow: 1 par défaut) */
     flex-grow: 0 !important;
+    /* Laisse le champ s'ajuster à sa taille minimale/maximale définie */
     flex-basis: auto !important;
 }
 
 /* 2. Cas 3 arbitres : 1/3, 1/3, 1/3 */
 .arbitres-row.arbitres-3-cols {
-    max-width: 100%; 
+    max-width: 100%; /* Assure que le conteneur prend toute la largeur */
 }
 .arbitres-row.arbitres-3-cols .champ {
+    /* flex-basis: calc(33.33% - 10px) 
+       33.33% est la base pour un tiers. On soustrait un peu (10px) 
+       pour compenser les 15px de gap et éviter que les champs ne "wrappe".
+    */
     flex-grow: 1;
     flex-basis: calc(33.33% - 10px) !important; 
-    min-width: 150px; 
+    min-width: 150px; /* Permet un meilleur ajustement sur des petits écrans */
 }
 
 /* 3. Cas 4 arbitres : 1/4, 1/4, 1/4, 1/4 */
 .arbitres-row.arbitres-4-cols {
-    max-width: 100%; 
+    max-width: 100%; /* Assure que le conteneur prend toute la largeur */
 }
 .arbitres-row.arbitres-4-cols .champ {
+    /* flex-basis: calc(25% - 11.25px)
+       On soustrait plus précisément 11.25px pour compenser les gaps (3*15px / 4 champs)
+    */
     flex-grow: 1;
     flex-basis: calc(25% - 11.25px) !important; 
     min-width: 150px;
 }
 
 /* Règle de secours : Si aucune classe arbitres-*-cols n'est présente 
-    (ce qui arrive juste après le chargement du HTML et AVANT l'exécution du JS), 
-    on force la mise en page "2 arbitres" par défaut. */
+   (ce qui arrive juste après le chargement du HTML et AVANT l'exécution du JS), 
+   on force la mise en page "2 arbitres" par défaut. */
 #arbitres-champs-row:not(.arbitres-2-cols):not(.arbitres-3-cols):not(.arbitres-4-cols) {
+    /* Applique la largeur maximale et le centrage UNIQUEMENT à la rangée des arbitres */
     max-width: 550px; 
     margin-left: auto;
     margin-right: auto;
@@ -593,7 +587,7 @@ button:hover {
 #details,
 #infos_complementaires {
     width: 100%;
-    height: 150px;
+	height: 150px;
 }
 
     
@@ -643,9 +637,9 @@ button:hover {
     background-color: var(--couleur-panel-fond);
     
     /* Vous pouvez aussi ajouter d'autres styles pour la boîte */
- /* border: 3px solid #ffcc00;
+  /*  border: 3px solid #ffcc00;
     border-radius: 15px; */
-    box-shadow: 
+	box-shadow: 
         0 4px 8px rgba(0, 0, 0, 0.2), /* Ombre standard */
         0 10px 20px rgba(0, 0, 0, 0.15); /* Ombre plus large pour la profondeur */
 }
@@ -688,6 +682,7 @@ input[type="number"] {
     width: 60px; 
     max-width: 60px;
 }
+
 </style>
 </head>
 
@@ -701,12 +696,12 @@ input[type="number"] {
 <h1>
     RAPPORT D'EXPULSION
     <span id="version-affichage" style="font-size: 0.5em; margin-left: 20px;">
-    </span>
+        </span>
 </h1>
 
 <h3 style="color: white;">
 <center><u><strong>
-Version développement. Si vous voulez voir à quoi ressemble la partie courriel, inscrire votre courriel dans le champ courriel.
+Version développement pour voir la partie courriel inscrire votre courriel dans le champ adresse courriel
 </u></strong>
 </center>
 </h3>
@@ -727,7 +722,7 @@ Version développement. Si vous voulez voir à quoi ressemble la partie courriel
  <h2>Informations sur le match</h2>
   <div class="match-row">
     <div><label># Match</label><input type="text" id="matchNumero" name="numero" maxlength="12" tabindex="1" required><div class="error"></div></div>
-    <div><label>Date et Heure</label><input type="text" id="matchDate" name="date" tabindex="2" required ><div class="error"></div></div>
+    <div><label>Date et Heure du match</label><input type="text" id="matchDate" name="date" tabindex="2" required ><div class="error"></div></div>
   </div>
 
   <div class="select-row">
@@ -735,7 +730,7 @@ Version développement. Si vous voulez voir à quoi ressemble la partie courriel
     <div><label>Ligue</label><select id="ligueSelect" tabindex="4" required><option value="">-- Sélectionner une ligue --</option></select><div class="error"></div></div>
     <div><label>Catégorie</label><select id="categorieSelect" tabindex="5" required><option value="">-- Sélectionner une catégorie --</option></select><div class="error"></div></div>
     <div id="classeContainer"><label>Classe</label><select id="classeSelect" tabindex="6" required><option value="">-- Sélectionner une classe --</option></select><div class="error"></div></div>
-    
+	
   </div>
    <div class="select-row" id="tournoiContainer" style="display: none;"><label>Nom de l'événement</label><select id="TournoiSelect" tabindex="7"><option value="">-- Sélectionner un événement --</option></select>    <div class="error"></div>
    </div>
@@ -745,41 +740,41 @@ Version développement. Si vous voulez voir à quoi ressemble la partie courriel
 <div class="panel-3d panel-step">
     <h2>Équipes et terrain</h2>
     <div class="match-equipes-row">
-                    
-           <div class="code-chip tooltip-champ"> 
-             <label>Équipe locale</label>
-             <input type="text" id="equipeLocale" list="equipesDataList" placeholder="Sélectionner ou saisir une équipe" tabindex="8" required>
-             
-             <div class="error"></div>
-             
-             <div>
-                 <label>Pointage</label>
-                 <input type="text" id="pointagelocal" maxlength="2" inputmode="numeric" pattern="[0-9]*" placeholder="0" tabindex="11">
-             </div>
-             
-             <span class="tooltip">Si un nom d'équipe n'apparait pas dans la liste,<br> vous pouvez simplement inscrire le nom de l'équipe dans le champ.</span> 
-         </div>
+				
+		 <div class="code-chip tooltip-champ"> 
+			<label>Équipe locale</label>
+			<input type="text" id="equipeLocale" list="equipesDataList" placeholder="Sélectionner ou saisir une équipe" tabindex="8" required>
+			
+			<div class="error"></div>
+			
+			<div>
+				<label>Pointage</label>
+				<input type="text" id="pointagelocal" maxlength="2" inputmode="numeric" pattern="[0-9]*" placeholder="0" tabindex="11">
+			</div>
+			
+			<span class="tooltip">Si un nom d'équipe n'apparait pas dans la liste,<br> vous pouvez simplement inscrire le nom de l'équipe dans le champ.</span> 
+		</div>
 
-         <div class="code-chip tooltip-champ">
-             <label>Équipe visiteur</label>
-             <input type="text" id="equipeVisiteur" list="equipesDataList" placeholder="Sélectionner ou saisir une équipe" tabindex="9" required>
-             
-             <div class="error"></div>
-             
-             <div> 
-                 <label>Pointage</label>
-                 <input type="text" id="pointagevisiteur" maxlength="2" inputmode="numeric" pattern="[0-9]*" placeholder="0" tabindex="12">
-             </div>
+		<div class="code-chip tooltip-champ">
+			<label>Équipe visiteur</label>
+			<input type="text" id="equipeVisiteur" list="equipesDataList" placeholder="Sélectionner ou saisir une équipe" tabindex="9" required>
+			
+			<div class="error"></div>
+			
+			<div> 
+				<label>Pointage</label>
+				<input type="text" id="pointagevisiteur" maxlength="2" inputmode="numeric" pattern="[0-9]*" placeholder="0" tabindex="12">
+			</div>
 
-             <span class="tooltip">Si un nom d'équipe n'apparait pas dans la liste,<br> vous pouvez simplement inscrire le nom de l'équipe dans le champ.</span>
-         </div>
-         
-         <div class="code-chip tooltip-champ">
-             <label>Terrain</label>
-             <input type="text" id="terrain" list="terrainsDataList" placeholder="Sélectionner ou saisir un terrain" tabindex="10" required>
-             <span class="tooltip">Si un nom d'un terrain n'apparait pas dans la liste,<br> vous pouvez simplement inscrire le nom du parc dans le champ.</span>
-             <div class="error"></div>
-         </div>
+			<span class="tooltip">Si un nom d'équipe n'apparait pas dans la liste,<br> vous pouvez simplement inscrire le nom de l'équipe dans le champ.</span>
+		</div>
+        
+        <div class="code-chip tooltip-champ">
+            <label>Terrain</label>
+            <input type="text" id="terrain" list="terrainsDataList" placeholder="Sélectionner ou saisir un terrain" tabindex="10" required>
+            <span class="tooltip">Si un nom d'un terrain n'apparait pas dans la liste,<br> vous pouvez simplement inscrire le nom du parc dans le champ.</span>
+            <div class="error"></div>
+        </div>
     </div>
 
     <datalist id="equipesDataList"></datalist>
@@ -795,7 +790,7 @@ Version développement. Si vous voulez voir à quoi ressemble la partie courriel
         <label class="form-label d-block" style="margin-right: 15px; margin-bottom: 0; font-size: 20px; position: relative; top: -5px;">Système d'arbitres</label>
         
         <div class="chips-container" id="arbitre-system-chips">
-                         
+                     
             <div class="chip selected" data-value="2">2 arbitres</div>
             
             <div class="chip" data-value="3">3 arbitres</div>
@@ -848,22 +843,22 @@ Version développement. Si vous voulez voir à quoi ressemble la partie courriel
             </select>
             <div class="error"></div>
         </div>
-            
-        <div class="champ">
-            <label for="courriel">Adresse courriel</label>
-            <input type="email" id="courriel" tabindex="19" required>
-   
-            <div style="text-align: center; margin-top: 5px;"> <input type="checkbox" id="courrielConfirme" name="courrielConfirme" checked>
-            <label for="courrielConfirme" style="font-size: 0.9em;">Avoir une copie du rapport d'expulsion</label>
-        </div>
+			
+			<div class="champ">
+				<label for="courriel">Adresse courriel</label>
+				<input type="email" id="courriel" tabindex="19" required>
+    
+				<div style="text-align: center; margin-top: 5px;"> <input type="checkbox" id="courrielConfirme" name="courrielConfirme" checked>
+				<label for="courrielConfirme" style="font-size: 0.9em;">Avoir une copie du rapport d'expulsion</label>
+			</div>
 
-        <div class="error"></div>
-        </div>
+			<div class="error"></div>
+		</div>
 
                 
         <div class="champ">
             <label for="telephone">Téléphone</label>
-            <input type="tel" id="telephone" tabindex="20" placeholder="(000) 000-0000"> 
+            <input type="tel" id="telephone" required tabindex="20" placeholder="(000) 000-0000"> 
             <div class="error"></div>
         </div>
     </div>
@@ -876,12 +871,12 @@ Version développement. Si vous voulez voir à quoi ressemble la partie courriel
     </div>
     <div class="chips-container" id="chipsNbExp"></div> 
     
-    <div class="tabs" id="expTabs"></div>
+	<div class="tabs" id="expTabs"></div>
     <div id="expulsionsContainer"></div>
 </div>
-    
+   
 
-    
+	
 <div class="panel-3d-detail panel-step" >
   <h2>Détails concernant les expulsions</h2>
   <textarea name="details" id="details" required></textarea>
@@ -903,7 +898,7 @@ Une fois le terrain quitté par le participant, a-t-il quitté les environs du t
     <button type="submit">Envoyer le rapport</button>
     <button type="reset" id="effacerBtn">Effacer le rapport</button>
 </div>
-    
+	
 </form>
 
  <div id="destinatairesContainer" style="color: white; display: none;">
@@ -911,29 +906,29 @@ Une fois le terrain quitté par le participant, a-t-il quitté les environs du t
     <label>Destinataires</label>
     <div id="destinataires" style="font-style: italic; color: white;"></div>
   </div>
-    
-    
+	
+	
 <div id="debugContainer" style="color: white; display: none;">
   <div style="font-size: 1.5em; font-weight: bold; margin-top: 10px; margin-bottom: 25px;">
-      Debug JSON
-  </div>    <pre id="debugOutput" style="color: white;"></pre>
+     Debug JSON
+  </div>   <pre id="debugOutput" style="color: white;"></pre>
 </div>
-</div>    
+</div>	
 
 <div id="htmlContainer" style="color: white; display: none;">
   <div style="font-size: 1.5em; font-weight: bold; margin-top: 10px; margin-bottom: 25px;">
-      Debug HTML
-  </div>    <pre id="htmlOutput" style="color: white;"></pre>
+     Debug HTML
+  </div>   <pre id="htmlOutput" style="color: white;"></pre>
 </div>
 
 <div id="champsContainer" style="color: white; display: none;">
   <div style="font-size: 1.5em; font-weight: bold; margin-top: 10px; margin-bottom: 25px;">
-      Champs Requis
-  </div>    <pre id="champsOutput" style="color: white;"></pre>
+     Champs Requis
+  </div>   <pre id="champsOutput" style="color: white;"></pre>
 </div>
 
-</div>    
-    
+</div>	
+	
 	
 	
 	
@@ -942,16 +937,13 @@ Une fois le terrain quitté par le participant, a-t-il quitté les environs du t
 <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
 <script src="https://cdn.jsdelivr.net/npm/flatpickr/dist/l10n/fr.js"></script> 
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-
-
 <script>
-
-
+/*const regionUrl = "https://script.google.com/macros/s/AKfycby5mjKpMvPhV4jQdNPuO7H8NIcaRh_P3SRoqQSJLu8IzrMn7s5ytmZxbYXody-nqVKS-A/exec";
+const codesUrl = "https://script.google.com/macros/s/AKfycbxTNlQ5JFpIDIBSTWARTT3v1ztYXexP9zMuVwwAdWC43acGQGA1cPibQYqSyCabhzEd/exec"; 
+*/
 //const regionUrl = "https://raw.githubusercontent.com/Loleduc/RapportExpulsion/refs/heads/main/Sans%20structure%20arbitres/adressesmultiples.json"; // à mettre si on utilise la liste d'arbitres
 //const regionUrl = "https://raw.githubusercontent.com/Loleduc/RapportExpulsion/refs/heads/main/Nouvelle%20architecture/BETA%20adressesmultiples.json"; // à mettre si un utilise pas la liste d'arbitres probablement à enlever
-//const regionUrl = "https://raw.githubusercontent.com/Loleduc/RapportExpulsion/refs/heads/main/Sans%20structure%20arbitres/adressesmultiplestournois.json";
-  const regionUrl = "https://raw.githubusercontent.com/Loleduc/RapportExpulsion/refs/heads/main/Nouvelle%20structure%20json/regions.json";
-  let cheminfichier = "https://raw.githubusercontent.com/Loleduc/RapportExpulsion/refs/heads/main/Nouvelle%20structure%20json/";
+const regionUrl = "https://raw.githubusercontent.com/Loleduc/RapportExpulsion/refs/heads/main/Sans%20structure%20arbitres/adressesmultiplestournois.json";
 
 const codesUrl = "https://raw.githubusercontent.com/Loleduc/RapportExpulsion/refs/heads/main/Sans%20structure%20arbitres/Codes.json";
 
@@ -970,25 +962,12 @@ let expulsionsData = {}; // 🛑 Objet pour stocker les données de chaque expul
 let ObjetCourriel ="";
 let jsonArbitres = {};
 let adressecourriel ="";
-let nomfichier = "";
-let lienEdition = "";
 
 const destinatairesContainer = document.getElementById("destinatairesContainer");
 const destinatairesDiv = document.getElementById("destinataires");
 
 // 🛑 SÉPARATEUR UNIQUE ET SÛR pour la persistance
 const CODE_SEPARATOR = '||';
-
-    window.reportToUpload = null; 
-    
- 
-const config = {
-    // ... vos valeurs ...
-    OWNER: 'Loleduc',
-    REPO: 'RapportExpulsion', 
-    FOLDER: 'json' 
-
-};
 
 
 document.addEventListener('DOMContentLoaded', function() {
@@ -1384,18 +1363,6 @@ async function chargerDonneesRegions(url) {
     }
 }
 
-async function chargerDonneeschemin(url) {
-    try {
-        const reponse = await fetch(url, { method: 'GET' });
-        if (!reponse.ok) throw new Error(`Erreur HTTP: ${reponse.status}`);
-        return await reponse.json(); 
-    } catch (erreur) {
-        console.error("Erreur lors du chargement des données depuis GitHub:", erreur);
-        return null; 
-    }
-}
-
-
 /**
  * Retourne le Data URI Base64 de l'image demandée selon son identifiant.
  * @param {string} imageName L'identifiant unique de l'image (passé dans genererRapportExpulsion).
@@ -1601,7 +1568,7 @@ function genererRapportExpulsion(customData) {
                 // On vérifie que la date existe (index 3) pour grouper l'affichage
                 if (!customData[2] || !customData[3]) break; 
                 
-                const displayDate = (customData[2].reponse || "N/A").replace('T', ' ');
+                const displayDate = (customData[3].reponse || "N/A").replace('T', ' ');
                 
                message += `
 					<tr>
@@ -1622,7 +1589,7 @@ function genererRapportExpulsion(customData) {
 					<td style="${styleLabel25}">Date & Heure :</td> 
 					<td style="${styleValue25}">${displayDate}</td> 
 					<td style="${styleLabel25}">Région :</td>
-					<td style="${styleValue25}">${customData[3].reponse}</td>
+					<td style="${styleValue25}">${customData[2].reponse}</td>
 					</tr>`;
                 
                 // On saute l'index 1 (Match #), 2 (Région), 3 (Date) et on passe à l'index 4 (Ligue)
@@ -1937,134 +1904,54 @@ function genererRapportExpulsion(customData) {
     return finalHTML;
 }
 
-  function stockerFichierTemporairement(content, filename, contentType) {
-        window.reportToUpload = {
-            content: content,
-            filename: filename,
-            contentType: contentType
-        };
-        console.log(`Rapport JSON stocké en mémoire : ${filename}`);
-    }
-
-
-
- /**
-     * Tente de téléverser le fichier JSON stocké sur GitHub en utilisant l'API.
-     * Le PAT doit être configuré dans window.githubConfig.
-     */
-    async function uploadToGitHub() {
-        if (!window.reportToUpload) {
-            console.error('Erreur: Aucun rapport n\'est prêt à être téléversé.');
-            return;
-        }
-
-        const { pat, owner, repo, folder } = window.githubConfig;
-		
-	    // 🛑 AJOUT DU CONSOLE.LOG POUR LE DÉBOGAGE 🛑
-    console.log("--- DÉBOGAGE CONFIGURATION GITHUB ---");
-    console.log(`PAT (Truncated): ${pat ? pat.substring(0, 8) + '...' : 'MISSING'}`);
-    console.log(`Owner: ${owner}`);
-    console.log(`Repo: ${repo}`);
-    console.log(`Folder: ${folder}`);
-    console.log("-------------------------------------");
-    // 🛑 FIN DU CONSOLE.LOG 🛑
-	
-        const { content, filename } = window.reportToUpload;
-        nomfichier = filename;
-        // Le contenu doit être encodé en Base64 pour l'API GitHub
-        const contentBase64 = btoa(unescape(encodeURIComponent(content)));
-        const filePath = `${folder}/${filename}`;
-
-        // L'API a besoin du nom du dépôt, pas de l'URL
-        const apiUrl = `https://api.github.com/repos/${owner}/${repo}/contents/${filePath}`;
-    	
-        const payload = {
-            message: `[Rapport auto] Ajout de ${filename}`,
-            content: contentBase64,
-            branch: 'main' // ou votre branche par défaut
-        };
-
-        try {
-            const response = await fetch(apiUrl, {
-                method: 'PUT',
-                headers: {
-                    'Authorization': `token ${pat}`,
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify(payload)
-            });
-
-            if (response.ok) {
-                // LOG AMÉLIORÉ
-                console.log(`%c[GitHub SUCCESS] Fichier commité : ${filePath}`, 'color: green; font-weight: bold;');
-                window.reportToUpload = null; // Vider le cache après succès
-            } else {
-                const errorData = await response.json();
-                // LOG AMÉLIORÉ
-                console.error(`%c[GitHub ERROR ${response.status}] Échec du commit pour : ${filePath}`, 'color: red; font-weight: bold;', errorData);
-            }
-        } catch (error) {
-            console.error("Erreur réseau/générale lors du téléversement GitHub:", error);
-        }
-    }
-
-
 /**
  * Fonction principale appelée après validation pour générer et afficher le rapport.
  */
-   function generateAndDisplayReport() {
-        try {
-            const jsonDebug = generateDebugJSON(); // Votre objet JavaScript
-            const customData = transformDebugJSONToCustomData(jsonDebug);
-            const htmlContent = genererRapportExpulsion(customData);
+function generateAndDisplayReport() {
+    try {
+        const jsonDebug = generateDebugJSON();               // ton objet
+		const customData = transformDebugJSONToCustomData(jsonDebug); // tableau {question, reponse}
+		const htmlContent = genererRapportExpulsion(customData);
+		
+		
+		envoyerRapportParEmail(customData);
+	    document.getElementById("htmlOutput").textContent = htmlContent;
+		
+        // Ouvre le HTML dans une nouvelle fenêtre/onglet pour visualiser le rapport
+        const newWindow = window.open();
+        newWindow.document.write(htmlContent);
+        newWindow.document.close();
+      
 
-            // 1. Convertir l'objet JSON en chaîne de caractères (string)
-            const jsonContentString = JSON.stringify(jsonDebug, null, 2);
-            // 2. Assurer le nom de fichier avec l'extension .json
-            const fileName = jsonDebug.match.id + '.json';
-
-            // ÉTAPE INVISIBLE 1: Mise en cache du fichier
-            stockerFichierTemporairement(jsonContentString, fileName, 'application/json');
-            
-            // ÉTAPE INVISIBLE 2: Téléversement immédiat sur GitHub
-            uploadToGitHub(); // <-- APPEL AUTOMATIQUE ICI
-
-            // Reste des actions visibles
-         //   envoyerRapportParEmail(customData);
-		   envoyerapprobateur();
-            document.getElementById("htmlOutput").textContent = htmlContent;
-            
-            // Ouvre le HTML dans une nouvelle fenêtre/onglet pour visualiser le rapport
-            const newWindow = window.open();
-            newWindow.document.write(htmlContent);
-            newWindow.document.close();
-        
-            Swal.fire({
-            title: "Rapport généré et envoyé!",
-            text: "Le rapport HTML a été généré. Le fichier JSON a été téléversé sur GitHub.",
-            icon: "success",
-            draggable: true,
-            customClass: {
-                title: 'mon-titre-personnalise',
-                content: 'mon-texte-personnalise',
-                popup: 'mon-background-personnalise'
-            }
-            });
-
-        } catch (e) {
-             Swal.fire({
-                 title: "Erreur de génération 😟",
-                 text: "Erreur lors de la génération du rapport HTML. Détails dans la console.",
-                 icon: "error", // Utilise l'icône d'erreur rouge
-                 draggable: true,
-                 customClass: {
-                     title: 'mon-titre-personnalise',
-                     content: 'mon-texte-personnalise',
-                     popup: 'mon-background-personnalise' 
-                 }
-             });
-        }
+    Swal.fire({
+    title: "Rapport généré avec succès !",
+    icon: "success",
+    draggable: true,
+    customClass: {
+        title: 'mon-titre-personnalise',
+        content: 'mon-texte-personnalise',
+        // 💡 Ajoutez la classe personnalisée pour la fenêtre entière
+        popup: 'mon-background-personnalise' 
     }
+});
+
+    } catch (e) {
+        Swal.fire({
+            title: "Erreur de génération 😟",
+            text: "Erreur lors de la génération du rapport HTML. Détails dans la console.",
+            icon: "error", // Utilise l'icône d'erreur rouge
+            draggable: true,
+			customClass: {
+			title: 'mon-titre-personnalise',
+			content: 'mon-texte-personnalise',
+			// 💡 Ajoutez la classe personnalisée pour la fenêtre entière
+			popup: 'mon-background-personnalise' 
+            }
+        });
+    }
+}
+
+
 	
 	/**
  * Met à jour le contenu du <datalist> principal avec les options fournies.
@@ -2219,12 +2106,28 @@ async function init() {
     
     setupValidation();
     
-
+    // 1. Démarrer les deux requêtes en parallèle SANS AWAIT
+    // Chaque requête est enveloppée dans une promesse pour gérer son propre parsing JSON et ses erreurs.
+  /*  const regionsPromise = fetch(regionUrl)
+        .then(res => res.ok ? res.json() : Promise.reject(new Error(`HTTP Régions ${res.status}`)))
+        .catch(err => {
+            console.warn("Impossible de récupérer les régions:", err);
+            return {}; // Retourne un objet vide pour ne pas bloquer Promise.all
+        });
+	*/
     const regionsPromise = await chargerDonneesRegions(regionUrl);
 	
 	const codesPromise = await chargerDonneesCodes(codesUrl);
 	
-
+   /* const codesPromise = fetch(codesUrl)
+        .then(resCodes => resCodes.ok ? resCodes.json() : Promise.reject(new Error(`HTTP Codes ${resCodes.status}`)))
+        // Extraction de la clé 'Codes' et gestion de l'échec de parsing/fetch
+        .then(codeData => codeData.Codes || {})
+        .catch(err => {
+            console.error("ÉCHEC TOTAL du fetch des codes:", err);
+            return {}; // Retourne un objet vide pour ne pas bloquer Promise.all
+        });
+*/
     // 2. Attendre que les deux promesses soient complétées (la durée sera celle du fetch le plus lent)
     const [regionsResult, codesResult] = await Promise.all([regionsPromise, codesPromise]);
 
@@ -2253,93 +2156,76 @@ async function init() {
     
     
 // ---------------- Gestion sélections dynamiques ----------------
-document.getElementById("regionSelect").addEventListener("change", async e => { 
-    const ligueSelect = document.getElementById("ligueSelect"); 
-    const catSelect = document.getElementById("categorieSelect"); 
-    const classeSelect = document.getElementById("classeSelect"); 
-    const destinatairesDiv = document.getElementById("destinataires");
-    const tournoiSelect = document.getElementById("TournoiSelect");
+document.getElementById("regionSelect").addEventListener("change", e => {
+    const ligueSelect = document.getElementById("ligueSelect");
+    const catSelect = document.getElementById("categorieSelect");
+    const classeSelect = document.getElementById("classeSelect");
+    ligueSelect.innerHTML = "<option value=''>-- Sélectionner une ligue --</option>";
+    catSelect.innerHTML = "<option value=''>-- Sélectionner une catégorie --</option>";
+    classeSelect.innerHTML = "<option value=''>-- Sélectionner une classe --</option>";
+    destinatairesDiv.textContent = "";
+	
+	// Réinitialisation des champs Équipe et Terrain et leurs datalists
+    document.getElementById('equipeLocale').value = '';
+    document.getElementById('equipeVisiteur').value = '';
+    document.getElementById('terrain').value = '';
+	//document.getElementById('arbitreMarbre').value = '';
+    //document.getElementById('arbitreButs').value = '';
+	document.getElementById('pointagelocal').value = '';
+    document.getElementById('pointagevisiteur').value = '';
+	
+   
+   
     
-    // --- Réinitialisation des sélecteurs et variables globales ---
-    ligueSelect.innerHTML = "<option value=''>-- Sélectionner une ligue --</option>"; 
-    catSelect.innerHTML = "<option value=''>-- Sélectionner une catégorie --</option>"; 
-    classeSelect.innerHTML = "<option value=''>-- Sélectionner une classe --</option>"; 
-    destinatairesDiv.textContent = ""; 
-    currentRegionData = {}; 
-    currentLigueData = {}; 
-
-    // --- Réinitialisation des champs de formulaire ---
-    document.getElementById('equipeLocale').value = ''; 
-    document.getElementById('equipeVisiteur').value = ''; 
-    document.getElementById('terrain').value = ''; 
-    document.getElementById('pointagelocal').value = ''; 
-    document.getElementById('pointagevisiteur').value = ''; 
-	document.getElementById('pointagelocal').required = false;
-    document.getElementById('pointagevisiteur').required = false;
+    // Optionnel, mais recommandé : effacer les messages d'erreur et les options de la datalist
+  //  document.querySelector('#equipeLocale + .error').textContent = '';
+  //  document.querySelector('#equipeVisiteur + .error').textContent = '';
+    clearErrorAfter('#equipeLocale');
+    clearErrorAfter('#equipeVisiteur');
+  
+    populateEquipesDatalist([]); // Vide la datalist des équipes
+    populateTerrainsDatalist([]); // Vide la datalist des terrains
     
-    // Correction du bug de persistance du champ Tournoi
-    const tournoiContainer = tournoiSelect.parentElement;
-    if (tournoiContainer) {
-        tournoiContainer.style.display = 'none';
-        tournoiContainer.required = false;
-        tournoiSelect.innerHTML = "<option value=''>-- Sélectionner un tournoi --</option>";
-    }
+	
+    const region = e.target.value;
     
-    clearErrorAfter('#equipeLocale'); 
-    clearErrorAfter('#equipeVisiteur'); 
-    populateEquipesDatalist([]); 
-    populateTerrainsDatalist([]); 
-    
-    const region = e.target.value; 
     if(!region) return;
+    if(!jsonRegions[region]) return;
+	 baseEmails = jsonRegions[region]._BaseEmails || [];
     
-    const regionConfig = jsonRegions.Regions ? jsonRegions.Regions[region] : jsonRegions[region];
-    if(!regionConfig) return;
-    
-    approbateursemails = regionConfig._Approbateurs || []; 
-	console.log("Courriel de l'approbateur : " + approbateursemails);
-
-    // --- Chargement ASYNCHRONE du fichier JSON (via chargerDonneeschemin) ---
-    const fileName = regionConfig.fichier;
-    if (!fileName) return;
-    const fullUrl = cheminfichier + fileName;
-    const fetchedData = await chargerDonneeschemin(fullUrl);
-    
-    if (fetchedData === null) return;
-    
-    currentRegionData = fetchedData; 
-
-    // --- Remplissage du select des ligues ---
-    Object.keys(currentRegionData).forEach(key=>{ 
-        if (key.charAt(0) !== '_') { 
-            let opt = document.createElement("option");  
-            opt.value=key;  
-            opt.textContent=key; 
-            ligueSelect.appendChild(opt); 
-        } 
-    }); 
+    // FILTRAGE: On filtre les clés qui commencent par '_' (i.e., _BaseEmails)
+    Object.keys(jsonRegions[region]).forEach(key=>{
+        if (key.charAt(0) !== '_') {
+            let opt = document.createElement("option"); 
+            opt.value=key; 
+            opt.textContent=key;
+            ligueSelect.appendChild(opt);
+        }
+    });
 });
 
-
 document.getElementById("ligueSelect").addEventListener("change", e => {
+    const region = document.getElementById("regionSelect").value;
     const ligue = e.target.value;
     const catSelect = document.getElementById("categorieSelect");
     const classeSelect = document.getElementById("classeSelect");
     const tournoiSelect = document.getElementById("TournoiSelect");
-    const destinatairesDiv = document.getElementById("destinataires");
     
-    // Réinitialisation
+    // Réinitialisation de tous les champs de sélection et champs d'entrée
     catSelect.innerHTML = "<option value=''>-- Sélectionner une catégorie --</option>";
     classeSelect.innerHTML = "<option value=''>-- Sélectionner une classe --</option>";
     tournoiSelect.innerHTML = "<option value=''>-- Sélectionner un tournoi --</option>";
     destinatairesDiv.textContent = "";
     document.getElementById('equipeLocale').value = '';
-    document.getElementById('equipeVisiteur').value = ''; 
+    document.getElementById('equipeVisiteur').value = '';
     document.getElementById('terrain').value = '';
-    document.getElementById('pointagelocal').value = '';
+   // document.getElementById('arbitreMarbre').value = '';
+   // document.getElementById('arbitreButs').value = '';
+	document.getElementById('pointagelocal').value = '';
     document.getElementById('pointagevisiteur').value = '';
-    document.getElementById('pointagelocal').required = false;
-    document.getElementById('pointagevisiteur').required = false;
+
+
+
     clearErrorAfter('#equipeLocale');
     clearErrorAfter('#equipeVisiteur');
     populateEquipesDatalist([]);
@@ -2347,24 +2233,34 @@ document.getElementById("ligueSelect").addEventListener("change", e => {
     
     if(!ligue) return;
     
-    currentLigueData = currentRegionData[ligue] || {};
-    
-    // **AJOUT : Récupération des destinataires de la ligue**
-    destinatairesLigue = currentLigueData._destinataires ? currentLigueData._destinataires[0] : [];
-    console.log("Destinataires de la ligue : " + destinatairesLigue);
-    
+    currentLigueData = jsonRegions[region][ligue] || {};
     const categories = {};
     
-    // Logique de peuplement des catégories - **MODIFICATION : Exclure les clés commençant par '_'**
+    // On itère sur toutes les clés de la ligue
     Object.keys(currentLigueData).forEach(key => {
-        if (key.charAt(0) === '_') return; // Ignore _destinataires et autres clés spéciales
-        const parts = key.split(" ");
-        const cat = parts[0];
-        const cls = parts.slice(1).join(" ");
-        if(!categories[cat]) categories[cat] = [];
-        if(!categories[cat].includes(cls)) categories[cat].push(cls);
+        if (key.charAt(0) === '_') return;
+
+        // Si la ligue est "Tournois", on doit d'abord vérifier si la sous-clé est un objet contenant d'autres clés,
+        // ce qui indique des tournois spécifiques (ex: "Tournoi 9U A de Beloeil")
+        if (ligue === "Tournois" || ligue === "Regionaux" || ligue === "Super Regionaux" || ligue === "Provinciaux") {
+            // Si la clé contient des espaces, c'est une combinaison 'catégorie classe' (ex: "9U A")
+            if (key.includes(" ")) {
+                const parts = key.split(" ");
+                const cat = parts[0];
+                const cls = parts.slice(1).join(" ");
+                if(!categories[cat]) categories[cat] = [];
+                if(!categories[cat].includes(cls)) categories[cat].push(cls);
+            }
+        } else {
+            // Logique existante pour les ligues régulières
+            const parts = key.split(" ");
+            const cat = parts[0];
+            const cls = parts.slice(1).join(" ");
+            if(!categories[cat]) categories[cat] = [];
+            if(!categories[cat].includes(cls)) categories[cat].push(cls);
+        }
     });
-    
+
     // Peuple le sélecteur de catégorie
     Object.keys(categories).forEach(cat => {
         let opt = document.createElement("option");
@@ -2374,33 +2270,40 @@ document.getElementById("ligueSelect").addEventListener("change", e => {
     });
     catSelect.dataset.classes = JSON.stringify(categories);
     
-    // Autofill de la catégorie et cascade vers la classe si la catégorie est unique
+    // Autofill si une seule catégorie est disponible
     if(Object.keys(categories).length === 1){
         const onlyCat = Object.keys(categories)[0];
         catSelect.value = onlyCat;
         if (typeof clearFieldError === 'function') clearFieldError(catSelect);
         catSelect.dispatchEvent(new Event("change"));
     }
-    
+
     // Gère la visibilité des conteneurs
     const tournoiContainer = tournoiSelect.parentElement;
     const classeContainer = classeSelect.parentElement;
-    
-    if (classeContainer) classeContainer.style.display = 'block';
-    
-    if (tournoiContainer) {
-        tournoiContainer.style.display = 'none';
-        tournoiContainer.required = false; 
+    if (ligue === "Tournois" || ligue === "Regionaux" || ligue === "Super Regionaux" || ligue === "Provinciaux") {
+        if (tournoiContainer) 
+		    { 
+			  tournoiContainer.style.display = 'none';
+			  tournoiContainer.required = false;	 
+			 }
+        if (classeContainer) classeContainer.style.display = 'block';
+    } else {
+        if (tournoiContainer) {
+		tournoiContainer.style.display = 'none';
+		tournoiContainer.required = false;	
+		}
+        if (classeContainer) classeContainer.style.display = 'block';
     }
+	
+	
 });
 
 document.getElementById("categorieSelect").addEventListener("change", e => {
     const classes = JSON.parse(e.target.dataset.classes || "{}");
     const classeSelect = document.getElementById("classeSelect");
     const tournoiSelect = document.getElementById("TournoiSelect");
-    const destinatairesDiv = document.getElementById("destinataires"); // <--- CORRIGÉ
     const tournoiContainer = tournoiSelect.parentElement;
-    const ligue = document.getElementById("ligueSelect").value; // Ajouté pour la logique de visibilité
     
     // Réinitialisation des select et champs dépendants
     classeSelect.innerHTML = "<option value=''>-- Sélectionner une classe --</option>";
@@ -2409,10 +2312,11 @@ document.getElementById("categorieSelect").addEventListener("change", e => {
     document.getElementById('equipeLocale').value = '';
     document.getElementById('equipeVisiteur').value = '';
     document.getElementById('terrain').value = '';
-    document.getElementById('pointagelocal').value = '';
+   // document.getElementById('arbitreMarbre').value = '';
+   // document.getElementById('arbitreButs').value = '';
+	document.getElementById('pointagelocal').value = '';
     document.getElementById('pointagevisiteur').value = '';
-    document.getElementById('pointagelocal').required = false;
-    document.getElementById('pointagevisiteur').required = false;
+
 
     clearErrorAfter('#equipeLocale');
     clearErrorAfter('#equipeVisiteur');
@@ -2420,14 +2324,7 @@ document.getElementById("categorieSelect").addEventListener("change", e => {
     populateTerrainsDatalist([]);
     
     const cat = e.target.value;
-    if(!cat) {
-        // En cas de réinitialisation de la catégorie, masquer le conteneur de tournoi
-        if (tournoiContainer) {
-            tournoiContainer.style.display = 'none';
-            tournoiContainer.required = false;
-        }
-        return;
-    }
+    if(!cat) return;
 
     const classesForCat = classes[cat] || [];
 
@@ -2437,60 +2334,59 @@ document.getElementById("categorieSelect").addEventListener("change", e => {
         classeSelect.appendChild(opt);
     });
     
-    // Masque le conteneur de tournoi si une catégorie est choisie mais pas encore la classe.
-    if (tournoiContainer) {
-        tournoiContainer.style.display = 'none';
-        tournoiContainer.required = false;
-    }
+    if (tournoiContainer) 
+	   {
+	    tournoiContainer.style.display = 'none';
+	    tournoiContainer.required = false;	
+	}	
 
-    // Autofill si une seule classe est disponible (Déclenche la cascade vers classeSelect)
+    // Autofill si une seule classe est disponible
     if(classesForCat.length === 1){
         const onlyClasse = classesForCat[0];
         classeSelect.value = onlyClasse;
         if (typeof clearFieldError === 'function') clearFieldError(classeSelect);
-        classeSelect.dispatchEvent(new Event("change")); // Déclenche l'écouteur classeSelect
+        classeSelect.dispatchEvent(new Event("change"));
     }
 });
 
 
 document.getElementById("classeSelect").addEventListener("change", e => {
+    const region = document.getElementById("regionSelect").value;
     const ligue = document.getElementById("ligueSelect").value;
     const cat = document.getElementById("categorieSelect").value;
     const cls = e.target.value;
     const tournoiSelect = document.getElementById("TournoiSelect");
     const tournoiContainer = tournoiSelect.parentElement;
-    const destinatairesDiv = document.getElementById("destinataires");
-    
+
     // Réinitialisation des champs et datalists
     document.getElementById('equipeLocale').value = '';
     document.getElementById('equipeVisiteur').value = '';
     document.getElementById('terrain').value = '';
-    document.getElementById('pointagelocal').value = '';
-    document.getElementById('pointagevisiteur').value = '';    
-    document.getElementById('pointagelocal').required = false;
-    document.getElementById('pointagevisiteur').required = false;
+  //  document.getElementById('arbitreMarbre').value = '';
+  //  document.getElementById('arbitreButs').value = '';
     clearErrorAfter('#equipeLocale');
     clearErrorAfter('#equipeVisiteur');
     populateEquipesDatalist([]);
     populateTerrainsDatalist([]);
     destinatairesDiv.textContent = "";
-    
+
     if (!cls) return;
-    
+
     const selectedLevelKey = `${cat} ${cls}`;
-    const selectedLevelData = currentLigueData[selectedLevelKey]; 
+    const selectedLevelData = currentLigueData[selectedLevelKey];
     
-    // Logique Tournois
+    // NOUVEAU: Si la ligue est "Tournois", on gère l'affichage du sélecteur de tournoi
     if (ligue === "Tournois" || ligue === "Regionaux" || ligue === "Super Regionaux" || ligue === "Provinciaux") {
         if (tournoiContainer) {
             tournoiContainer.style.display = 'block';
-            tournoiContainer.required = true;
+			tournoiContainer.required = true;
             tournoiSelect.innerHTML = "<option value=''>-- Sélectionner un tournoi --</option>";
         }
+
         const availableTournois = selectedLevelData || {};
-        
         Object.keys(availableTournois).forEach(tournoiName => {
-            if (tournoiName.charAt(0) !== '_' && typeof availableTournois[tournoiName] === 'object' && availableTournois[tournoiName] !== null) {
+            // Assurez-vous d'ignorer les clés comme "EmailsSpecifiques"
+            if (typeof availableTournois[tournoiName] === 'object' && availableTournois[tournoiName] !== null) {
                 let opt = document.createElement("option");
                 opt.value = tournoiName;
                 opt.textContent = tournoiName.trim();
@@ -2498,70 +2394,70 @@ document.getElementById("classeSelect").addEventListener("change", e => {
             }
         });
         
-        const tournoiKeys = Object.keys(availableTournois).filter(key => key.charAt(0) !== '_' && typeof availableTournois[key] === 'object');
+        // Gère le cas où il n'y a qu'un seul tournoi disponible, et l'autofill
+        const tournoiKeys = Object.keys(availableTournois).filter(key => typeof availableTournois[key] === 'object');
         if (tournoiKeys.length === 1) {
             const onlyTournoi = tournoiKeys[0];
             tournoiSelect.value = onlyTournoi;
             if (typeof clearFieldError === 'function') clearFieldError(tournoiSelect);
             tournoiSelect.dispatchEvent(new Event("change"));
         }
-        return; 
+        return; // Sortir pour ne pas exécuter le reste de la logique
     }
     
-    // Logique ligues régulières
-    const specificEmails = (selectedLevelData && selectedLevelData._EmailsSpecifiques) || []; 
+    // Logique existante pour les ligues régulières (qui sera toujours exécutée si ligue n'est pas "Tournois")
+    const specificEmails = (selectedLevelData && selectedLevelData.EmailsSpecifiques) || [];
     const availableTeams = (selectedLevelData && selectedLevelData.Equipes) || [];
     const availableTerrains = (selectedLevelData && selectedLevelData.Terrains) || [];
-   
-    // **MODIFICATION : Combiner approbateurs région + destinataires ligue + emails spécifiques**
-    const allEmails = [...destinatairesLigue, ...specificEmails];
-    adressecourriel = allEmails;
+    const baseEmails = jsonRegions[region]._BaseEmails || [];
+    const allEmails = [...baseEmails, ...specificEmails];
     
     populateEquipesDatalist(availableTeams);
     populateTerrainsDatalist(availableTerrains);
     destinatairesDiv.textContent = allEmails.join(", ");
 });
 
-// ---------------------------------------------------------------------------------------------------
-
 document.getElementById("TournoiSelect").addEventListener("change", e => {
+    const region = document.getElementById("regionSelect").value;
     const ligue = document.getElementById("ligueSelect").value;
-    const cat = document.getElementById("categorieSelect").value;
+    const catClass = document.getElementById("categorieSelect").value;
     const cls = document.getElementById("classeSelect").value;
     const tournoiName = e.target.value;
-    const destinatairesDiv = document.getElementById("destinataires");
     
-    // Réinitialisation
+    // Réinitialisation des emails et des champs dépendants
     destinatairesDiv.textContent = "";
     document.getElementById('equipeLocale').value = '';
     document.getElementById('equipeVisiteur').value = '';
     document.getElementById('terrain').value = '';
-    document.getElementById('pointagelocal').value = '';
-    document.getElementById('pointagevisiteur').value = '';    
-    document.getElementById('pointagelocal').required = false;
-    document.getElementById('pointagevisiteur').required = false;
+ //   document.getElementById('arbitreMarbre').value = '';
+ //   document.getElementById('arbitreButs').value = '';
+	document.getElementById('pointagelocal').value = '';
+    document.getElementById('pointagevisiteur').value = '';
+
+
+
     clearErrorAfter('#equipeLocale');
     clearErrorAfter('#equipeVisiteur');
     populateEquipesDatalist([]);
     populateTerrainsDatalist([]);
-    
+
     if (!tournoiName) return;
     
-    const selectedLevelKey = `${cat} ${cls}`;
-    const tournoiData = currentRegionData[ligue][selectedLevelKey][tournoiName];
+    // Le chemin est maintenant: jsonRegions[region].Tournois[catégorie][classe][nom du tournoi]
+    const tournoiData = jsonRegions[region][ligue][`${catClass} ${cls}`][tournoiName];
     
-    const specificEmails = (tournoiData && tournoiData._EmailsSpecifiques) || [];
+    const baseEmails = jsonRegions[region]._BaseEmails || [];
+    const specificEmails = (tournoiData && tournoiData.EmailsSpecifiques) || [];
     
-    // **MODIFICATION : Combiner approbateurs région + destinataires ligue + emails spécifiques**
-    const allEmails = [...destinatairesLigue, ...specificEmails];
+    const allEmails = [...baseEmails, ...specificEmails];
     destinatairesDiv.textContent = allEmails.join(", ");
     
+    // S'il y a des équipes ou terrains spécifiques au tournoi (peu probable mais utile)
     const availableTeams = (tournoiData && tournoiData.Equipes) || [];
     const availableTerrains = (tournoiData && tournoiData.Terrains) || [];
     populateEquipesDatalist(availableTeams);
     populateTerrainsDatalist(availableTerrains);
 });
-
 
 // ---------------- Gestion Arbitre Rapport (inchangé) ----------------
 function updateArbitreRapport() {
@@ -2784,14 +2680,7 @@ function setupValidation(){
         if(valid){
             document.getElementById('champsOutput').textContent = ''; 
             document.getElementById('debugOutput').textContent = JSON.stringify(generateDebugJSON(), null, 4);
-         //   generateAndDisplayReport(); 
-		 const jsonDebug = generateDebugJSON();
-		 const customData = transformDebugJSONToCustomData(jsonDebug);
-         const jsonContentString = JSON.stringify(jsonDebug, null, 2);
-         const fileName = jsonDebug.match.id + '.json';
-         stockerFichierTemporairement(jsonContentString, fileName, 'application/json');
-		 uploadToGitHub();
-		 envoyerapprobateur();
+            generateAndDisplayReport(); 
         } else {
             const listeNoms = nomsChampsRequisManquants.length > 0 
                 ? '- ' + nomsChampsRequisManquants.join('\n- ')
@@ -3195,9 +3084,9 @@ function createCodeChips(expulsionIndex, codesData, panel) {
     });
 }    
 			
-/* async function envoyerRapportParEmail(data) {
+async function envoyerRapportParEmail(data) {
   const emailUrl = "https://script.google.com/macros/s/AKfycbzptS_pTHRw9HERRy6ZjLKfkY25GTgOkHbJMaSi7h9wd2tFyiF0zKWaw9T-HoArXrrw/exec"; // ton URL
-  //const rapportHTML = genererRapportExpulsion(data);
+  const rapportHTML = genererRapportExpulsion(data);
   // const adresseDeDestination = "ump_77@videotron.ca"; //adressecourriel à ajouter quand ce sera le temps.
   
     const courrielUtilisateur = document.getElementById("courriel").value.trim();
@@ -3207,7 +3096,7 @@ function createCodeChips(expulsionIndex, codesData, panel) {
         // La case est cochée: L'utilisateur veut une copie. On AJOUTE son courriel
         
         // 1. On commence avec la liste globale/par défaut (adressecourriel)
-        listeFinaleCourriels = approbateursemails; 
+        listeFinaleCourriels = adressecourriel; 
         
         // 2. On ajoute le courriel de l'utilisateur
         if (courrielUtilisateur.length > 0) {
@@ -3261,52 +3150,11 @@ function createCodeChips(expulsionIndex, codesData, panel) {
     } else {
       alert(`❌ Erreur serveur: ${result.error}`);
     }
-  } catch (err) {  console.error("Quelque chose s'est produit :", err);
+  } catch (err) {  console.error("Une erreur silencieuse s'est produite :", err);
   }
 }
-*/
-  async function envoyerapprobateur() {
-  
-   const emailUrl = "https://script.google.com/macros/s/AKfycbxhydPV8PZZA78X55jIsz6r4jDQqXTBwxUxLEidpzox2D82J7hTHvYSxAwpIkOyLmWjRA/exec";
-   let contenuhtml = "";
-   
-   const rapporteurNom = document.getElementById('arbitreRapport').value;
-	
-	lienEdition = "https://loleduc.github.io/RapportExpulsion/json_editor_http.html?file=" + nomfichier +"&modif=false";
-	
-	console.log("Dest : " + approbateursemails + " rapport fait : " + rapporteurNom + " Nom fichier : " + nomfichier + " Lien : " + lienEdition)
-    const destinataireEmailString = approbateursemails.join(","); 
-     
-   
-    const payload = {
-    destinataireCourriel: destinataireEmailString,
-	rapporteurNom: rapporteurNom, // mettre le nom de l'arbitre faisant le rapport
-	currentFilename: nomfichier,
-	lienEdition: lienEdition
-  };
-   console.log(JSON.stringify(payload));
 
-  try {
-    const response = await fetch(emailUrl, {
-      method: 'POST',
-	  mode: 'cors', // Nécessaire pour les requêtes cross-domain
-      headers: { 'Content-Type': 'text/plain' },
-      body: JSON.stringify(payload)
-    });
 
-    const result = await response.json();
-	alert(result);
-    console.log("Résultat serveur:", result);
-    if (result.success) {
-      alert(`✅ OK — ${result.fileName}`);
-      document.getElementById('rapportForm').reset();
-    } else {
-      alert(`❌ Erreur serveur: ${result.error}`);
-    }
-     } catch (err) {  console.error("Une erreur silencieuse s'est produite :", err);
-    }
-  
-  }
 	
 			
 function generateDebugJSON() {
@@ -3390,19 +3238,14 @@ function generateDebugJSON() {
         }
     }
 
-   const parametres = {
-    Approbateur : approbateursemails,
-	Destinataires : adressecourriel
-	}
-	
+   
 	
 	// Construction finale
     const result = {
         match,
         equipes,
         officiels,
-        expulsions,
-		parametres
+        expulsions
     };
     
     // Affichage joli dans debugOutput
@@ -3648,5 +3491,4 @@ document.getElementById('effacerBtn').addEventListener('click', function(e) {
 });
 	</script>
 </body>
-
 </html>

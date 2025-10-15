@@ -19,12 +19,14 @@
     "terrain": "fffd"
   },
   "officiels": {
-    "marbre": "dfrf",
-    "buts1": "fddffd",
+    "marbre": "Louis-Olivier Leduc",
+    "buts1": "Denis Labont?",
     "marqueur": "dfgfd",
     "rapport": "dfrf",
     "courriel": "d@2.com",
-    "telephone": "(444) 444-4444"
+    "telephone": "(444) 444-4444",
+    "buts2": "",
+    "buts3": ""
   },
   "expulsions": [
     {

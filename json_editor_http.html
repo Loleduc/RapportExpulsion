@@ -697,7 +697,7 @@ function showMessage(text, type) {
             // Appliquer la logique de lecture seule après le chargement
             console.log(isModifiable);	
 			const modeText = isModifiable ? ' (Mode édition)' : ' (Mode visualisation)';
-            document.getElementById('reportTitle').textContent = `⚾ Éditeur de Rapports d'Expulsion .05 ${modeText}`;
+            document.getElementById('reportTitle').textContent = `⚾ Éditeur de Rapports d'Expulsion .06 ${modeText}`;
 			toggleReadOnly(!isModifiable);
             
         } catch (error) {
@@ -1103,7 +1103,7 @@ async function saveToGitHub() {
         contentLength: payload.fileContent.length
     });
     
-    const scriptUrl = "https://script.google.com/macros/s/AKfycbzu6VQ3Cfx1RHia6pWM5F1hGMj9zsm8MMC6leTXFIwvcmfMgvUOoOy1nQce9F3NZQJy/exec";
+    const scriptUrl = "https://script.google.com/macros/s/AKfycbzu6VQ3Cfx1RHia6pWM5F1hGMj9zsm8MMC6leTXFIwvcmfMgvUOoOy1nQce9F3NZQJy/exec";   // App Script Upload GitHub
     
     // Afficher un message de chargement
     showMessage('⏳ Sauvegarde en cours...', 'info');
@@ -1142,7 +1142,7 @@ async function saveToGitHub() {
 }
 
 async function fetchSha(filename) {
-    const scriptUrl = "https://script.google.com/macros/s/AKfycbzu6VQ3Cfx1RHia6pWM5F1hGMj9zsm8MMC6leTXFIwvcmfMgvUOoOy1nQce9F3NZQJy/exec";
+    const scriptUrl = "https://script.google.com/macros/s/AKfycbzu6VQ3Cfx1RHia6pWM5F1hGMj9zsm8MMC6leTXFIwvcmfMgvUOoOy1nQce9F3NZQJy/exec";  // App Script upload Github
     
     console.log('🔍 Récupération du SHA pour:', filename);
     
@@ -1184,7 +1184,7 @@ async function retournerRapport() {
         showMessage("Impossible de retourner le rapport : aucun fichier chargé (currentFilename est vide).", 'error');
         return;
     }
-
+     const APPS_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbyw-YmSwF5L07xCfd1Z-5B15dJYKhzDegN_7wca3zxD_l4KvyepN2-Iqr0i00O_0DGG/exec";   //App Script Retour rapport.
     // Mettre à jour les données du formulaire
     updateCurrentData(); 
 
@@ -1260,7 +1260,7 @@ function approuverRapport() {
 
 
 async function envoyerRapportParEmail(rapportHTML) {
-    const emailUrl = "https://script.google.com/macros/s/AKfycbzptS_pTHRw9HERRy6ZjLKfkY25GTgOkHbJMaSi7h9wd2tFyiF0zKWaw9T-HoArXrrw/exec";
+    const emailUrl = "https://script.google.com/macros/s/AKfycbzptS_pTHRw9HERRy6ZjLKfkY25GTgOkHbJMaSi7h9wd2tFyiF0zKWaw9T-HoArXrrw/exec";   //Apps script PDF et Emails
 
     const courrielUtilisateur = document.getElementById("courriel").value.trim();
     let listeFinaleCourriels = "";

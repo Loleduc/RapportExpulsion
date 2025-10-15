@@ -1140,20 +1140,36 @@ async function saveToGitHub() {
 async function fetchSha(filename) {
     const scriptUrl = "https://script.google.com/macros/s/AKfycbzu6VQ3Cfx1RHia6pWM5F1hGMj9zsm8MMC6leTXFIwvcmfMgvUOoOy1nQce9F3NZQJy/exec";
     
+    console.log('🔍 Récupération du SHA pour:', filename);
+    
     try {
-        const response = await fetch(`${scriptUrl}?fileName=${filename}`);
+        const response = await fetch(scriptUrl, {
+            method: "POST",
+            headers: { "Content-Type": "text/plain" },
+            body: JSON.stringify({
+                action: "getSha",
+                fileName: filename
+            })
+        });
         
         if (response.ok) {
             const data = await response.json();
+            console.log('📦 Réponse Apps Script (SHA):', data);
+            
             if (data.success && data.sha) {
                 currentSha = data.sha;
-                console.log('✅ SHA récupéré via Apps Script:', currentSha);
+                console.log('✅ SHA récupéré:', currentSha);
+            } else {
+                console.log('ℹ️ Pas de SHA (nouveau fichier)');
+                currentSha = null;
             }
         } else {
-            console.error('Erreur lors de la récupération du SHA:', response.status);
+            console.error('❌ Erreur HTTP:', response.status);
+            currentSha = null;
         }
     } catch (error) {
-        console.error('Erreur lors de la récupération du SHA:', error);
+        console.error('❌ Erreur lors de la récupération du SHA:', error);
+        currentSha = null;
     }
 }
 

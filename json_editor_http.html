@@ -677,7 +677,7 @@ function showMessage(text, type) {
             const response = await fetch(url);
             
             if (!response.ok) {
-                throw new Error('Le fichier ' + filename 'n''existe plus ou à été approuvé ');
+                throw new Error('Le fichier ' + filename + 'n''existe plus ou à été approuvé ');
             }
             
             currentData = await response.json();
@@ -697,7 +697,7 @@ function showMessage(text, type) {
             // Appliquer la logique de lecture seule après le chargement
             console.log(isModifiable);	
 			const modeText = isModifiable ? ' (Mode édition)' : ' (Mode visualisation)';
-            document.getElementById('reportTitle').textContent = `⚾ Éditeur de Rapports d'Expulsion .06 ${modeText}`;
+            document.getElementById('reportTitle').textContent = `⚾ Éditeur de Rapports d'Expulsion .07 ${modeText}`;
 			toggleReadOnly(!isModifiable);
             
         } catch (error) {

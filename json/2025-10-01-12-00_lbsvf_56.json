@@ -1,0 +1,48 @@
+{
+  "match": {
+    "evenement": "",
+    "numero": "56",
+    "date": "2025-10-01 12:00",
+    "region": "RIVE-SUD",
+    "ligue": "LBSVF",
+    "categorie": "Senior",
+    "classe": "BB",
+    "details_expulsions": "dsdsdsds",
+    "infos_complementaires": "Le participant a-t-il reçu un avertissement avant d’être expulsé ?\n\nLa situation était-elle d’une longue durée ?\n\nUne fois le terrain quitté par le participant, a-t-il quitté les environs du terrain et est-il resté invisible ?",
+    "id": "2025-10-01-12-00_lbsvf_56"
+  },
+  "equipes": {
+    "locale": "A's Laprairie",
+    "pointagelocal": "",
+    "visiteur": "Brewers Drummondville",
+    "pointagevisiteur": "",
+    "terrain": "Parc Celanese"
+  },
+  "officiels": {
+    "marbre": "a",
+    "buts1": "v",
+    "marqueur": "vc",
+    "rapport": "a",
+    "courriel": "s@2.com",
+    "telephone": "(333) 333-3333"
+  },
+  "expulsions": [
+    {
+      "numero": 1,
+      "equipe": "A's Laprairie",
+      "chandail": "3",
+      "joueur": "dsds",
+      "codes": [
+        "55.1 - SUSPENSION AUTOMATIQUE"
+      ]
+    }
+  ],
+  "parametres": {
+    "Approbateur": [
+      "ump_77@videotron.ca"
+    ],
+    "Destinataires": [
+      "LBSVF@domaine.com"
+    ]
+  }
+}

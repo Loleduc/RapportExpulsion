@@ -24,7 +24,9 @@
     "marqueur": "fgfg",
     "rapport": "hfgghf",
     "courriel": "2@2.com",
-    "telephone": "(444) 444-4444"
+    "telephone": "(444) 444-4444",
+    "buts2": "",
+    "buts3": ""
   },
   "expulsions": [
     {
@@ -44,8 +46,8 @@
     "Destinataires": [
       "LBSVF@domaine.com"
     ],
-    "approuve": "Non",
-    "Nom_Approbateur": "",
-    "Date_Approbation": ""
+    "approuve": "Oui",
+    "Nom_Approbateur": "Denis Labonté",
+    "Date_Approbation": "2025-10-16 22:44"
   }
 }

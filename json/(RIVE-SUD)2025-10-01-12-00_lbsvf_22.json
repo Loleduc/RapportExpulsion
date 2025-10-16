@@ -7,7 +7,7 @@
     "ligue": "LBSVF",
     "categorie": "Senior",
     "classe": "BB",
-    "details_expulsions": "bla bla bla",
+    "details_expulsions": "",
     "infos_complementaires": "Le participant a-t-il reçu un avertissement avant d’être expulsé ?\n\nLa situation était-elle d’une longue durée ?\n\nUne fois le terrain quitté par le participant, a-t-il quitté les environs du terrain et est-il resté invisible ?",
     "id": "2025-10-01-12-00_lbsvf_22"
   },
@@ -48,6 +48,6 @@
     ],
     "approuve": "Oui",
     "Nom_Approbateur": "",
-    "Date_Approbation": "2025-10-16 23:02"
+    "Date_Approbation": "2025-10-16 23:04"
   }
 }

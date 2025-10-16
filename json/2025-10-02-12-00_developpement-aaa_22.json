@@ -1,0 +1,48 @@
+{
+  "match": {
+    "evenement": "",
+    "numero": "22",
+    "date": "2025-10-02 12:00",
+    "region": "Baseball Quebec",
+    "ligue": "Developpement AAA",
+    "categorie": "18U",
+    "classe": "AAA",
+    "details_expulsions": "fgdgdffdg",
+    "infos_complementaires": "Le participant a-t-il reçu un avertissement avant d’être expulsé ?\n\nLa situation était-elle d’une longue durée ?\n\nUne fois le terrain quitté par le participant, a-t-il quitté les environs du terrain et est-il resté invisible ?",
+    "id": "2025-10-02-12-00_developpement-aaa_22"
+  },
+  "equipes": {
+    "locale": "fffd",
+    "pointagelocal": "",
+    "visiteur": "fdggfdgfd",
+    "pointagevisiteur": "",
+    "terrain": "dfgfdf"
+  },
+  "officiels": {
+    "marbre": "fddf",
+    "buts1": "cxvewr",
+    "marqueur": "fwe",
+    "rapport": "cxvewr",
+    "courriel": "s@s.com",
+    "telephone": "(444) 444-4444"
+  },
+  "expulsions": [
+    {
+      "numero": 1,
+      "equipe": "fffd",
+      "chandail": "5",
+      "joueur": "fgdfdfgdfg",
+      "codes": [
+        "55.1 - SUSPENSION AUTOMATIQUE"
+      ]
+    }
+  ],
+  "parametres": {
+    "Approbateur": [
+      "loleduc@videotron.ca"
+    ],
+    "Destinataires": [
+      "adresse18uAAA@domaine.com"
+    ]
+  }
+}
